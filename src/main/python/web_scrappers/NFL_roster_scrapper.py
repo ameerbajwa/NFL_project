@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
-from .python.SQL_uploads import insert
+from src.main.python.SQL_uploads import insert
 
 import pandas as pd
 import time
@@ -83,7 +83,7 @@ def grabbing_roster_info(list_of_active_teams):
 
                 for roster_col_index in range(1, len(roster_column_names)):
                     player_roster_info[roster_column_names[roster_col_index]] = list_of_values_for_row[roster_col_index-1]
-
+                print(player_roster_info)
                 team_roster_df = team_roster_df.append(player_roster_info, ignore_index=True)
 
         insert.insert_roster_info_to_mysql(team_roster_df)
