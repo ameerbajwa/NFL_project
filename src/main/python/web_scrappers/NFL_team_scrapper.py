@@ -61,6 +61,13 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
             i += 1
             continue
 
+    if (type_of_info_from_teams == 'roster'):
+        grabbing_roster_info(list_of_active_teams)
+    elif (type_of_info_from_teams == 'injury'):
+        grabbing_injury_info(list_of_active_teams)
+    elif (type_of_info_from_teams == 'team'):
+        grabbing_team_info(list_of_active_teams)
+
     return (list_of_active_teams)
 
 def grabbing_roster_info(list_of_active_teams):
@@ -99,6 +106,16 @@ def grabbing_roster_info(list_of_active_teams):
 
         cleaned_team_roster_df = cleaning_scrapped_team_data.cleaning_NFL_roster_data(team_roster_df)
         insert.insert_roster_info_to_mysql(cleaned_team_roster_df)
+
+def grabbing_injury_info(list_of_active_teams_injury_reports):
+    for active_team_injury_report_index in range(0,len(list_of_active_teams_injury_reports)):
+        driver.get(list_of_active_teams_injury_reports[active_team_injury_report_index]['url'])
+        time.sleep(2)
+
+def grabbing_team_info(list_of_active_teams):
+    for active_team_index in range(0, len(list_of_active_teams)):
+        driver.get(list_of_active_teams[active_team_index]['url'])
+        time.sleep(2)
 
 # TEST
 # test_dict = [{'team_name': 'Arizona Cardinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019_roster.htm'}]
