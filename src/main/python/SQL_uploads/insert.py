@@ -1,7 +1,7 @@
 import pymysql
 import pandas as pd
 
-def insert_roster_info_to_mysql(team_roster_info): # team_roster_info
+def insert_roster_info_to_mysql(team_roster_info):
     connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
 
     connection_to_database = pymysql.connect(
@@ -11,12 +11,6 @@ def insert_roster_info_to_mysql(team_roster_info): # team_roster_info
                                 port=3306,
                                 database='NFL_database'
                              ) % (connection_to_local_mysql_data_management_system.columns[1])
-
-    # insert_SQL_query = "SELECT * FROM NFL_roster_info_2019_2020_season"
-    # table = pd.read_sql(insert_SQL_query, connection_to_database)
-    # print (table)
-#
-# insert_roster_info_to_mysql()
 
     for i in range(0, len(team_roster_info)):
         insert_SQL_query = "INSERT INTO `NFL_roster_info_2019_2020_season` " \
@@ -58,6 +52,6 @@ def insert_roster_info_to_mysql(team_roster_info): # team_roster_info
                           )
 
     connection_to_database.commit()
-    print(team_roster_info.loc[0, 'Team'] + 'roster insertion complete!')
+    print(team_roster_info.loc[0, 'Team'] + ' roster insertion complete!')
 
 
