@@ -2,10 +2,10 @@ from src.main.python.web_scrappers import NFL_team_scrapper
 import sys
 
 print ('Welcome to the main scrapping central page!')
-action = input('What do you want to do? ("c" to create scrapper ...) ')
+action = input('What do you want to do? ("create_inserter" to create scrapper for inserting data, "create_updater" to create scrapper to update data) ')
 
-if (action == 'c'):
-    scrapper_type = input('What type of scrapper do you want to create? ("team" for teams, "player_stats" for player stats, or "play_by_play" for play_by_play information) ')
+if (action == 'create_inserter'):
+    scrapper_type = input('What type of inserting scrapper do you want to create? ("team" for teams, "player_stats" for player stats, or "play_by_play" for play_by_play information) ')
     year = input('For which season year? ')
 
     if (scrapper_type == 'team'):
