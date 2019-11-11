@@ -7,6 +7,7 @@ from src.main.python.cleaning_scrapped_data import cleaning_scrapped_team_data
 import pandas as pd
 import time
 import os
+import pickle
 
 chromedriver = "/Applications/chromedriver"
 os.environ["webdriver.chrome.driver"] = chromedriver
@@ -61,14 +62,19 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
             i += 1
             continue
 
+    with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'wb') as handle:
+        pickle.dump(list_of_active_teams, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+def selecting_info(type_of_info_from_teams, year):
+    with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'rb') as handle:
+        list_of_active_teams = pickle.load(handle)
+
     if (type_of_info_from_teams == 'roster'):
-        grabbing_roster_info(list_of_active_teams)
+        grabbing_team_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'injury'):
         grabbing_injury_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'team'):
         grabbing_team_info(list_of_active_teams)
-
-    return (list_of_active_teams)
 
 def grabbing_roster_info(list_of_active_teams):
 
