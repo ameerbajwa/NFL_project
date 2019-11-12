@@ -19,3 +19,5 @@ def cleaning_NFL_roster_data(team_roster_df):
     cleaned_team_roster_df = team_roster_df
     print ('Cleaned team roster pandas dataframe!')
     return (cleaned_team_roster_df)
+
+# NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED

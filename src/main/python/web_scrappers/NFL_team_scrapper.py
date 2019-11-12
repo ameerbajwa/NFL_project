@@ -8,6 +8,7 @@ import pandas as pd
 import time
 import os
 import pickle
+import sys
 
 chromedriver = "/Applications/chromedriver"
 os.environ["webdriver.chrome.driver"] = chromedriver
@@ -118,13 +119,58 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
         driver.get(list_of_active_teams_injury_reports[active_team_injury_report_index]['url'])
         time.sleep(2)
 
+        list_of_game_dates = driver.find_elements_by_xpath('//*[@id="team_injuries"]/thead/tr//th')
+
+        for game_date in list_of_game_dates[1:]:
+            print (game_date.text)
+
 def grabbing_team_info(list_of_active_teams):
+
     for active_team_index in range(0, len(list_of_active_teams)):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
+
+        team_info = driver.find_elements_by_xpath('//*[@id="meta"]/div[2]//p')
+
+        team_info_dict = {}
+
+        for info_index in range(0,len(team_info)):
+            team_info_dict['team'] = list_of_active_teams[active_team_index]['team_name']
+            if (info_index == 0):
+                team_info_dict['wins'] = int(team_info[info_index].text.split(',')[0].split(' ')[1].split('-')[0])
+                team_info_dict['losses'] = int(team_info[info_index].text.split(',')[0].split(' ')[1].split('-')[1])
+                if (len(team_info[info_index].text.split(',')[0].split(' ')[1].split('-')) > 2):
+                    team_info_dict['ties'] = int(team_info[info_index].text.split(',')[0].split(' ')[1].split('-')[2])
+                else:
+                    team_info_dict['ties'] = 0
+                team_info_dict['conference'] = team_info[info_index].text.split(',')[1].split(' ')[3]
+                team_info_dict['division'] = team_info[info_index].text.split(',')[1].split(' ')[4]
+            elif (info_index == 1):
+                team_info_dict['coach'] = team_info[info_index].text.split(' ')[1] + ' ' + team_info[info_index].text.split(' ')[2]
+            else:
+                continue
+
+        team_info_df = pd.DataFrame(data=team_info_dict, index=[list_of_active_teams[active_team_index]['team_name']])
+        # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
+        insert.insert_overall_team_info_to_mysql(team_info_df)
+
+def grabbing_off_and_def_team_info(list_of_active_teams):
+    for active_team_index in range(0, len(list_of_active_teams)):
+        driver.get(list_of_active_teams[active_team_index]['url'])
+        time.sleep(2)
+
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="team_stats"]/thead/tr[2]//th')
+        team_stats_column_names = []
+
+        for raw_col_index in range(1,len(raw_column_names)):
+            team_stats_column_names.append(raw_column_names[raw_col_index].text)
+
 
 # TEST
 # test_dict = [{'team_name': 'Arizona Cardinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019_roster.htm'}]
 # grabbing_roster_info(test_dict)
 
-# grabbing_roster_info(list_of_active_teams)
+# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+# grabbing_team_info(test_dict)
+
+sys.exit()

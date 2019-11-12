@@ -52,6 +52,47 @@ def insert_roster_info_to_mysql(team_roster_info):
                           )
 
     connection_to_database.commit()
-    print(team_roster_info.loc[0, 'Team'] + ' roster insertion complete!')
+    print(team_roster_info.loc[0, 'Team'] + ' roster insertion to mysql table complete!')
+
+def insert_overall_team_info_to_mysql(overall_team_info):
+    team_name = overall_team_info.loc['Arizona Caridinals', 'team']
+    print (team_name)
+    connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
+
+    connection_to_database = pymysql.connect(
+                                user='root',
+                                password='Tennis07',
+                                host='127.0.0.1',
+                                port=3306,
+                                database='NFL_database'
+                             ) # % (connection_to_local_mysql_data_management_system.columns[1])
+
+    insert_SQL_query = "INSERT INTO `NFL_team_info_2019_2020_season`" \
+                       "(" \
+                       "    team," \
+                       "    wins," \
+                       "    losses," \
+                       "    ties," \
+                       "    conference," \
+                       "    division," \
+                       "    coach" \
+                       ") VALUES (%s, %s, %s, %s, %s, %s, %s);"
+
+    with connection_to_database.cursor() as cursor:
+        cursor.execute(insert_SQL_query,
+                       (
+                            overall_team_info.loc[team_name, 'team'],
+                            str(overall_team_info.loc[team_name, 'wins']),
+                            str(overall_team_info.loc[team_name, 'losses']),
+                            str(overall_team_info.loc[team_name, 'ties']),
+                            overall_team_info.loc[team_name, 'conference'],
+                            overall_team_info.loc[team_name, 'division'],
+                            overall_team_info.loc[team_name, 'coach']
+                       )
+                      )
+
+    connection_to_database.commit()
+    print (team_name + ' overall team info insertion to mysql table complete!')
+
 
 
