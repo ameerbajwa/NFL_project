@@ -159,12 +159,42 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
 
-        raw_column_names = driver.find_elements_by_xpath('//*[@id="team_stats"]/thead/tr[2]//th')
+        raw_column_names_part_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/thead/tr[2]//th')
+        raw_column_names_part_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/thead/tr[2]//th')
         team_stats_column_names = []
 
-        for raw_col_index in range(1,len(raw_column_names)):
-            team_stats_column_names.append(raw_column_names[raw_col_index].text)
+        for raw_col_index in range(1,len(raw_column_names_part_1)):
+            team_stats_column_names.append(raw_column_names_part_1[raw_col_index].text)
+        for raw_col_index in range(1,len(raw_column_names_part_2)):
+            team_stats_column_names.append(raw_column_names_part_2[raw_col_index].text)
 
+        team_off_stats_dict = {}
+        team_def_stats_dict = {}
+
+        team_off_stats_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/tbody/tr[1]//td')
+        team_off_stats_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/tbody/tr[1]//td')
+
+        for off_index in range(0, len(team_off_stats_1)):
+            team_off_stats_dict[team_stats_column_names[off_index]] = team_off_stats_1[off_index].text
+        for off_index in range(0, len(team_off_stats_2)):
+            team_off_stats_dict[team_stats_column_names[off_index + len(raw_column_names_part_1) - 1]] = team_off_stats_2[off_index].text
+
+        team_off_stats_df = pd.DataFrame(data=team_off_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
+
+        team_def_stats_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/tbody/tr[2]//td')
+        team_def_stats_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/tbody/tr[2]//td')
+
+        for def_index in range(0, len(team_def_stats_1)):
+            team_def_stats_dict[team_stats_column_names[def_index]] = team_def_stats_1[def_index].text
+        for def_index in range(0, len(team_def_stats_2)):
+            team_def_stats_dict[team_stats_column_names[def_index + len(raw_column_names_part_1) - 1]] = team_def_stats_2[def_index].text
+
+        team_def_stats_df = pd.DataFrame(data=team_def_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
+
+        cleaned_team_off_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_off_stats(team_off_stats_df)
+        cleaned_team_def_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_def_stats(team_def_stats_df)
+        insert.insert_team_off_stats_to_mysql(cleaned_team_off_stats_df)
+        insert.insert_team_def_stats_to_mysql(cleaned_team_def_stats_df)
 
 # TEST
 # test_dict = [{'team_name': 'Arizona Cardinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019_roster.htm'}]
@@ -173,4 +203,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_team_info(test_dict)
 
-sys.exit()
+# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+# grabbing_off_and_def_team_info(test_dict)
+
+# sys.exit()

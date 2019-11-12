@@ -21,3 +21,9 @@ def cleaning_NFL_roster_data(team_roster_df):
     return (cleaned_team_roster_df)
 
 # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED
+
+def cleaning_NFL_team_off_stats(team_off_stats_df):
+    return team_off_stats_df
+
+def cleaning_NFL_team_def_stats(team_def_stats_df):
+    return team_def_stats_df

@@ -6,7 +6,7 @@ def insert_roster_info_to_mysql(team_roster_info):
 
     connection_to_database = pymysql.connect(
                                 user='root',
-                                password='$s',
+                                password='%s',
                                 host='127.0.0.1',
                                 port=3306,
                                 database='NFL_database'
@@ -61,11 +61,11 @@ def insert_overall_team_info_to_mysql(overall_team_info):
 
     connection_to_database = pymysql.connect(
                                 user='root',
-                                password='Tennis07',
+                                password='%s',
                                 host='127.0.0.1',
                                 port=3306,
                                 database='NFL_database'
-                             ) # % (connection_to_local_mysql_data_management_system.columns[1])
+                             ) % (connection_to_local_mysql_data_management_system.columns[1])
 
     insert_SQL_query = "INSERT INTO `NFL_team_info_2019_2020_season`" \
                        "(" \
@@ -93,6 +93,29 @@ def insert_overall_team_info_to_mysql(overall_team_info):
 
     connection_to_database.commit()
     print (team_name + ' overall team info insertion to mysql table complete!')
+
+def insert_team_off_stats_to_mysql(team_off_stats_df):
+    connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
+
+    connection_to_database = pymysql.connect(
+                                user='root',
+                                password='%s',
+                                host='127.0.0.1',
+                                port=3306,
+                                database='NFL_database'
+                             ) % (connection_to_local_mysql_data_management_system.columns[1])
+
+
+def insert_team_def_stats_to_mysql(team_def_stats_df):
+    connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
+
+    connection_to_database = pymysql.connect(
+                                user='root',
+                                password='%s',
+                                host='127.0.0.1',
+                                port=3306,
+                                database='NFL_database'
+                             ) % (connection_to_local_mysql_data_management_system.columns[1])
 
 
 
