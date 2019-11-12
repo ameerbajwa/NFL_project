@@ -112,7 +112,8 @@ def grabbing_roster_info(list_of_active_teams):
                 team_roster_df = team_roster_df.append(player_roster_info, ignore_index=True)
 
         cleaned_team_roster_df = cleaning_scrapped_team_data.cleaning_NFL_roster_data(team_roster_df)
-        insert.insert_roster_info_to_mysql(cleaned_team_roster_df)
+        connection_to_mysql = insert.connect_to_mysql_system()
+        insert.insert_roster_info_to_mysql(cleaned_team_roster_df, connection_to_mysql)
 
 def grabbing_injury_info(list_of_active_teams_injury_reports):
     for active_team_injury_report_index in range(0,len(list_of_active_teams_injury_reports)):
@@ -152,7 +153,8 @@ def grabbing_team_info(list_of_active_teams):
 
         team_info_df = pd.DataFrame(data=team_info_dict, index=[list_of_active_teams[active_team_index]['team_name']])
         # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
-        insert.insert_overall_team_info_to_mysql(team_info_df)
+        connection_to_mysql = insert.connect_to_mysql_system()
+        insert.insert_overall_team_info_to_mysql(team_info_df, connection_to_mysql)
 
 def grabbing_off_and_def_team_info(list_of_active_teams):
     for active_team_index in range(0, len(list_of_active_teams)):
@@ -193,8 +195,9 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 
         cleaned_team_off_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_off_stats(team_off_stats_df)
         cleaned_team_def_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_def_stats(team_def_stats_df)
-        insert.insert_team_off_stats_to_mysql(cleaned_team_off_stats_df)
-        insert.insert_team_def_stats_to_mysql(cleaned_team_def_stats_df)
+        connection_to_mysql = insert.connect_to_mysql_system()
+        insert.insert_team_off_stats_to_mysql(cleaned_team_off_stats_df, connection_to_mysql)
+        insert.insert_team_def_stats_to_mysql(cleaned_team_def_stats_df, connection_to_mysql)
 
 # TEST
 # test_dict = [{'team_name': 'Arizona Cardinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019_roster.htm'}]
