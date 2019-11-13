@@ -65,9 +65,40 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
             i += 1
             continue
 
-    with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year,
-              'wb') as handle:
+    with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'wb') as handle:
         pickle.dump(list_of_active_teams, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def grabbing_nfl_game_urls(year, week):
-    return year, week
+    driver.get('https://www.pro-football-reference.com/years/')
+    time.sleep(1)
+
+    list_of_seasons = driver.find_elements_by_xpath('//*[@id="years"]/tbody//tr')
+
+    for season in list_of_seasons:
+        if (str(year) == season.find_element_by_xpath('th/a').text):
+            driver.get(season.find_element_by_xpath('th/a').get_attribute('href'))
+            time.sleep(1)
+        else:
+            continue
+
+    list_of_weeks = driver.find_elements_by_xpath('//*[@id="div_week_games"]/div//div')
+
+    for week in list_of_weeks:
+        if (str(week) == week.find_element_by_tag_name('a').text.split(' ')[1]):
+            driver.get(week.find_element_by_tag_name('a').get_attribute('href'))
+            time.sleep(1)
+        else:
+            continue
+
+    dict_of_game_summary_urls = {
+        'year': year,
+        'week': week,
+        'list_of_game_summary_urls': []
+    }
+    list_of_game_summaries = driver.find_elements_by_xpath('//*[@id="content"]/div[5]//div')
+
+    for game_summary in list_of_game_summaries:
+        dict_of_game_summary_urls['list_of_game_summary_urls'].append(game_summary.find_element_by_xpath('//*[@id="content"]/div[5]/div[1]/table[1]/tbody/tr[2]/td[3]/a').get_attribute('href'))
+
+    with open('dictionaries_of_nfl_urls/list_of_game_summaries_from_week_' + str(week) + '_season_' + str(year), 'wb') as handle:
+        pickle.dump(dict_of_game_summary_urls, handle, protocol=pickle.HIGHEST_PROTOCOL)

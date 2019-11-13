@@ -28,7 +28,11 @@ while (exit_program == False):
 
         if (scrapper_type == 'team'):
             type_of_info_from_teams = input('What type of team data do you want to be scrapped? ("roster" for roster data, "injury" for injury data, "team" for overall team statistics and personel information) ')
-            NFL_team_scrapper.selecting_info(type_of_info_from_teams, year)
+            NFL_team_scrapper.selecting_team_info(type_of_info_from_teams, year)
+
+        if (scrapper_type == 'player_stats'):
+            week = input('For which week in ' + year + ' season? ')
+            NFL_player_scrapper.selecting_player_info(year, week)
 
     if (action == 'exit'):
         sys.exit()

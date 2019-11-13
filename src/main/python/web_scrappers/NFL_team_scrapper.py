@@ -14,7 +14,7 @@ chromedriver = "/Applications/chromedriver"
 os.environ["webdriver.chrome.driver"] = chromedriver
 driver = webdriver.Chrome(chromedriver)
 
-def selecting_info(type_of_info_from_teams, year):
+def selecting_team_info(type_of_info_from_teams, year):
     with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'rb') as handle:
         list_of_active_teams = pickle.load(handle)
 
