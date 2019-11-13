@@ -199,6 +199,9 @@ def insert_team_off_stats_to_mysql(team_off_stats_df, connection_to_database):
             str(team_off_stats_df.iloc[0,38])
         ))
 
+    connection_to_database.commit()
+    print (team_off_stats_df.index[0] + ' offensive team stats insertion to mysql table complete!')
+
 def insert_team_def_stats_to_mysql(team_def_stats_df, connection_to_database):
     # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
     #
@@ -302,5 +305,6 @@ def insert_team_def_stats_to_mysql(team_def_stats_df, connection_to_database):
             str(team_def_stats_df.iloc[0,38])
         ))
 
-
+    connection_to_database.commit()
+    print (team_def_stats_df.index[0] + ' defensive team stats insertion to mysql table complete!')
 
