@@ -65,18 +65,20 @@ def grab_offensive_player_data(dict_of_game_summaries):
         adv_rushing_player_stats_df = table_scrapper('rushing_advanced')
         adv_receiving_player_stats_df = table_scrapper('receiving_advanced')
 
-        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df)
-        clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df)
-        clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df)
-
-
-
+        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
+        clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
+        clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
 def grab_defensive_player_data(dict_of_game_summaries):
 
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
+
+        basic_def_player_stats_df = table_scrapper('player_defense')
+        adv_def_player_stats_df = table_scrapper('defense_advanced')
+
+        cleaning_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_stats(basic_def_player_stats_df, adv_def_player_stats_df)
 
 def grab_special_teams_player_data(dict_of_game_summaries):
 
