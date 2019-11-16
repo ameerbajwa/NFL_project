@@ -26,11 +26,36 @@ def table_scrapper(id_of_table):
 
     # unique ids_for_table scrapping of player stats by game: player_offense, passing_advanced, rushing_advanced, receiving_advanced, player_defense, defense_advanced
 
+    # FOR COLUMN NAMES FOR THE BASIC OFFENSE AND DEFENSE TABLE, HAVE TO GRAB BOTH ROWS OF THEADS TO DIFFER BETWEEN THE
+    #  PASSING, RUSHING, AND RECEIVING COLUMNS
+
     raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table +'"]/thead/tr[2]//th') # id_of_table
     column_names = []
 
-    for col in raw_column_names:
-        column_names.append(col.text)
+    if (len(driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead//tr')) > 1):
+        raw_headers = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr[1]//th')
+        headers = []
+        headers.append({'header_name': '', 'number_of_columns_covered': 0})
+        for head in raw_headers[1:]:
+            header_dict = {}
+            header_dict['header_name'] = head.text
+            header_dict['number_of_columns_covered'] = head.colspan
+            headers.append(header_dict)
+
+        header_counter = 0
+        start = headers[header_counter]['number_of_columns_covered'] + 2
+        end = headers[header_counter + 1]['number_of_columns_covered'] + 2
+        for col_index in range(2,len(raw_column_names)):
+            if (col_index >= start and col_index < end):
+                column_names.append(headers[header_counter + 1]['header_name'] + '_' + raw_column_names[col_index].text)
+            else:
+                header_counter += 1
+                start = end
+                end += (headers[header_counter + 1]['number_of_columns_covered'] + 2)
+
+    else:
+        for col in raw_column_names:
+            column_names.append(col.text)
 
     player_stats_df = pd.DataFrame(columns=column_names)
 
