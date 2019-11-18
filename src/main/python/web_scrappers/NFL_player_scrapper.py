@@ -10,10 +10,6 @@ import os
 import pickle
 import sys
 
-chromedriver = "/Applications/chromedriver"
-os.environ["webdriver.chrome.driver"] = chromedriver
-driver = webdriver.Chrome(chromedriver)
-
 def selecting_player_info(year, week):
     with open('dictionaries_of_nfl_urls/list_of_game_summaries_from_week_' + str(week) + '_season_' + str(year), 'rb') as handle:
         dict_of_game_summaries = pickle.load(handle)
@@ -22,7 +18,7 @@ def selecting_player_info(year, week):
     grab_defensive_player_data(dict_of_game_summaries)
     grab_special_teams_player_data(dict_of_game_summaries)
 
-def table_scrapper(id_of_table):
+def table_scrapper(id_of_table, driver):
 
     # unique ids_for_table scrapping of player stats by game: player_offense, passing_advanced, rushing_advanced, receiving_advanced, player_defense, defense_advanced
 
@@ -80,32 +76,41 @@ def table_scrapper(id_of_table):
     return (player_stats_df)
 
 def grab_offensive_player_data(dict_of_game_summaries):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
 
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
 
-        basic_off_player_stats_df = table_scrapper('player_offense')
-        adv_passing_player_stats_df = table_scrapper('passing_advanced')
-        adv_rushing_player_stats_df = table_scrapper('rushing_advanced')
-        adv_receiving_player_stats_df = table_scrapper('receiving_advanced')
+        basic_off_player_stats_df = table_scrapper('player_offense', driver)
+        adv_passing_player_stats_df = table_scrapper('passing_advanced', driver)
+        adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver)
+        adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver)
 
         clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
         clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
         clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
 def grab_defensive_player_data(dict_of_game_summaries):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
 
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
 
-        basic_def_player_stats_df = table_scrapper('player_defense')
-        adv_def_player_stats_df = table_scrapper('defense_advanced')
+        basic_def_player_stats_df = table_scrapper('player_defense', driver)
+        adv_def_player_stats_df = table_scrapper('defense_advanced', driver)
 
         cleaning_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_stats(basic_def_player_stats_df, adv_def_player_stats_df)
 
 def grab_special_teams_player_data(dict_of_game_summaries):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
 
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)

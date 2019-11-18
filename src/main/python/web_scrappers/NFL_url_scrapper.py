@@ -10,11 +10,11 @@ import os
 import pickle
 import sys
 
-chromedriver = "/Applications/chromedriver"
-os.environ["webdriver.chrome.driver"] = chromedriver
-driver = webdriver.Chrome(chromedriver)
-
 def grabbing_nfl_team_urls(type_of_info_from_teams, year):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
+
     driver.get("https://www.pro-football-reference.com/teams/")
     time.sleep(1)
     list_of_teams = driver.find_elements_by_xpath('/html/body/div[2]/div[3]/div[2]/div[2]/div/table/tbody//th')
@@ -69,24 +69,30 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
         pickle.dump(list_of_active_teams, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def grabbing_nfl_game_urls(year, week):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
+
     driver.get('https://www.pro-football-reference.com/years/')
     time.sleep(1)
 
     list_of_seasons = driver.find_elements_by_xpath('//*[@id="years"]/tbody//tr')
 
     for season in list_of_seasons:
-        if (str(year) == season.find_element_by_xpath('th/a').text):
-            driver.get(season.find_element_by_xpath('th/a').get_attribute('href'))
+        if (str(year) == season.find_element_by_tag_name('a').text):
+            driver.get(season.find_element_by_tag_name('a').get_attribute('href'))
             time.sleep(1)
+            break
         else:
             continue
 
     list_of_weeks = driver.find_elements_by_xpath('//*[@id="div_week_games"]/div//div')
 
-    for week in list_of_weeks:
-        if (str(week) == week.find_element_by_tag_name('a').text.split(' ')[1]):
-            driver.get(week.find_element_by_tag_name('a').get_attribute('href'))
+    for week_of_season in list_of_weeks:
+        if (week == week_of_season.find_element_by_tag_name('a').text.split(' ')[1]):
+            driver.get(week_of_season.find_element_by_tag_name('a').get_attribute('href'))
             time.sleep(1)
+            break
         else:
             continue
 

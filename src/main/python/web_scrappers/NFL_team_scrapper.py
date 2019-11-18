@@ -10,10 +10,6 @@ import os
 import pickle
 import sys
 
-chromedriver = "/Applications/chromedriver"
-os.environ["webdriver.chrome.driver"] = chromedriver
-driver = webdriver.Chrome(chromedriver)
-
 def selecting_team_info(type_of_info_from_teams, year):
     with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'rb') as handle:
         list_of_active_teams = pickle.load(handle)
@@ -24,8 +20,13 @@ def selecting_team_info(type_of_info_from_teams, year):
         grabbing_injury_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'team'):
         grabbing_team_info(list_of_active_teams)
+    elif (type_of_info_from_teams == 'off_def_team'):
+        grabbing_off_and_def_team_info(list_of_active_teams)
 
 def grabbing_roster_info(list_of_active_teams):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
 
     for active_team_index in range(0, len(list_of_active_teams)):
         driver.get(list_of_active_teams[active_team_index]['url'])
@@ -60,10 +61,14 @@ def grabbing_roster_info(list_of_active_teams):
                 team_roster_df = team_roster_df.append(player_roster_info, ignore_index=True)
 
         cleaned_team_roster_df = cleaning_scrapped_team_data.cleaning_NFL_roster_data(team_roster_df)
-        connection_to_mysql = insert.connect_to_mysql_system()
-        insert.insert_roster_info_to_mysql(cleaned_team_roster_df, connection_to_mysql)
+        # connection_to_mysql = insert.connect_to_mysql_system()
+        insert.insert_roster_info_to_mysql(cleaned_team_roster_df)
 
 def grabbing_injury_info(list_of_active_teams_injury_reports):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
+
     for active_team_injury_report_index in range(0,len(list_of_active_teams_injury_reports)):
         driver.get(list_of_active_teams_injury_reports[active_team_injury_report_index]['url'])
         time.sleep(2)
@@ -74,6 +79,9 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
             print (game_date.text)
 
 def grabbing_team_info(list_of_active_teams):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
 
     for active_team_index in range(0, len(list_of_active_teams)):
         driver.get(list_of_active_teams[active_team_index]['url'])
@@ -101,51 +109,79 @@ def grabbing_team_info(list_of_active_teams):
 
         team_info_df = pd.DataFrame(data=team_info_dict, index=[list_of_active_teams[active_team_index]['team_name']])
         # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
-        connection_to_mysql = insert.connect_to_mysql_system()
-        insert.insert_overall_team_info_to_mysql(team_info_df, connection_to_mysql)
+        # connection_to_mysql = insert.connect_to_mysql_system()
+        insert.insert_overall_team_info_to_mysql(team_info_df)
 
 def grabbing_off_and_def_team_info(list_of_active_teams):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
+
     for active_team_index in range(0, len(list_of_active_teams)):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
 
+        raw_column_headers_part_1 = driver.find_elements_by_xpath(('//*[@id="team_stats"]/thead/tr[1]//th'))
         raw_column_names_part_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/thead/tr[2]//th')
         raw_column_names_part_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/thead/tr[2]//th')
         team_stats_column_names = []
 
+        raw_header_index = 1
+        inside_counter = 0
         for raw_col_index in range(1,len(raw_column_names_part_1)):
-            team_stats_column_names.append(raw_column_names_part_1[raw_col_index].text)
+            if (raw_column_headers_part_1[raw_header_index].text != ''):
+                if (inside_counter < int(raw_column_headers_part_1[raw_header_index].get_attribute('colspan'))):
+                    print (inside_counter)
+                    print (raw_column_headers_part_1[raw_header_index].text)
+                    if (len(raw_column_headers_part_1[raw_header_index].text.split(' ')) > 1):
+                        column_header = '_'.join(raw_column_headers_part_1[raw_header_index].text.split(' '))
+                    else:
+                        column_header = raw_column_headers_part_1[raw_header_index].text
+                    inside_counter += 1
+                    team_stats_column_names.append(column_header + '_' + raw_column_names_part_1[raw_col_index].text)
+                else:
+                    inside_counter = 0
+                    raw_header_index += 1
+                    print(raw_column_names_part_1[raw_col_index].text)
+                    team_stats_column_names.append(raw_column_names_part_1[raw_col_index].text)
+            else:
+                print (raw_column_names_part_1[raw_col_index].text)
+                team_stats_column_names.append(raw_column_names_part_1[raw_col_index].text)
+                raw_header_index += 1
+
         for raw_col_index in range(1,len(raw_column_names_part_2)):
             team_stats_column_names.append(raw_column_names_part_2[raw_col_index].text)
 
-        team_off_stats_dict = {}
-        team_def_stats_dict = {}
+        print (team_stats_column_names)
 
-        team_off_stats_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/tbody/tr[1]//td')
-        team_off_stats_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/tbody/tr[1]//td')
+        # team_off_stats_dict = {}
+        # team_def_stats_dict = {}
+        #
+        # team_off_stats_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/tbody/tr[1]//td')
+        # team_off_stats_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/tbody/tr[1]//td')
+        #
+        # for off_index in range(0, len(team_off_stats_1)):
+        #     team_off_stats_dict[team_stats_column_names[off_index]] = team_off_stats_1[off_index].text
+        # for off_index in range(0, len(team_off_stats_2)):
+        #     team_off_stats_dict[team_stats_column_names[off_index + len(raw_column_names_part_1) - 1]] = team_off_stats_2[off_index].text
+        #
+        # team_off_stats_df = pd.DataFrame(data=team_off_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
+        #
+        # team_def_stats_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/tbody/tr[2]//td')
+        # team_def_stats_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/tbody/tr[2]//td')
+        #
+        # for def_index in range(0, len(team_def_stats_1)):
+        #     team_def_stats_dict[team_stats_column_names[def_index]] = team_def_stats_1[def_index].text
+        # for def_index in range(0, len(team_def_stats_2)):
+        #     team_def_stats_dict[team_stats_column_names[def_index + len(raw_column_names_part_1) - 1]] = team_def_stats_2[def_index].text
+        #
+        # team_def_stats_df = pd.DataFrame(data=team_def_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
 
-        for off_index in range(0, len(team_off_stats_1)):
-            team_off_stats_dict[team_stats_column_names[off_index]] = team_off_stats_1[off_index].text
-        for off_index in range(0, len(team_off_stats_2)):
-            team_off_stats_dict[team_stats_column_names[off_index + len(raw_column_names_part_1) - 1]] = team_off_stats_2[off_index].text
-
-        team_off_stats_df = pd.DataFrame(data=team_off_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
-
-        team_def_stats_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/tbody/tr[2]//td')
-        team_def_stats_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/tbody/tr[2]//td')
-
-        for def_index in range(0, len(team_def_stats_1)):
-            team_def_stats_dict[team_stats_column_names[def_index]] = team_def_stats_1[def_index].text
-        for def_index in range(0, len(team_def_stats_2)):
-            team_def_stats_dict[team_stats_column_names[def_index + len(raw_column_names_part_1) - 1]] = team_def_stats_2[def_index].text
-
-        team_def_stats_df = pd.DataFrame(data=team_def_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
-
-        cleaned_team_off_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_off_stats(team_off_stats_df)
-        cleaned_team_def_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_def_stats(team_def_stats_df)
-        connection_to_mysql = insert.connect_to_mysql_system()
-        insert.insert_team_off_stats_to_mysql(cleaned_team_off_stats_df, connection_to_mysql)
-        insert.insert_team_def_stats_to_mysql(cleaned_team_def_stats_df, connection_to_mysql)
+        # cleaned_team_off_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_off_stats(team_off_stats_df)
+        # cleaned_team_def_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_def_stats(team_def_stats_df)
+        # connection_to_mysql = insert.connect_to_mysql_system()
+        # insert.insert_team_off_stats_to_mysql(team_off_stats_df)
+        # insert.insert_team_def_stats_to_mysql(team_def_stats_df)
 
 # TEST
 # test_dict = [{'team_name': 'Arizona Cardinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019_roster.htm'}]
@@ -154,7 +190,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_team_info(test_dict)
 
-# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-# grabbing_off_and_def_team_info(test_dict)
+test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+grabbing_off_and_def_team_info(test_dict)
 
-# sys.exit()
+sys.exit()

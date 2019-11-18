@@ -13,7 +13,9 @@ def connect_to_mysql_system():
                              ) % (connection_to_local_mysql_data_management_system.columns[1])
     return (connection_to_database)
 
-def insert_roster_info_to_mysql(team_roster_info, connection_to_database):
+def insert_roster_info_to_mysql(team_roster_info):
+
+    connection_to_database = connect_to_mysql_system()
 
     for i in range(0, len(team_roster_info)):
         insert_SQL_query = "INSERT INTO `NFL_roster_info_2019_2020_season` " \
@@ -57,9 +59,9 @@ def insert_roster_info_to_mysql(team_roster_info, connection_to_database):
     connection_to_database.commit()
     print(team_roster_info.loc[0, 'Team'] + ' roster insertion to mysql table complete!')
 
-def insert_overall_team_info_to_mysql(overall_team_info, connection_to_database):
+def insert_overall_team_info_to_mysql(overall_team_info):
     team_name = overall_team_info.loc['Arizona Caridinals', 'team']
-    print (team_name)
+    connection_to_database = connect_to_mysql_system()
     # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
     #
     # connection_to_database = pymysql.connect(
@@ -97,7 +99,9 @@ def insert_overall_team_info_to_mysql(overall_team_info, connection_to_database)
     connection_to_database.commit()
     print (team_name + ' overall team info insertion to mysql table complete!')
 
-def insert_team_off_stats_to_mysql(team_off_stats_df, connection_to_database):
+def insert_team_off_stats_to_mysql(team_off_stats_df):
+    connection_to_database = connect_to_mysql_system()
+
     # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
     #
     # connection_to_database = pymysql.connect(
@@ -202,7 +206,9 @@ def insert_team_off_stats_to_mysql(team_off_stats_df, connection_to_database):
     connection_to_database.commit()
     print (team_off_stats_df.index[0] + ' offensive team stats insertion to mysql table complete!')
 
-def insert_team_def_stats_to_mysql(team_def_stats_df, connection_to_database):
+def insert_team_def_stats_to_mysql(team_def_stats_df):
+    connection_to_database = connect_to_mysql_system()
+
     # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
     #
     # connection_to_database = pymysql.connect(
