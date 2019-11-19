@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from src.main.python.SQL_uploads import insert
 from src.main.python.cleaning_scrapped_data import cleaning_scrapped_team_data
@@ -8,7 +7,6 @@ import pandas as pd
 import time
 import os
 import pickle
-import sys
 
 def selecting_team_info(type_of_info_from_teams, year):
     with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'rb') as handle:
@@ -61,7 +59,6 @@ def grabbing_roster_info(list_of_active_teams):
                 team_roster_df = team_roster_df.append(player_roster_info, ignore_index=True)
 
         cleaned_team_roster_df = cleaning_scrapped_team_data.cleaning_NFL_roster_data(team_roster_df)
-        # connection_to_mysql = insert.connect_to_mysql_system()
         insert.insert_roster_info_to_mysql(cleaned_team_roster_df)
 
 def grabbing_injury_info(list_of_active_teams_injury_reports):
@@ -163,9 +160,6 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 
         for raw_col_index in range(1,len(raw_column_names_part_2)):
             team_stats_column_names.append(raw_column_names_part_2[raw_col_index].text)
-
-        print (team_stats_column_names)
-        print (len(team_stats_column_names))
 
         team_off_stats_dict = {}
         team_def_stats_dict = {}

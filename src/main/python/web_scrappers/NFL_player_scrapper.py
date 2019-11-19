@@ -35,7 +35,7 @@ def table_scrapper(id_of_table, driver):
         for head in raw_headers[1:]:
             header_dict = {}
             header_dict['header_name'] = head.text
-            header_dict['number_of_columns_covered'] = head.colspan
+            header_dict['number_of_columns_covered'] = int(head.get_attribute('colspan'))
             headers.append(header_dict)
 
         header_counter = 0
@@ -89,9 +89,14 @@ def grab_offensive_player_data(dict_of_game_summaries):
         adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver)
         adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver)
 
-        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
-        clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
-        clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
+        print (basic_off_player_stats_df)
+        print (adv_passing_player_stats_df)
+        print (adv_rushing_player_stats_df)
+        print (adv_receiving_player_stats_df)
+
+        # clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
+        # clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
+        # clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
 def grab_defensive_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
@@ -115,3 +120,8 @@ def grab_special_teams_player_data(dict_of_game_summaries):
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
+
+# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080cle.htm']}
+# grab_offensive_player_data(test_dict)
+#
+# sys.exit()

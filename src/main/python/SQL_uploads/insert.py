@@ -286,3 +286,5 @@ def insert_team_def_stats_to_mysql(team_def_stats_df):
     connection_to_database.commit()
     print (team_def_stats_df.index[0] + ' defensive team stats insertion to mysql table complete!')
 
+
+

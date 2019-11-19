@@ -1,14 +1,9 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
-from src.main.python.SQL_uploads import insert
-from src.main.python.cleaning_scrapped_data import cleaning_scrapped_team_data
 
-import pandas as pd
 import time
 import os
 import pickle
-import sys
 
 def grabbing_nfl_team_urls(type_of_info_from_teams, year):
     chromedriver = "/Applications/chromedriver"
