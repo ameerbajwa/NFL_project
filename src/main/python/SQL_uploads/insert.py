@@ -62,15 +62,6 @@ def insert_roster_info_to_mysql(team_roster_info):
 def insert_overall_team_info_to_mysql(overall_team_info):
     team_name = overall_team_info.loc['Arizona Caridinals', 'team']
     connection_to_database = connect_to_mysql_system()
-    # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
-    #
-    # connection_to_database = pymysql.connect(
-    #                             user='root',
-    #                             password='%s',
-    #                             host='127.0.0.1',
-    #                             port=3306,
-    #                             database='NFL_database'
-    #                          ) % (connection_to_local_mysql_data_management_system.columns[1])
 
     insert_SQL_query = "INSERT INTO `NFL_team_info_2019_2020_season`" \
                        "(" \
@@ -102,15 +93,6 @@ def insert_overall_team_info_to_mysql(overall_team_info):
 def insert_team_off_stats_to_mysql(team_off_stats_df):
     connection_to_database = connect_to_mysql_system()
 
-    # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
-    #
-    # connection_to_database = pymysql.connect(
-    #                             user='root',
-    #                             password='%s',
-    #                             host='127.0.0.1',
-    #                             port=3306,
-    #                             database='NFL_database'
-    #                          ) % (connection_to_local_mysql_data_management_system.columns[1])
     insert_SQL_query = "INSERT INTO `NFL_team_offensive_statistics_2019_2020_season`" \
                        "(" \
                        "team," \
@@ -139,7 +121,7 @@ def insert_team_off_stats_to_mysql(team_off_stats_df):
                         "number_of_drives_by_team," \
                         "per_of_drives_resulting_in_off_score_by_team," \
                         "per_of_drives_resulting_in_off_turnover_by_team," \
-                        "average_staring_field_position_by_team," \
+                        "average_starting_field_position_by_team," \
                         "average_time_per_drive_by_team," \
                         "average_number_of_plays_per_drive_by_team," \
                         "net_yards_per_drive_by_team," \
@@ -162,45 +144,45 @@ def insert_team_off_stats_to_mysql(team_off_stats_df):
     with connection_to_database.cursor() as cursor:
         cursor.execute(insert_SQL_query, (
             team_off_stats_df.index[0],
-            str(team_off_stats_df.iloc[0,0]),
-            str(team_off_stats_df.iloc[0,1]),
-            str(team_off_stats_df.iloc[0,2]),
-            str(team_off_stats_df.iloc[0,3]),
-            str(team_off_stats_df.iloc[0,4]),
-            str(team_off_stats_df.iloc[0,5]),
-            str(team_off_stats_df.iloc[0,6]),
-            str(team_off_stats_df.iloc[0,7]),
-            str(team_off_stats_df.iloc[0,8]),
-            str(team_off_stats_df.iloc[0,9]),
-            str(team_off_stats_df.iloc[0,10]),
-            str(team_off_stats_df.iloc[0,11]),
-            str(team_off_stats_df.iloc[0,12]),
-            str(team_off_stats_df.iloc[0,13]),
-            str(team_off_stats_df.iloc[0,14]),
-            str(team_off_stats_df.iloc[0,15]),
-            str(team_off_stats_df.iloc[0,16]),
-            str(team_off_stats_df.iloc[0,17]),
-            str(team_off_stats_df.iloc[0,18]),
-            str(team_off_stats_df.iloc[0,19]),
-            str(team_off_stats_df.iloc[0,20]),
-            str(team_off_stats_df.iloc[0,21]),
-            str(team_off_stats_df.iloc[0,22]),
-            str(team_off_stats_df.iloc[0,23]),
-            str(team_off_stats_df.iloc[0,24]),
-            str(team_off_stats_df.iloc[0,25]),
-            str(team_off_stats_df.iloc[0,26]),
-            str(team_off_stats_df.iloc[0,27]),
-            str(team_off_stats_df.iloc[0,28]),
-            str(team_off_stats_df.iloc[0,29]),
-            str(team_off_stats_df.iloc[0,30]),
-            str(team_off_stats_df.iloc[0,31]),
-            str(team_off_stats_df.iloc[0,32]),
-            str(team_off_stats_df.iloc[0,33]),
-            str(team_off_stats_df.iloc[0,34]),
-            str(team_off_stats_df.iloc[0,35]),
-            str(team_off_stats_df.iloc[0,36]),
-            str(team_off_stats_df.iloc[0,37]),
-            str(team_off_stats_df.iloc[0,38])
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'PF']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Yds']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Tot_Yds_&_TO_Ply']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Tot_Yds_&_TO_Y/P']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Tot_Yds_&_TO_TO']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'FL']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'1stD']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_Cmp']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_Att']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_Yds']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_TD']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_Int']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_NY/A']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Passing_1stD']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Rushing_Att']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Rushing_Yds']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Rushing_TD']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Rushing_Y/A']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Rushing_1stD']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Penalties_Pen']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Penalties_Yds']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Penalties_1stPy']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'#Dr']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Sc%']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'TO%']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Average_Drive_Start']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Average_Drive_Time']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Average_Drive_Plays']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Average_Drive_Yds']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'Average_Drive_Pts']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'3DAtt']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'3DConv']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'3D%']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'4DAtt']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'4DConv']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'4D%']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'RZAtt']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'RZTD']),
+            str(team_off_stats_df.loc[team_off_stats_df.index[0],'RZPct'])
         ))
 
     connection_to_database.commit()
@@ -208,16 +190,6 @@ def insert_team_off_stats_to_mysql(team_off_stats_df):
 
 def insert_team_def_stats_to_mysql(team_def_stats_df):
     connection_to_database = connect_to_mysql_system()
-
-    # connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
-    #
-    # connection_to_database = pymysql.connect(
-    #                             user='root',
-    #                             password='%s',
-    #                             host='127.0.0.1',
-    #                             port=3306,
-    #                             database='NFL_database'
-    #                          ) % (connection_to_local_mysql_data_management_system.columns[1])
     
     insert_SQL_query = "INSERT INTO `NFL_team_defensive_statistics_2019_2020_season`" \
                        "(" \
@@ -238,11 +210,11 @@ def insert_team_def_stats_to_mysql(team_def_stats_df):
                                 "first_downs_through_passing_by_opposing_teams," \
                                 "rushing_attempts_by_opposing_teams," \
                                 "yards_gained_through_rushing_by_opposing_teams," \
-                                "rushing_toudowns_by_opposing_teams," \
+                                "rushing_touchdowns_by_opposing_teams," \
                                 "rushing_yards_per_attempt_by_opposing_teams," \
                                 "first_downs_through_rushing_by_opposing_teams," \
                                 "penalties_committed_by_team_and_accepted_by_opposing_teams," \
-                                "penalty_yards_accured_from_team," \
+                                "penalty_yards_accrued_from_team," \
                                 "first_downs_by_teams_penalties," \
                                 "number_of_drives_by_opposing_teams," \
                                 "per_of_drives_resulting_in_off_score_by_opposing_teams," \
@@ -270,45 +242,45 @@ def insert_team_def_stats_to_mysql(team_def_stats_df):
     with connection_to_database.cursor() as cursor:
         cursor.execute(insert_SQL_query, (
             team_def_stats_df.index[0],
-            str(team_def_stats_df.iloc[0,0]),
-            str(team_def_stats_df.iloc[0,1]),
-            str(team_def_stats_df.iloc[0,2]),
-            str(team_def_stats_df.iloc[0,3]),
-            str(team_def_stats_df.iloc[0,4]),
-            str(team_def_stats_df.iloc[0,5]),
-            str(team_def_stats_df.iloc[0,6]),
-            str(team_def_stats_df.iloc[0,7]),
-            str(team_def_stats_df.iloc[0,8]),
-            str(team_def_stats_df.iloc[0,9]),
-            str(team_def_stats_df.iloc[0,10]),
-            str(team_def_stats_df.iloc[0,11]),
-            str(team_def_stats_df.iloc[0,12]),
-            str(team_def_stats_df.iloc[0,13]),
-            str(team_def_stats_df.iloc[0,14]),
-            str(team_def_stats_df.iloc[0,15]),
-            str(team_def_stats_df.iloc[0,16]),
-            str(team_def_stats_df.iloc[0,17]),
-            str(team_def_stats_df.iloc[0,18]),
-            str(team_def_stats_df.iloc[0,19]),
-            str(team_def_stats_df.iloc[0,20]),
-            str(team_def_stats_df.iloc[0,21]),
-            str(team_def_stats_df.iloc[0,22]),
-            str(team_def_stats_df.iloc[0,23]),
-            str(team_def_stats_df.iloc[0,24]),
-            str(team_def_stats_df.iloc[0,25]),
-            str(team_def_stats_df.iloc[0,26]),
-            str(team_def_stats_df.iloc[0,27]),
-            str(team_def_stats_df.iloc[0,28]),
-            str(team_def_stats_df.iloc[0,29]),
-            str(team_def_stats_df.iloc[0,30]),
-            str(team_def_stats_df.iloc[0,31]),
-            str(team_def_stats_df.iloc[0,32]),
-            str(team_def_stats_df.iloc[0,33]),
-            str(team_def_stats_df.iloc[0,34]),
-            str(team_def_stats_df.iloc[0,35]),
-            str(team_def_stats_df.iloc[0,36]),
-            str(team_def_stats_df.iloc[0,37]),
-            str(team_def_stats_df.iloc[0,38])
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'PF']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Yds']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Tot_Yds_&_TO_Ply']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Tot_Yds_&_TO_Y/P']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Tot_Yds_&_TO_TO']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'FL']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '1stD']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_Cmp']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_Att']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_Yds']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_TD']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_Int']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_NY/A']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Passing_1stD']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Rushing_Att']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Rushing_Yds']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Rushing_TD']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Rushing_Y/A']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Rushing_1stD']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Penalties_Pen']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Penalties_Yds']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Penalties_1stPy']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '#Dr']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Sc%']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'TO%']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Average_Drive_Start']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Average_Drive_Time']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Average_Drive_Plays']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Average_Drive_Yds']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'Average_Drive_Pts']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '3DAtt']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '3DConv']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '3D%']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '4DAtt']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '4DConv']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], '4D%']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'RZAtt']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'RZTD']),
+            str(team_def_stats_df.loc[team_def_stats_df.index[0], 'RZPct'])
         ))
 
     connection_to_database.commit()
