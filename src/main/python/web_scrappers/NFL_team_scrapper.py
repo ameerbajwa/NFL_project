@@ -109,7 +109,6 @@ def grabbing_team_info(list_of_active_teams):
 
         team_info_df = pd.DataFrame(data=team_info_dict, index=[list_of_active_teams[active_team_index]['team_name']])
         # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
-        # connection_to_mysql = insert.connect_to_mysql_system()
         insert.insert_overall_team_info_to_mysql(team_info_df)
 
 def grabbing_off_and_def_team_info(list_of_active_teams):
@@ -166,6 +165,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
             team_stats_column_names.append(raw_column_names_part_2[raw_col_index].text)
 
         print (team_stats_column_names)
+        print (len(team_stats_column_names))
 
         team_off_stats_dict = {}
         team_def_stats_dict = {}
@@ -190,9 +190,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 
         team_def_stats_df = pd.DataFrame(data=team_def_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
 
-        # cleaned_team_off_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_off_stats(team_off_stats_df)
-        # cleaned_team_def_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_def_stats(team_def_stats_df)
-        # connection_to_mysql = insert.connect_to_mysql_system()
+        # NO CLEANING OF THE NFL TEAM OFFENSIVE AND DEFENSIVE DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
         insert.insert_team_off_stats_to_mysql(team_off_stats_df)
         insert.insert_team_def_stats_to_mysql(team_def_stats_df)
 
@@ -203,7 +201,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_team_info(test_dict)
 
-test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-grabbing_off_and_def_team_info(test_dict)
-
-sys.exit()
+# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+# grabbing_off_and_def_team_info(test_dict)
+#
+# sys.exit()
