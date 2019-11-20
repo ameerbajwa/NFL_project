@@ -25,30 +25,48 @@ def table_scrapper(id_of_table, driver):
     # FOR COLUMN NAMES FOR THE BASIC OFFENSE AND DEFENSE TABLE, HAVE TO GRAB BOTH ROWS OF THEADS TO DIFFER BETWEEN THE
     #  PASSING, RUSHING, AND RECEIVING COLUMNS
 
-    raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table +'"]/thead/tr[2]//th') # id_of_table
+    if (len(driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead//tr')) > 1):
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr[2]//th')  # id_of_table
+    else:
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr//th')
+
     column_names = []
 
     if (len(driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead//tr')) > 1):
         raw_headers = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr[1]//th')
         headers = []
-        headers.append({'header_name': '', 'number_of_columns_covered': 0})
+        headers.append({'header_name': '', 'number_of_columns_covered': 2})
         for head in raw_headers[1:]:
             header_dict = {}
             header_dict['header_name'] = head.text
-            header_dict['number_of_columns_covered'] = int(head.get_attribute('colspan'))
+            if (header_dict['header_name'] == ''):
+                header_dict['number_of_columns_covered'] = 1
+            else:
+                header_dict['number_of_columns_covered'] = int(head.get_attribute('colspan'))
             headers.append(header_dict)
 
         header_counter = 0
-        start = headers[header_counter]['number_of_columns_covered'] + 2
+        start = headers[header_counter]['number_of_columns_covered']
         end = headers[header_counter + 1]['number_of_columns_covered'] + 2
+        column_names.append(raw_column_names[0].text)
+        column_names.append(raw_column_names[1].text)
         for col_index in range(2,len(raw_column_names)):
             if (col_index >= start and col_index < end):
-                column_names.append(headers[header_counter + 1]['header_name'] + '_' + raw_column_names[col_index].text)
+                if (col_index == 8 and id_of_table == 'player_offense'):
+                    column_names.append(headers[header_counter + 1]['header_name'] + '_sacked_' + raw_column_names[col_index].text)
+                else:
+                    column_names.append(headers[header_counter + 1]['header_name'] + '_' + raw_column_names[col_index].text)
             else:
                 header_counter += 1
-                start = end
-                end += (headers[header_counter + 1]['number_of_columns_covered'] + 2)
-
+                if (headers[header_counter + 1]['header_name'] == ''):
+                    column_names.append(raw_column_names[col_index].text)
+                    header_counter += 1
+                    start = end + 1
+                    end += (headers[header_counter + 1]['number_of_columns_covered']) + 1
+                else:
+                    column_names.append(headers[header_counter + 1]['header_name'] + '_' + raw_column_names[col_index].text)
+                    start = end + 1
+                    end += (headers[header_counter + 1]['number_of_columns_covered'])
     else:
         for col in raw_column_names:
             column_names.append(col.text)
@@ -62,7 +80,7 @@ def table_scrapper(id_of_table, driver):
         if (len(player.find_elements_by_tag_name('th')) > 1):
             continue
         else:
-            player_stats[column_names[0]] = player.find_element_by_xpath('/th/a').text
+            player_stats[column_names[0]] = player.find_element_by_tag_name('th').text
 
             list_of_stats = []
             for stat in player.find_elements_by_tag_name('td'):
@@ -89,14 +107,9 @@ def grab_offensive_player_data(dict_of_game_summaries):
         adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver)
         adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver)
 
-        print (basic_off_player_stats_df)
-        print (adv_passing_player_stats_df)
-        print (adv_rushing_player_stats_df)
-        print (adv_receiving_player_stats_df)
-
-        # clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
-        # clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
-        # clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
+        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
+        clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
+        clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
 def grab_defensive_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
@@ -110,7 +123,7 @@ def grab_defensive_player_data(dict_of_game_summaries):
         basic_def_player_stats_df = table_scrapper('player_defense', driver)
         adv_def_player_stats_df = table_scrapper('defense_advanced', driver)
 
-        cleaning_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_stats(basic_def_player_stats_df, adv_def_player_stats_df)
+        # cleaning_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_stats(basic_def_player_stats_df, adv_def_player_stats_df)
 
 def grab_special_teams_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
