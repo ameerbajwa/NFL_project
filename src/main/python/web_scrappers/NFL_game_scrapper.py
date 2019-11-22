@@ -70,32 +70,29 @@ def grab_game_drive_summary_data(dict_of_game_summaries):
         game_drive_summary_dict['day_and_date_of_game'] = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[3]/div[1]').text
 
         raw_drive_summary_headers = driver.find_elements_by_xpath('//*[@id="home_drives"]/thead/tr//th')
-        headers = []
+        headers = ['week', 'home_team_name', 'away_team_name', 'day_and_date_of_game', 'team_drive']
 
         for header in raw_drive_summary_headers:
             headers.append(header.text)
         headers.remove('#')
 
+        game_drive_summary_df = pd.DataFrame(columns=headers)
+        drives = ['home_drives', 'vis_drives']
 
+        for drive_index in range(0,len(drives)):
+            game_drive_summary_dict['team_drive'] = driver.find_element_by_xpath('//*[@id="all_' + drives[drive_index] + '"]/div[1]/h2').text
+            rows_in_drive = driver.find_elements_by_xpath('//*[@id="' + drives[drive_index] + '"]/tbody//tr')
+            for row in rows_in_drive:
+                header_index = 5
+                list_of_values_of_drive = row.find_elements_by_tag_name('td')
+                for col in list_of_values_of_drive:
+                    game_drive_summary_dict[headers[header_index]] = col.text
+                    header_index += 1
+                game_drive_summary_df = game_drive_summary_df.append(game_drive_summary_dict, ignore_index=True)
 
-        teams_drives_summaries = driver.find_elements_by_xpath('//*[@id="content"]/div[24]//div')
+        clean_game_drive_summary_df = cleaning_scrapped_game_stats_data.cleaning_game_drive_summary(game_drive_summary_df)
 
-        for team_index in range(0,len(teams_drives_summaries)):
-            if (team_index == 0):
-                game_drive_summary_dict['team_drive'] = teams_drives_summaries[team_index].find_element_by_xpath('//*[@id="all_home_drives"]/div[1]/h2').text
-            else:
-                game_drive_summary_dict['team_drive'] = teams_drives_summaries[team_index].find_element_by_xpath('//*[@id="all_vis_drives"]/div[1]/h2').text
-            for row in teams_drives_summaries[team_index].find_elements_by_xpath('/div[1]/div/div[3]/div/table/tbody//tr'):
-                for col in row.find_elements_by_tag_name('td'):
-                    game_drive_summary_dict[header] = col.text
-
-                index_for_df = '_'.join(game_drive_summary_dict['home_team_name'].split(' ')) + '_vs_' + '_'.join(game_drive_summary_dict['away_team_name'].split(' ')) + '_' + '_'.join(game_drive_summary_dict['team_drive'].split(' '))
-                game_drive_summary_df = pd.DataFrame(data=game_drive_summary_dict, index=[index_for_df])
-
-                print ()
-            # clean_game_drive_summary_df = cleaning_scrapped_game_stats_data.cleaning_game_drive_summary(game_drive_summary_df)
-
-test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080cle.htm']}
+test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080mia.htm']}
 grab_game_drive_summary_data(test_dict)
 
 sys.exit()
