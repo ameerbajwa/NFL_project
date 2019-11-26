@@ -1,5 +1,7 @@
 import pymysql
 import pandas as pd
+import random
+import string
 
 def connect_to_mysql_system():
     connection_to_local_mysql_data_management_system = pd.read_csv('~/Desktop/connection_to_local_mysql_system.csv')
@@ -343,5 +345,47 @@ def insert_game_summary_data_to_mysql(game_summary_df):
     connection_to_database.commit()
     print (game_id + ' summary stats insertion to mysql table complete!')
 
+def insert_game_drive_summary_data_to_mysql(game_drive_summary_df):
+    connection_to_database = connect_to_mysql_system()
+
+    for i in range(0,len(game_drive_summary_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        insert_SQL_query = "INSERT INTO `game_drives_summary_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    home_team," \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    team_drive," \
+                           "    quarter," \
+                           "    time_left_on_clock," \
+                           "    line_of_scrimmage," \
+                           "    number_of_plays," \
+                           "    length_of_drive," \
+                           "    yards_gained_from_drive," \
+                           "    result_of_drive" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                game_drive_summary_df.loc[i, 'home_team_name'],
+                game_drive_summary_df.loc[i, 'away_team_name'],
+                game_drive_summary_df.loc[i, 'week'],
+                str(game_drive_summary_df.loc[i, 'date']),
+                game_drive_summary_df.loc[i, 'team_drive'],
+                int(game_drive_summary_df.loc[i, 'Quarter']),
+                game_drive_summary_df.loc[i, 'Time'],
+                game_drive_summary_df.loc[i, 'LOS'],
+                int(game_drive_summary_df.loc[i, 'Plays']),
+                game_drive_summary_df.loc[i, 'Length'],
+                int(game_drive_summary_df.loc[i, 'Yds']),
+                game_drive_summary_df.loc[i, 'Result']
+            ))
+
+    connection_to_database.commit()
+    print (game_drive_summary_df.loc[0, 'home_team_name'] + ' vs ' + game_drive_summary_df.loc[0, 'away_team_name'] + ' drive summary stats insertion to mysql table complete!')
 
 
