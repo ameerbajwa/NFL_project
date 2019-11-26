@@ -286,5 +286,62 @@ def insert_team_def_stats_to_mysql(team_def_stats_df):
     connection_to_database.commit()
     print (team_def_stats_df.index[0] + ' defensive team stats insertion to mysql table complete!')
 
+def insert_game_summary_data_to_mysql(game_summary_df):
+    connection_to_database = connect_to_mysql_system()
+    game_id = game_summary_df.index[0]
+
+    insert_SQL_query = "INSERT INTO `game_summary_2019_2020_season`" \
+                       "(" \
+                       "    game," \
+                       "    home_team," \
+                       "    away_team," \
+                       "    week," \
+                       "    date," \
+                       "    year," \
+                       "    month," \
+                       "    day," \
+                       "    hour," \
+                       "    minute," \
+                       "    day_of_week," \
+                       "    stadium," \
+                       "    attendance," \
+                       "    time_of_game," \
+                       "    won_toss," \
+                       "    roof," \
+                       "    surface," \
+                       "    weather," \
+                       "    score_of_home_team," \
+                       "    score_of_away_team" \
+                       ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                       "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+
+    with connection_to_database.cursor() as cursor:
+        cursor.execute(insert_SQL_query,
+                       (
+                           game_id,
+                           game_summary_df.loc[game_id, 'home_team_name'],
+                           game_summary_df.loc[game_id, 'away_team_name'],
+                           int(game_summary_df.loc[game_id, 'week']),
+                           str(game_summary_df.loc[game_id, 'date']),
+                           int(game_summary_df.loc[game_id, 'year']),
+                           int(game_summary_df.loc[game_id, 'month']),
+                           int(game_summary_df.loc[game_id, 'day']),
+                           int(game_summary_df.loc[game_id, 'hour']),
+                           int(game_summary_df.loc[game_id, 'minute']),
+                           game_summary_df.loc[game_id, 'day_of_week'],
+                           game_summary_df.loc[game_id, 'stadium_name'],
+                           int(game_summary_df.loc[game_id, 'attendance']),
+                           int(game_summary_df.loc[game_id, 'time_of_game']),
+                           game_summary_df.loc[game_id, 'won_toss'],
+                           game_summary_df.loc[game_id, 'roof'],
+                           game_summary_df.loc[game_id, 'surface'],
+                           game_summary_df.loc[game_id, 'weather'],
+                           int(game_summary_df.loc[game_id, 'home_team_score']),
+                           int(game_summary_df.loc[game_id, 'away_team_score'])
+                       ))
+
+    connection_to_database.commit()
+    print (game_id + ' summary stats insertion to mysql table complete!')
+
 
 
