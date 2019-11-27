@@ -57,10 +57,7 @@ def cleaning_game_summary_data(game_summary_df):
     return game_summary_df
 
 def cleaning_game_drive_summary(game_drive_summary_df):
-    print (game_drive_summary_df.columns)
-    print (game_drive_summary_df)
-
     day_of_week, year, month, day, date = transforming_date(game_drive_summary_df, 0)
-    game_drive_summary_df = pd.to_datetime(datetime.strptime(date, '%Y-%m-%d'))
+    game_drive_summary_df['date'] = pd.to_datetime(datetime.strptime(date, '%Y-%m-%d'))
 
     return game_drive_summary_df

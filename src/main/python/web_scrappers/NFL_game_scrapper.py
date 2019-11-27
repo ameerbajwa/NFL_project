@@ -94,7 +94,7 @@ def grab_game_drive_summary_data(dict_of_game_summaries):
         clean_game_drive_summary_df = cleaning_scrapped_game_stats_data.cleaning_game_drive_summary(game_drive_summary_df)
         insert.insert_game_drive_summary_data_to_mysql(clean_game_drive_summary_df)
 
-test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080mia.htm']}
-grab_game_drive_summary_data(test_dict)
-
-sys.exit()
+# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080mia.htm']}
+# grab_game_drive_summary_data(test_dict)
+#
+# sys.exit()

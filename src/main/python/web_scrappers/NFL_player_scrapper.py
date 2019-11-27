@@ -140,7 +140,7 @@ def grab_special_teams_player_data(dict_of_game_summaries):
         return_player_stats_df = table_scrapper('returns', driver) # //*[@id="returns"]/thead
         kicking_punting_player_stats_df = table_scrapper('kicking', driver) # //*[@id="kicking"]/thead
 
-# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080cle.htm']}
-# grab_defensive_player_data(test_dict)
+# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
+# grab_offensive_player_data(test_dict)
 #
 # sys.exit()
