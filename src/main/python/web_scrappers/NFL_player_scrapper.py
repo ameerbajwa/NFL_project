@@ -87,13 +87,12 @@ def table_scrapper(id_of_table, driver):
                 list_of_stats.append(stat.text)
 
             for i in range(1, len(column_names)):
-                if (list_of_stats[i-1] == ''):
-                    list_of_stats[i-1] = 0
+                # if (list_of_stats[i-1] == ''):
+                #     list_of_stats[i-1] = 0
                 player_stats[column_names[i]] = list_of_stats[i - 1]
 
             player_stats_df = player_stats_df.append(player_stats, ignore_index=True)
 
-    print (player_stats_df)
     return (player_stats_df)
 
 def grab_offensive_player_data(dict_of_game_summaries):
@@ -107,12 +106,13 @@ def grab_offensive_player_data(dict_of_game_summaries):
 
         basic_off_player_stats_df = table_scrapper('player_offense', driver)
         adv_passing_player_stats_df = table_scrapper('passing_advanced', driver)
-        adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver)
-        adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver)
+        # adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver)
+        # adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver)
 
-        # clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
+        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
         # clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
         # clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
+        print (clean_passing_stats_df)
 
 def grab_defensive_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
@@ -140,7 +140,7 @@ def grab_special_teams_player_data(dict_of_game_summaries):
         return_player_stats_df = table_scrapper('returns', driver) # //*[@id="returns"]/thead
         kicking_punting_player_stats_df = table_scrapper('kicking', driver) # //*[@id="kicking"]/thead
 
-# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
-# grab_offensive_player_data(test_dict)
-#
-# sys.exit()
+test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
+grab_offensive_player_data(test_dict)
+
+sys.exit()
