@@ -13,9 +13,9 @@ def converting_to_float(x):
     else:
         return float(x)
 
-def convert_values_to_appropriate_types(basic_player_stats_df, adv_player_stats_df):
+def convert_values_to_appropriate_types(list_of_player_stats_df):
 
-    for df in [basic_player_stats_df, adv_player_stats_df]:
+    for df in list_of_player_stats_df:
         for col in df.columns[2:]:
             if ('%' in df[col].values):
                 df[col] = list(map(lambda x: x.replace('%', '') if '%' in x else x, df[col]))
@@ -27,7 +27,7 @@ def convert_values_to_appropriate_types(basic_player_stats_df, adv_player_stats_
             else:
                 df[col] = list(map(converting_to_int, df[col]))
 
-    return (basic_player_stats_df, adv_player_stats_df)
+    return list_of_player_stats_df
 
 def defining_new_columns(list_of_new_column_names, cleaner_adv_off_player_stats_df):
 
@@ -52,7 +52,10 @@ def joining_basic_stats_and_adv_stats(basic_player_stats_df, adv_player_stats_df
 
 def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense):
 
-    cleaner_basic_off_player_stats_df, cleaner_adv_off_player_stats_df = convert_values_to_appropriate_types(basic_off_player_stats_df, adv_off_player_stats_df)
+    list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
+    cleaner_list_of_player_dfs = convert_values_to_appropriate_types(list_of_player_dfs)
+    cleaner_basic_off_player_stats_df = cleaner_list_of_player_dfs[0]
+    cleaner_adv_off_player_stats_df = cleaner_list_of_player_dfs[1]
 
     if (type_of_offense == 'passing'):
 
@@ -65,7 +68,6 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 
         passing_stats_df = joining_basic_stats_and_adv_stats(cleaner_basic_off_player_stats_df, new_adv_off_player_stats_df, list_of_new_column_names)
 
-        print (passing_stats_df)
         return (passing_stats_df)
 
     elif (type_of_offense == 'rushing'):
@@ -79,7 +81,6 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 
         rushing_stats_df = joining_basic_stats_and_adv_stats(cleaner_basic_off_player_stats_df, new_adv_off_player_stats_df, list_of_new_column_names)
 
-        print (rushing_stats_df)
         return (rushing_stats_df)
 
     elif (type_of_offense == 'receiving'):
@@ -93,15 +94,24 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 
         receiving_stats_df = joining_basic_stats_and_adv_stats(cleaner_basic_off_player_stats_df, new_adv_off_player_stats_df, list_of_new_column_names)
 
-        print (receiving_stats_df)
         return (receiving_stats_df)
 
 def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df):
 
-    cleaner_basic_def_player_stats_df, cleaner_adv_def_player_stats_df = convert_values_to_appropriate_types(basic_def_player_stats_df, adv_def_player_stats_df)
+    list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
+    cleaner_list_of_player_dfs = convert_values_to_appropriate_types(list_of_player_dfs)
+    cleaner_basic_def_player_stats_df = cleaner_list_of_player_dfs[0]
+    cleaner_adv_def_player_stats_df = cleaner_list_of_player_dfs[1]
 
     cleaner_basic_def_player_stats_df.sort_values(['Tm', 'Tackles_Comb', 'Player'], ascending=[False, True, False], inplace=True)
     cleaner_adv_def_player_stats_df.sort_values(['Tm', 'Comb', 'Player'], ascending=[False, True, False], inplace=True)
 
-    list_of_new_columns_names =
+    # list_of_new_column_names =
+
+def cleaning_special_team_player_stats(player_stats_df):
+
+    list_of_player_dfs = convert_values_to_appropriate_types([player_stats_df])
+    cleaner_player_df = list_of_player_dfs[0]
+
+
 
