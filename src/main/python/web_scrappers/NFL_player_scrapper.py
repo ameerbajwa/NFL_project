@@ -18,7 +18,7 @@ def selecting_player_info(year, week):
     grab_defensive_player_data(dict_of_game_summaries)
     grab_special_teams_player_data(dict_of_game_summaries)
 
-def table_scrapper(id_of_table, driver):
+def table_scrapper(id_of_table, driver, week):
 
     # unique ids_for_table scrapping of player stats by game: player_offense, passing_advanced, rushing_advanced, receiving_advanced, player_defense, defense_advanced
 
@@ -93,6 +93,11 @@ def table_scrapper(id_of_table, driver):
 
             player_stats_df = player_stats_df.append(player_stats, ignore_index=True)
 
+    player_stats_df['week'] = week
+    player_stats_df['date'] = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[3]/div[1]').text
+    player_stats_df['home_team_name'] = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[1]/div[1]/strong/a').text
+    player_stats_df['away_team_name'] = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[2]/div[1]/strong/a').text
+
     return (player_stats_df)
 
 def grab_offensive_player_data(dict_of_game_summaries):
@@ -100,14 +105,16 @@ def grab_offensive_player_data(dict_of_game_summaries):
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
+    week = dict_of_game_summaries['week']
+
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
 
-        basic_off_player_stats_df = table_scrapper('player_offense', driver)
-        adv_passing_player_stats_df = table_scrapper('passing_advanced', driver)
-        adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver)
-        adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver)
+        basic_off_player_stats_df = table_scrapper('player_offense', driver, week)
+        adv_passing_player_stats_df = table_scrapper('passing_advanced', driver, week)
+        adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver, week)
+        adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver, week)
 
         clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
         clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
@@ -118,12 +125,14 @@ def grab_defensive_player_data(dict_of_game_summaries):
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
+    week = dict_of_game_summaries['week']
+
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
 
-        basic_def_player_stats_df = table_scrapper('player_defense', driver)
-        adv_def_player_stats_df = table_scrapper('defense_advanced', driver)
+        basic_def_player_stats_df = table_scrapper('player_defense', driver, week)
+        adv_def_player_stats_df = table_scrapper('defense_advanced', driver, week)
 
         cleaning_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df)
 
@@ -132,12 +141,14 @@ def grab_special_teams_player_data(dict_of_game_summaries):
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
+    week = dict_of_game_summaries['week']
+
     for game_summary in dict_of_game_summaries['list_of_game_summary_urls']:
         driver.get(game_summary)
         time.sleep(1)
 
-        return_player_stats_df = table_scrapper('returns', driver)
-        kicking_punting_player_stats_df = table_scrapper('kicking', driver)
+        return_player_stats_df = table_scrapper('returns', driver, week)
+        kicking_punting_player_stats_df = table_scrapper('kicking', driver, week)
 
         cleaning_return_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(return_player_stats_df)
         cleaning_kicking_punting_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(kicking_punting_player_stats_df)
