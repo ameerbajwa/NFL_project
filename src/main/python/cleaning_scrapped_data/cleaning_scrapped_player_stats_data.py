@@ -1,3 +1,6 @@
+from time import strptime
+from datetime import datetime
+import pandas as pd
 
 def converting_to_int(x):
 
@@ -12,6 +15,12 @@ def converting_to_float(x):
         return 0.0
     else:
         return float(x)
+
+def transforming_date(date_of_game):
+    pieces_of_date = date_of_game.replace(',', '').split(' ')
+    month = strptime(pieces_of_date[1], '%b').tm_mon
+    date = str(pieces_of_date[3]) + '-' + str(month) + '-' + str(pieces_of_date[2])
+    return (pd.to_datetime(datetime.strptime(date, '%Y-%m-%d')))
 
 def convert_values_to_appropriate_types(list_of_player_stats_df):
 
@@ -50,7 +59,11 @@ def joining_basic_stats_and_adv_stats(basic_player_stats_df, adv_player_stats_df
 
     return (adv_player_stats_df)
 
-def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense):
+def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense, date_of_game):
+
+    list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
+    for df in list_of_player_dfs:
+        df['date'] = list(map(transforming_date, df['date']))
 
     list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
     cleaner_list_of_player_dfs = convert_values_to_appropriate_types(list_of_player_dfs)
@@ -99,6 +112,10 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df):
 
     list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
+    for df in list_of_player_dfs:
+        df['date'] = list(map(transforming_date, df['date']))
+
+    list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
     cleaner_list_of_player_dfs = convert_values_to_appropriate_types(list_of_player_dfs)
     cleaner_basic_def_player_stats_df = cleaner_list_of_player_dfs[0]
     cleaner_adv_def_player_stats_df = cleaner_list_of_player_dfs[1]
@@ -106,12 +123,23 @@ def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_st
     cleaner_basic_def_player_stats_df.sort_values(['Tm', 'Tackles_Comb', 'Player'], ascending=[False, True, False], inplace=True)
     cleaner_adv_def_player_stats_df.sort_values(['Tm', 'Comb', 'Player'], ascending=[False, True, False], inplace=True)
 
-    # list_of_new_column_names =
+    list_of_new_column_names =['Def_Interceptions_Yds', 'Def_Interceptions_TD', 'Def_Interceptions_Lng', 'Def_Interceptions_PD,'
+                               'Tackles_Solo', 'Tackles_Ast', 'Tackles_TFL', 'Fumbles_FR', 'Fumbles_Yds', 'Fumbles_TD', 'Fumbles_FF']
+
+    new_adv_def_player_stats_df = defining_new_columns(list_of_new_column_names, cleaner_adv_def_player_stats_df)
+
+    defensive_player_stats = joining_basic_stats_and_adv_stats(cleaner_basic_def_player_stats_df, new_adv_def_player_stats_df, list_of_new_column_names)
+
+    return (defensive_player_stats)
 
 def cleaning_special_team_player_stats(player_stats_df):
 
+    player_stats_df['date'] = list(map(transforming_date, player_stats_df['date']))
+
     list_of_player_dfs = convert_values_to_appropriate_types([player_stats_df])
     cleaner_player_df = list_of_player_dfs[0]
+
+    return (cleaner_player_df)
 
 
 
