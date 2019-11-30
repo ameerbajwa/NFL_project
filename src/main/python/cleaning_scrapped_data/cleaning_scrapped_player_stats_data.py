@@ -16,13 +16,16 @@ def converting_to_float(x):
     else:
         return float(x)
 
-def splitting_player_name(list_of_player_stats_df):
+def defining_opposing_team_and_splitting_player_name(list_of_player_stats_df):
     new_list_of_player_stats_df = []
+
     for df in list_of_player_stats_df:
         df['player_first_name'] = list(map(lambda x: ' '.join(x.split(' ')[:-1]) if len(x.split(' ')) > 1 else x.split(' ')[0], df['Player']))
         df['player_last_name'] = list(map(lambda x: x.split(' ')[-1], df['Player']))
-
+        teams = df['Tm'].unique()
+        df['opposing_team'] = list(map(lambda x: teams[0] if x == teams[1] else teams[1], df['Tm']))
         new_list_of_player_stats_df.append(df)
+
     return (new_list_of_player_stats_df)
 
 def transforming_date(date_of_game):
@@ -71,7 +74,7 @@ def joining_basic_stats_and_adv_stats(basic_player_stats_df, adv_player_stats_df
 def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense, date_of_game):
 
     list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
-    new_list_of_player_dfs = splitting_player_name(list_of_player_dfs)
+    new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
 
     for df in new_list_of_player_dfs:
         df['date'] = list(map(transforming_date, df['date']))
@@ -122,7 +125,7 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df):
 
     list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
-    new_list_of_player_dfs = splitting_player_name(list_of_player_dfs)
+    new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
 
     for df in new_list_of_player_dfs:
         df['date'] = list(map(transforming_date, df['date']))
@@ -148,7 +151,7 @@ def cleaning_special_team_player_stats(player_stats_df):
     player_stats_df['date'] = list(map(transforming_date, player_stats_df['date']))
 
     list_of_player_dfs = [player_stats_df]
-    new_list_of_player_dfs = splitting_player_name(list_of_player_dfs)
+    new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
 
     newer_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
     cleaner_player_df = newer_list_of_player_dfs[0]
