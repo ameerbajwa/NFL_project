@@ -138,7 +138,9 @@ def grab_defensive_player_data(dict_of_game_summaries):
         basic_def_player_stats_df = table_scrapper('player_defense', driver, week)
         adv_def_player_stats_df = table_scrapper('defense_advanced', driver, week)
 
-        cleaning_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df)
+        clean_defensive_stats_df = cleaning_scrapped_player_stats_data.cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df)
+
+        insert.insert_defensive_stats_to_mysql(clean_defensive_stats_df)
 
 def grab_special_teams_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
@@ -154,8 +156,8 @@ def grab_special_teams_player_data(dict_of_game_summaries):
         return_player_stats_df = table_scrapper('returns', driver, week)
         kicking_punting_player_stats_df = table_scrapper('kicking', driver, week)
 
-        cleaning_return_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(return_player_stats_df)
-        cleaning_kicking_punting_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(kicking_punting_player_stats_df)
+        clean_return_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(return_player_stats_df)
+        clean_kicking_punting_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(kicking_punting_player_stats_df)
 
 test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
 grab_offensive_player_data(test_dict)

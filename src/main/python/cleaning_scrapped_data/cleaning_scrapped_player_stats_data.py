@@ -71,7 +71,7 @@ def joining_basic_stats_and_adv_stats(basic_player_stats_df, adv_player_stats_df
 
     return (adv_player_stats_df)
 
-def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense, date_of_game):
+def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense):
 
     list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
     new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)

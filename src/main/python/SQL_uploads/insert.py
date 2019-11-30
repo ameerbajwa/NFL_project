@@ -479,7 +479,7 @@ def insert_passing_stats_to_mysql(passing_stats_df):
             ))
 
     connection_to_database.commit()
-    print (passing_stats_df.loc[0, 'home_team_name'] + ' vs ' + passing_stats_df.loc[0, 'away_team_name'] + ' game\'s passing stats insertion to mysql table complete')
+    print (passing_stats_df.loc[0, 'home_team_name'] + ' vs ' + passing_stats_df.loc[0, 'away_team_name'] + ' game\'s passing stats insertion to mysql table complete!')
 
 
 def insert_rushing_stats_to_mysql(rushing_stats_df):
@@ -487,8 +487,134 @@ def insert_rushing_stats_to_mysql(rushing_stats_df):
 
     for i in range(0, len(rushing_stats_df)):
         random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        insert_SQL_query = "INSERT INTO `NFL_player_rushing_stats_per_game_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    player_first_name," \
+                           "    player_last_name," \
+                           "    team," \
+                           "    opposing_team," \
+                           "    home_team," \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    rushing_attempts," \
+                           "    rushing_yards_gained," \
+                           "    first_downs_through_rushing," \
+                           "    rushing_yards_before_contact," \
+                           "    rushing_yards_before_contact_per_rushing_attempt," \
+                           "    rushing_yards_after_contact," \
+                           "    rushing_yards_after_contact_per_rushing_attempt," \
+                           "    broken_tackles_on_rushes," \
+                           "    rushing_attempts_per_broken_tackle," \
+                           "    rushing_touchdowns," \
+                           "    longest_rushing_attempt," \
+                           "    number_of_times_fumbled," \
+                           "    fumbles_lost" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s);"
 
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                rushing_stats_df.loc[i, 'player_first_name'],
+                rushing_stats_df.loc[i, 'player_last_name'],
+                rushing_stats_df.loc[i, 'Tm'],
+                rushing_stats_df.loc[i, 'opposing_team'],
+                rushing_stats_df.loc[i, 'home_team_name'],
+                rushing_stats_df.loc[i, 'away_team_name'],
+                rushing_stats_df.loc[i, 'week'],
+                rushing_stats_df.loc[i, 'date'],
+                rushing_stats_df.loc[i, 'player_first_name'],
+                rushing_stats_df.loc[i, 'Att'],
+                rushing_stats_df.loc[i, 'Yds'],
+                rushing_stats_df.loc[i, '1D'],
+                rushing_stats_df.loc[i, 'YBC'],
+                rushing_stats_df.loc[i, 'YBC/Att'],
+                rushing_stats_df.loc[i, 'YAC'],
+                rushing_stats_df.loc[i, 'YAC/Att'],
+                rushing_stats_df.loc[i, 'BrkTkl'],
+                rushing_stats_df.loc[i, 'Att/Br'],
+                rushing_stats_df.loc[i, 'Rushing_TD'],
+                rushing_stats_df.loc[i, 'Rushing_Lng'],
+                rushing_stats_df.loc[i, 'Fumbles_Fmb'],
+                rushing_stats_df.loc[i, 'Fumbles_FL']
+            ))
 
+    connection_to_database.commit()
+    print (rushing_stats_df.loc[0, 'home_team_name'] + ' vs ' + rushing_stats_df.loc[0, 'away_team_name'] + ' game\'s rushing stats insertion to mysql table complete!')
 
 def insert_receiving_stats_to_mysql(receiving_stats_df):
     connection_to_database = connect_to_mysql_system()
+
+    for i in range(0, len(receiving_stats_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+
+        insert_SQL_query = "INSERT INTO `NFL_player_receiving_stats_per_game_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    player_first_name," \
+                           "    player_last_name," \
+                           "    team," \
+                           "    opposing_team," \
+                           "    home_team," \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    pass_targets," \
+                           "    receptions," \
+                           "    receiving_yards," \
+                           "    first_downs_through_receiving," \
+                           "    total_yards_passed_through_air_before_caught," \
+                           "    yards_before_catch_per_reception," \
+                           "    yards_after_catch," \
+                           "    yards_after_catch_per_reception," \
+                           "    broken_tackles_on_recptions," \
+                           "    receptions_per_broken_tackle," \
+                           "    dropped_passes," \
+                           "    dropped_passes_per_target," \
+                           "    receiving_touchdowns," \
+                           "    longest_reception," \
+                           "    number_of_times_fumbled," \
+                           "    fumbles_lost" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s" \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" \
+                           "          %s, %s, %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                receiving_stats_df.loc[i, 'player_first_name'],
+                receiving_stats_df.loc[i, 'player_last_name'],
+                receiving_stats_df.loc[i, 'Tm'],
+                receiving_stats_df.loc[i, 'opposing_team'],
+                receiving_stats_df.loc[i, 'home_team_name'],
+                receiving_stats_df.loc[i, 'away_team_name'],
+                receiving_stats_df.loc[i, 'week'],
+                receiving_stats_df.loc[i, 'date'],
+                receiving_stats_df.loc[i, 'Tgt'],
+                receiving_stats_df.loc[i, 'Rec'],
+                receiving_stats_df.loc[i, 'Yds'],
+                receiving_stats_df.loc[i, '1D'],
+                receiving_stats_df.loc[i, 'YBC'],
+                receiving_stats_df.loc[i, 'YBC/R'],
+                receiving_stats_df.loc[i, 'YAC'],
+                receiving_stats_df.loc[i, 'YAC/R'],
+                receiving_stats_df.loc[i, 'BrkTkl'],
+                receiving_stats_df.loc[i, 'Rec/Br'],
+                receiving_stats_df.loc[i, 'Drop'],
+                receiving_stats_df.loc[i, 'Drop%'],
+                receiving_stats_df.loc[i, 'Receiving_TD'],
+                receiving_stats_df.loc[i, 'Receiving_Lng'],
+                receiving_stats_df.loc[i, 'Fumbles_Fmb'],
+                receiving_stats_df.loc[i, 'Fumbles_FL']
+            ))
+
+    connection_to_database.commit()
+    print (receiving_stats_df.loc[0, 'home_team_name'] + ' vs ' + receiving_stats_df.loc[0, 'away_team_name'] + ' game\'s receiving stats insertion to mysql table complete!')
+
+def insert_defensive_stats_to_mysql(defensive_stats_df):
+    connection_to_database = connect_to_mysql_system()
+
+    
