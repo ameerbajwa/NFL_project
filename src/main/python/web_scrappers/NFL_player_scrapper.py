@@ -120,6 +120,10 @@ def grab_offensive_player_data(dict_of_game_summaries):
         clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
         clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
+        insert.insert_passing_stats_to_mysql(clean_passing_stats_df)
+        insert.insert_rushing_stats_to_mysql(clean_rushing_stats_df)
+        insert.insert_receiving_stats_to_mysql(clean_receiving_stats_df)
+
 def grab_defensive_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver

@@ -388,4 +388,107 @@ def insert_game_drive_summary_data_to_mysql(game_drive_summary_df):
     connection_to_database.commit()
     print (game_drive_summary_df.loc[0, 'home_team_name'] + ' vs ' + game_drive_summary_df.loc[0, 'away_team_name'] + ' drive summary stats insertion to mysql table complete!')
 
+def insert_passing_stats_to_mysql(passing_stats_df):
+    connection_to_database = connect_to_mysql_system()
 
+    for i in range(0,len(passing_stats_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        insert_SQL_query = "INSERT INTO `NFL_player_passing_stats_per_game_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    player_first_name," \
+                           "    player_last_name," \
+                           "    team," \
+                           "    opposing_team," \
+                           "    home_team," \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    completed_passes," \
+                           "    attempted_passes," \
+                           "    yards_gained_by_passing," \
+                           "    first_downs_through_passing," \
+                           "    first_downs_through_passing_per_pass_play," \
+                           "    intended_air_yards_on_all_pass_attempts," \
+                           "    average_depth_of_target_per_pass_attempt," \
+                           "    total_yards_passed_and_caught_traveling_through_the_air_past_LOS," \
+                           "    completed_air_yards_per_pass_completion," \
+                           "    completed_air_yards_per_pass_attempt," \
+                           "    pass_yards_after_catch," \
+                           "    pass_yards_after_catch_per_pass_completion," \
+                           "    passes_dropped," \
+                           "    passes_dropped_per_pass_attempt," \
+                           "    times_blitzed," \
+                           "    times_hurried," \
+                           "    times_hit," \
+                           "    scrambles," \
+                           "    yards_per_scrabble_attempt," \
+                           "    passing_touchdowns," \
+                           "    passing_interceptions," \
+                           "    times_sacked," \
+                           "    yards_lost_due_to_sacks," \
+                           "    longest_completed_pass_thrown," \
+                           "    QB_rating," \
+                           "    number_of_times_fumbled," \
+                           "    fumbles_lost" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                passing_stats_df.loc[i, 'player_first_name'],
+                passing_stats_df.loc[i, 'player_last_name'],
+                passing_stats_df.loc[i, 'Tm'],
+                passing_stats_df.loc[i, 'opposing_team'],
+                passing_stats_df.loc[i, 'home_team_name'],
+                passing_stats_df.loc[i, 'away_team_name'],
+                passing_stats_df.loc[i, 'week'],
+                passing_stats_df.loc[i, 'date'],
+                passing_stats_df.loc[i, 'Cmp'],
+                passing_stats_df.loc[i, 'Att'],
+                passing_stats_df.loc[i, 'Yds'],
+                passing_stats_df.loc[i, '1D'],
+                passing_stats_df.loc[i, '1D%'],
+                passing_stats_df.loc[i, 'IAY'],
+                passing_stats_df.loc[i, 'IAY/PA'],
+                passing_stats_df.loc[i, 'CAY'],
+                passing_stats_df.loc[i, 'CAY/Cmp'],
+                passing_stats_df.loc[i, 'CAY/PA'],
+                passing_stats_df.loc[i, 'YAC'],
+                passing_stats_df.loc[i, 'YAC/Cmp'],
+                passing_stats_df.loc[i, 'Drops'],
+                passing_stats_df.loc[i, 'Drops%'],
+                passing_stats_df.loc[i, 'BadTh'],
+                passing_stats_df.loc[i, 'Bad%'],
+                passing_stats_df.loc[i, 'Bltz'],
+                passing_stats_df.loc[i, 'Hrry'],
+                passing_stats_df.loc[i, 'Hits'],
+                passing_stats_df.loc[i, 'Scrm'],
+                passing_stats_df.loc[i, 'Yds/Scr'],
+                passing_stats_df.loc[i, 'Passing_TD'],
+                passing_stats_df.loc[i, 'Passing_Int'],
+                passing_stats_df.loc[i, 'Passing_Sk'],
+                passing_stats_df.loc[i, 'Passing_Yds'],
+                passing_stats_df.loc[i, 'Passing_Lng'],
+                passing_stats_df.loc[i, 'Passing_Rate'],
+                passing_stats_df.loc[i, 'Fumbles_Fmb'],
+                passing_stats_df.loc[i, 'Fumbles_FL'],
+            ))
+
+    connection_to_database.commit()
+    print (passing_stats_df.loc[0, 'home_team_name'] + ' vs ' + passing_stats_df.loc[0, 'away_team_name'] + ' game\'s passing stats insertion to mysql table complete')
+
+
+def insert_rushing_stats_to_mysql(rushing_stats_df):
+    connection_to_database = connect_to_mysql_system()
+
+    for i in range(0, len(rushing_stats_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+
+
+
+def insert_receiving_stats_to_mysql(receiving_stats_df):
+    connection_to_database = connect_to_mysql_system()
