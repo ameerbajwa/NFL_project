@@ -16,6 +16,15 @@ def converting_to_float(x):
     else:
         return float(x)
 
+def splitting_player_name(list_of_player_stats_df):
+    new_list_of_player_stats_df = []
+    for df in list_of_player_stats_df:
+        df['player_first_name'] = list(map(lambda x: ' '.join(x.split(' ')[:-1]) if len(x.split(' ')) > 1 else x.split(' ')[0], df['Player']))
+        df['player_last_name'] = list(map(lambda x: x.split(' ')[-1], df['Player']))
+
+        new_list_of_player_stats_df.append(df)
+    return (new_list_of_player_stats_df)
+
 def transforming_date(date_of_game):
     pieces_of_date = date_of_game.replace(',', '').split(' ')
     month = strptime(pieces_of_date[1], '%b').tm_mon
@@ -62,11 +71,12 @@ def joining_basic_stats_and_adv_stats(basic_player_stats_df, adv_player_stats_df
 def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense, date_of_game):
 
     list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
-    for df in list_of_player_dfs:
+    new_list_of_player_dfs = splitting_player_name(list_of_player_dfs)
+
+    for df in new_list_of_player_dfs:
         df['date'] = list(map(transforming_date, df['date']))
 
-    list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
-    cleaner_list_of_player_dfs = convert_values_to_appropriate_types(list_of_player_dfs)
+    cleaner_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
     cleaner_basic_off_player_stats_df = cleaner_list_of_player_dfs[0]
     cleaner_adv_off_player_stats_df = cleaner_list_of_player_dfs[1]
 
@@ -112,11 +122,12 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df):
 
     list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
-    for df in list_of_player_dfs:
+    new_list_of_player_dfs = splitting_player_name(list_of_player_dfs)
+
+    for df in new_list_of_player_dfs:
         df['date'] = list(map(transforming_date, df['date']))
 
-    list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
-    cleaner_list_of_player_dfs = convert_values_to_appropriate_types(list_of_player_dfs)
+    cleaner_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
     cleaner_basic_def_player_stats_df = cleaner_list_of_player_dfs[0]
     cleaner_adv_def_player_stats_df = cleaner_list_of_player_dfs[1]
 
@@ -136,8 +147,11 @@ def cleaning_special_team_player_stats(player_stats_df):
 
     player_stats_df['date'] = list(map(transforming_date, player_stats_df['date']))
 
-    list_of_player_dfs = convert_values_to_appropriate_types([player_stats_df])
-    cleaner_player_df = list_of_player_dfs[0]
+    list_of_player_dfs = [player_stats_df]
+    new_list_of_player_dfs = splitting_player_name(list_of_player_dfs)
+
+    newer_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
+    cleaner_player_df = newer_list_of_player_dfs[0]
 
     return (cleaner_player_df)
 
