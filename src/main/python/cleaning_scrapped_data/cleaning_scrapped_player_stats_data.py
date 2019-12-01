@@ -77,7 +77,7 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
     new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
 
     for df in new_list_of_player_dfs:
-        df['date'] = list(map(transforming_date, df['date']))
+        df['new_date'] = list(map(transforming_date, df['date']))
 
     cleaner_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
     cleaner_basic_off_player_stats_df = cleaner_list_of_player_dfs[0]
