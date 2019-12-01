@@ -617,4 +617,209 @@ def insert_receiving_stats_to_mysql(receiving_stats_df):
 def insert_defensive_stats_to_mysql(defensive_stats_df):
     connection_to_database = connect_to_mysql_system()
 
-    
+    for i in range(0, len(defensive_stats_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+
+        insert_SQL_query = "INSERT INTO `NFL_player_defensive_stats_per_game_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    player_first_name," \
+                           "    player_last_name," \
+                           "    team," \
+                           "    opposing_team," \
+                           "    home_team," \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    passes_intercepted," \
+                           "    yards_returned_from_interceptions," \
+                           "    interceptions_returned_for_touchdown," \
+                           "    longest_interception_return," \
+                           "    passes_deflected," \
+                           "    times_targeted_by_a_pass," \
+                           "    completed_passes_when_targeted," \
+                           "    completion_percentage_allowed_when_targeted," \
+                           "    receiving_yards_allowed_on_completion," \
+                           "    receiving_yards_per_reception_allowed," \
+                           "    receiving_yards_per_time_targeted," \
+                           "    receiving_touchdowns_allowed," \
+                           "    passer_rating_allowed_when_targeted," \
+                           "    averaged_depth_of_receiver_when_targeted," \
+                           "    total_air_yards_on_completions," \
+                           "    yards_after_catch_on_completion," \
+                           "    times_brought_on_for_blitz," \
+                           "    QB_hurries," \
+                           "    QB_knockdowns," \
+                           "    sacks," \
+                           "    QB_pressures," \
+                           "    total_tackles," \
+                           "    solo_tackles," \
+                           "    assisted_tackles," \
+                           "    tackles_for_loss," \
+                           "    missed_tackles," \
+                           "    missed_tackles_percentage," \
+                           "    fumbles_recovered," \
+                           "    yards_receovered_after_fumble," \
+                           "    touchdowns_from_fumble_recovery," \
+                           "    forced_fumbles" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                defensive_stats_df.loc[i, 'player_first_name'],
+                defensive_stats_df.loc[i, 'player_last_name'],
+                defensive_stats_df.loc[i, 'Tm'],
+                defensive_stats_df.loc[i, 'opposing_team'],
+                defensive_stats_df.loc[i, 'home_team_name'],
+                defensive_stats_df.loc[i, 'away_team_name'],
+                defensive_stats_df.loc[i, 'week'],
+                defensive_stats_df.loc[i, 'date'],
+                defensive_stats_df.loc[i, 'Int'],
+                defensive_stats_df.loc[i, 'Def Interceptions_Yds'],
+                defensive_stats_df.loc[i, 'Def Interceptions_TD'],
+                defensive_stats_df.loc[i, 'Def Interceptions_Lng'],
+                defensive_stats_df.loc[i, 'Def Interceptions_PD'],
+                defensive_stats_df.loc[i, 'Tgt'],
+                defensive_stats_df.loc[i, 'Cmp'],
+                defensive_stats_df.loc[i, 'Cmp%'],
+                defensive_stats_df.loc[i, 'Yds'],
+                defensive_stats_df.loc[i, 'Yds/Cmp'],
+                defensive_stats_df.loc[i, 'Yds/Tgt'],
+                defensive_stats_df.loc[i, 'TD'],
+                defensive_stats_df.loc[i, 'Rat'],
+                defensive_stats_df.loc[i, 'DADOT'],
+                defensive_stats_df.loc[i, 'Air'],
+                defensive_stats_df.loc[i, 'YAC'],
+                defensive_stats_df.loc[i, 'Bltz'],
+                defensive_stats_df.loc[i, 'Hrry'],
+                defensive_stats_df.loc[i, 'QBKD'],
+                defensive_stats_df.loc[i, 'Sk'],
+                defensive_stats_df.loc[i, 'Prss'],
+                defensive_stats_df.loc[i, 'Comb'],
+                defensive_stats_df.loc[i, 'Tackles_Solo'],
+                defensive_stats_df.loc[i, 'Tackles_Ast'],
+                defensive_stats_df.loc[i, 'Tackles_TFL'],
+                defensive_stats_df.loc[i, 'MTkl'],
+                defensive_stats_df.loc[i, 'MTkl%'],
+                defensive_stats_df.loc[i, 'Fumbles_FR'],
+                defensive_stats_df.loc[i, 'Fumbles_Yds'],
+                defensive_stats_df.loc[i, 'Fumbles_TD'],
+                defensive_stats_df.loc[i, 'Fumbles_FF']
+            ))
+
+    connection_to_database.commit()
+    print (defensive_stats_df.loc[0, 'home_team_name'] + ' vs ' + defensive_stats_df.loc[0, 'away_team_name'] + ' game\'s defensive stats insertion to mysql table complete!')
+
+def insert_return_stats_to_mysql(return_stats_df):
+    connection_to_database = connect_to_mysql_system()
+
+    for i in range(0, len(return_stats_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+
+        insert_SQL_query = "INSERT INTO `NFL_player_return_stats_per_game_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    player_first_name," \
+                           "    player_last_name," \
+                           "    team," \
+                           "    opposing_team," \
+                           "    home_team," \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    kickoff_returns," \
+                           "    yards_after_kickoff_returns," \
+                           "    yards_per_kickoff_returns," \
+                           "    kickoff_return_touchdowns," \
+                           "    longest_kickoff_return," \
+                           "    punt_return," \
+                           "    yards_after_punt_returns," \
+                           "    yards_per_punt_return," \
+                           "    punt_return_touchdowns," \
+                           "    longest_punt_return" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                return_stats_df.loc[i, 'player_first_name'],
+                return_stats_df.loc[i, 'player_last_name'],
+                return_stats_df.loc[i, 'Tm'],
+                return_stats_df.loc[i, 'opposing_team'],
+                return_stats_df.loc[i, 'home_team_name'],
+                return_stats_df.loc[i, 'away_team_name'],
+                return_stats_df.loc[i, 'week'],
+                return_stats_df.loc[i, 'date'],
+                return_stats_df.loc[i, 'Kick Returns_Rt'],
+                return_stats_df.loc[i, 'Kick Returns_Yds'],
+                return_stats_df.loc[i, 'Kick Returns_Y/Rt'],
+                return_stats_df.loc[i, 'Kick Returns_TD'],
+                return_stats_df.loc[i, 'Kick Returns_Lng'],
+                return_stats_df.loc[i, 'Punt Returns_Rt'],
+                return_stats_df.loc[i, 'Punt Returns_Yds'],
+                return_stats_df.loc[i, 'Punt Returns_Y/R'],
+                return_stats_df.loc[i, 'Punt Returns_TD'],
+                return_stats_df.loc[i, 'Punt Returns_Lng']
+            ))
+
+    connection_to_database.commit()
+    print (return_stats_df.loc[0, 'home_team_name'] + ' vs ' + return_stats_df.loc[0, 'away_team_name'] + ' game\'s return stats insertion to mysql table complete!')
+
+
+def insert_kick_punt_stats_to_mysql(kick_punt_stats_df):
+    connection_to_database = connect_to_mysql_system()
+
+    for i in range(0, len(kick_punt_stats_df)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+
+        insert_SQL_query = "INSERT INTO `NFL_player_kicking_stats_per_game_2019_2020_season`" \
+                           "(" \
+                           "    id," \
+                           "    player_first_name," \
+                           "    player_last_name," \
+                           "    team," \
+                           "    opposing_team," \
+                           "    home_team" \
+                           "    away_team," \
+                           "    week," \
+                           "    date," \
+                           "    extra_points_made," \
+                           "    extra_points_attempted," \
+                           "    field_goals_made," \
+                           "    field_goals_attempted," \
+                           "    times_punted," \
+                           "    total_punt_yardage," \
+                           "    yards_per_punt," \
+                           "    longest_punt" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                kick_punt_stats_df.loc[i, 'player_first_name'],
+                kick_punt_stats_df.loc[i, 'player_last_name'],
+                kick_punt_stats_df.loc[i, 'Tm'],
+                kick_punt_stats_df.loc[i, 'opposing_team'],
+                kick_punt_stats_df.loc[i, 'home_team_name'],
+                kick_punt_stats_df.loc[i, 'away_team_name'],
+                kick_punt_stats_df.loc[i, 'week'],
+                kick_punt_stats_df.loc[i, 'date'],
+                kick_punt_stats_df.loc[i, 'Scoring_XPM'],
+                kick_punt_stats_df.loc[i, 'Scoring_XPA'],
+                kick_punt_stats_df.loc[i, 'Scoring_FGM'],
+                kick_punt_stats_df.loc[i, 'Scoring_FGA'],
+                kick_punt_stats_df.loc[i, 'Punting_Pnt'],
+                kick_punt_stats_df.loc[i, 'Punting_Yds'],
+                kick_punt_stats_df.loc[i, 'Punting_Y/P'],
+                kick_punt_stats_df.loc[i, 'Punting_Lng']
+            ))
+
+    connection_to_database.commit()
+    print (kick_punt_stats_df.loc[0, 'home_team_name'] + ' vs ' + kick_punt_stats_df.loc[0, 'away_team_name'] + ' game\'s kicking and punting stats insertion to mysql table complete!')
+

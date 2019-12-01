@@ -159,6 +159,9 @@ def grab_special_teams_player_data(dict_of_game_summaries):
         clean_return_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(return_player_stats_df)
         clean_kicking_punting_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(kicking_punting_player_stats_df)
 
+        insert.insert_return_stats_to_mysql(clean_return_player_stats_df)
+        insert.insert_kick_punt_stats_to_mysql(clean_kicking_punting_player_stats_df)
+
 test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
 grab_offensive_player_data(test_dict)
 

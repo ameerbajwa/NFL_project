@@ -137,7 +137,7 @@ def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_st
     cleaner_basic_def_player_stats_df.sort_values(['Tm', 'Tackles_Comb', 'Player'], ascending=[False, True, False], inplace=True)
     cleaner_adv_def_player_stats_df.sort_values(['Tm', 'Comb', 'Player'], ascending=[False, True, False], inplace=True)
 
-    list_of_new_column_names =['Def_Interceptions_Yds', 'Def_Interceptions_TD', 'Def_Interceptions_Lng', 'Def_Interceptions_PD,'
+    list_of_new_column_names =['Def Interceptions_Yds', 'Def Interceptions_TD', 'Def Interceptions_Lng', 'Def Interceptions_PD,'
                                'Tackles_Solo', 'Tackles_Ast', 'Tackles_TFL', 'Fumbles_FR', 'Fumbles_Yds', 'Fumbles_TD', 'Fumbles_FF']
 
     new_adv_def_player_stats_df = defining_new_columns(list_of_new_column_names, cleaner_adv_def_player_stats_df)
