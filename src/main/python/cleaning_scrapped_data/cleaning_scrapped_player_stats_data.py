@@ -35,20 +35,49 @@ def transforming_date(date_of_game):
     return (pd.to_datetime(datetime.strptime(date, '%Y-%m-%d')))
 
 def convert_values_to_appropriate_types(list_of_player_stats_df):
+    # IF COLUMN HEADER HAS RATE, DADOT, /, OR % THEN CONVERT TO FLOAT ELSE CONVERT TO INT
+    new_list_of_player_stats_df = []
+    list_of_columns_set = ['date', 'week', 'home_team_name', 'away_team_name', 'new_date', 'player_first_name', 'player_last_name', 'opposing_team', 'Player', 'Tm']
 
     for df in list_of_player_stats_df:
-        for col in df.columns[2:]:
-            if ('%' in df[col].values):
-                df[col] = list(map(lambda x: x.replace('%', '') if '%' in x else x, df[col]))
-            else:
+        for col in df.columns:
+            if (col in list_of_columns_set):
                 continue
-
-            if ('.' in df[col].values):
-                df[col] = list(map(converting_to_float, df[col]))
             else:
-                df[col] = list(map(converting_to_int, df[col]))
+                if ('%' in col):
+                    df[col] = list(map(lambda x: x.replace('%', '') if '%' in x else x, df[col]))
+                    df[col] = list(map(converting_to_float, df[col]))
+                elif ('/' in col or col == 'Passing_Rate' or col == 'Rat' or col == 'DADOT' or col == 'Sk'):
+                    df[col] = list(map(converting_to_float, df[col]))
+                else:
+                    df[col] = list(map(converting_to_int, df[col]))
 
-    return list_of_player_stats_df
+            # for val_index in range(0, len(df[col].values)):
+            #     if (type(df[col].values[val_index]) == str):
+            #         if ('%' in df[col].values[val_index]):
+            #
+            #
+            #             # if ('.' in val):
+            #             #     df[col] = list(map(converting_to_float, df[col]))
+            #             #     break
+            #             # elif ('.' not in val):
+            #             #     df[col] = list(map(converting_to_int, df[col]))
+            #             #     break
+            #
+            #         elif ('.' in df[col].values[val_index]):
+            #             df[col] = list(map(converting_to_float, df[col]))
+            #             break
+            #         elif ('.' not in df[col].values[val_index]):
+            #             if ('.' in df[col].values[val_index+1]):
+            #                 df[col] = list(map(converting_to_float, df[col]))
+            #                 break
+            #             elif ('.' not in df[col].values[val_index+1]):
+            #                 df[col] = list(map(converting_to_int, df[col]))
+            #                 break
+
+        new_list_of_player_stats_df.append(df)
+
+    return (new_list_of_player_stats_df)
 
 def defining_new_columns(list_of_new_column_names, cleaner_adv_off_player_stats_df):
 
