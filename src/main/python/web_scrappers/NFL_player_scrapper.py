@@ -22,11 +22,8 @@ def table_scrapper(id_of_table, driver, week):
 
     # unique ids_for_table scrapping of player stats by game: player_offense, passing_advanced, rushing_advanced, receiving_advanced, player_defense, defense_advanced
 
-    # FOR COLUMN NAMES FOR THE BASIC OFFENSE AND DEFENSE TABLE, HAVE TO GRAB BOTH ROWS OF THEADS TO DIFFER BETWEEN THE
-    #  PASSING, RUSHING, AND RECEIVING COLUMNS
-
     if (len(driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead//tr')) > 1):
-        raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr[2]//th')  # id_of_table
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr[2]//th')
     else:
         raw_column_names = driver.find_elements_by_xpath('//*[@id="' + id_of_table + '"]/thead/tr//th')
 
@@ -114,16 +111,16 @@ def grab_offensive_player_data(dict_of_game_summaries):
         time.sleep(1)
 
         basic_off_player_stats_df = table_scrapper('player_offense', driver, week)
-        adv_passing_player_stats_df = table_scrapper('passing_advanced', driver, week)
-        # adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver, week)
+        # adv_passing_player_stats_df = table_scrapper('passing_advanced', driver, week)
+        adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver, week)
         # adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver, week)
 
-        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
-        # clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
+        # clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
+        clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
         # clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
-        insert.insert_passing_stats_to_mysql(clean_passing_stats_df)
-        # insert.insert_rushing_stats_to_mysql(clean_rushing_stats_df)
+        # insert.insert_passing_stats_to_mysql(clean_passing_stats_df)
+        insert.insert_rushing_stats_to_mysql(clean_rushing_stats_df)
         # insert.insert_receiving_stats_to_mysql(clean_receiving_stats_df)
 
 def grab_defensive_player_data(dict_of_game_summaries):
