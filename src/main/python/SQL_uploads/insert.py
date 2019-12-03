@@ -507,7 +507,7 @@ def insert_rushing_stats_to_mysql(rushing_stats_df):
                            "    rushing_yards_after_contact," \
                            "    rushing_yards_after_contact_per_rushing_attempt," \
                            "    broken_tackles_on_rushes," \
-                           "    rushing_attempts_per_broken_tackle," \
+                           "    rush_attempts_per_broken_tackle," \
                            "    rushing_touchdowns," \
                            "    longest_rushing_attempt," \
                            "    number_of_times_fumbled," \
@@ -527,7 +527,6 @@ def insert_rushing_stats_to_mysql(rushing_stats_df):
                 rushing_stats_df.loc[i, 'away_team_name'],
                 str(rushing_stats_df.loc[i, 'week']),
                 str(rushing_stats_df.loc[i, 'new_date']),
-                str(rushing_stats_df.loc[i, 'player_first_name']),
                 str(rushing_stats_df.loc[i, 'Att']),
                 str(rushing_stats_df.loc[i, 'Yds']),
                 str(rushing_stats_df.loc[i, '1D']),
@@ -567,11 +566,11 @@ def insert_receiving_stats_to_mysql(receiving_stats_df):
                            "    receptions," \
                            "    receiving_yards," \
                            "    first_downs_through_receiving," \
-                           "    total_yards_passed_through_air_before_caught," \
+                           "    total_yards_passed_through_the_air_before_caught," \
                            "    yards_before_catch_per_reception," \
                            "    yards_after_catch," \
                            "    yards_after_catch_per_reception," \
-                           "    broken_tackles_on_recptions," \
+                           "    broken_tackles_on_receptions," \
                            "    receptions_per_broken_tackle," \
                            "    dropped_passes," \
                            "    dropped_passes_per_target," \
@@ -579,8 +578,8 @@ def insert_receiving_stats_to_mysql(receiving_stats_df):
                            "    longest_reception," \
                            "    number_of_times_fumbled," \
                            "    fumbles_lost" \
-                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s" \
-                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s);"
 
         with connection_to_database.cursor() as cursor:
@@ -737,7 +736,7 @@ def insert_return_stats_to_mysql(return_stats_df):
                            "    yards_per_kickoff_returns," \
                            "    kickoff_return_touchdowns," \
                            "    longest_kickoff_return," \
-                           "    punt_return," \
+                           "    punt_returns," \
                            "    yards_after_punt_returns," \
                            "    yards_per_punt_return," \
                            "    punt_return_touchdowns," \
@@ -761,7 +760,7 @@ def insert_return_stats_to_mysql(return_stats_df):
                 str(return_stats_df.loc[i, 'Kick Returns_Y/Rt']),
                 str(return_stats_df.loc[i, 'Kick Returns_TD']),
                 str(return_stats_df.loc[i, 'Kick Returns_Lng']),
-                str(return_stats_df.loc[i, 'Punt Returns_Rt']),
+                str(return_stats_df.loc[i, 'Punt Returns_Ret']),
                 str(return_stats_df.loc[i, 'Punt Returns_Yds']),
                 str(return_stats_df.loc[i, 'Punt Returns_Y/R']),
                 str(return_stats_df.loc[i, 'Punt Returns_TD']),
@@ -785,7 +784,7 @@ def insert_kick_punt_stats_to_mysql(kick_punt_stats_df):
                            "    player_last_name," \
                            "    team," \
                            "    opposing_team," \
-                           "    home_team" \
+                           "    home_team," \
                            "    away_team," \
                            "    week," \
                            "    date," \

@@ -68,8 +68,6 @@ def table_scrapper(id_of_table, driver, week):
         for col in raw_column_names:
             column_names.append(col.text)
 
-    print (column_names)
-
     player_stats_df = pd.DataFrame(columns=column_names)
 
     player_stats = driver.find_elements_by_xpath('//*[@id="'+ id_of_table + '"]/tbody//tr') # id_of_table
@@ -111,17 +109,17 @@ def grab_offensive_player_data(dict_of_game_summaries):
         time.sleep(1)
 
         basic_off_player_stats_df = table_scrapper('player_offense', driver, week)
-        # adv_passing_player_stats_df = table_scrapper('passing_advanced', driver, week)
+        adv_passing_player_stats_df = table_scrapper('passing_advanced', driver, week)
         adv_rushing_player_stats_df = table_scrapper('rushing_advanced', driver, week)
-        # adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver, week)
+        adv_receiving_player_stats_df = table_scrapper('receiving_advanced', driver, week)
 
-        # clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
+        clean_passing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_passing_player_stats_df, 'passing')
         clean_rushing_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_rushing_player_stats_df, 'rushing')
-        # clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
+        clean_receiving_stats_df = cleaning_scrapped_player_stats_data.cleaning_offensive_player_stats(basic_off_player_stats_df, adv_receiving_player_stats_df, 'receiving')
 
-        # insert.insert_passing_stats_to_mysql(clean_passing_stats_df)
+        insert.insert_passing_stats_to_mysql(clean_passing_stats_df)
         insert.insert_rushing_stats_to_mysql(clean_rushing_stats_df)
-        # insert.insert_receiving_stats_to_mysql(clean_receiving_stats_df)
+        insert.insert_receiving_stats_to_mysql(clean_receiving_stats_df)
 
 def grab_defensive_player_data(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
@@ -152,16 +150,16 @@ def grab_special_teams_player_data(dict_of_game_summaries):
         driver.get(game_summary)
         time.sleep(1)
 
-        return_player_stats_df = table_scrapper('returns', driver, week)
         kicking_punting_player_stats_df = table_scrapper('kicking', driver, week)
+        return_player_stats_df = table_scrapper('returns', driver, week)
 
-        clean_return_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(return_player_stats_df)
-        clean_kicking_punting_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_special_team_player_stats(kicking_punting_player_stats_df)
+        clean_kicking_punting_player_stats_df, teams = cleaning_scrapped_player_stats_data.cleaning_kicking_player_stats(kicking_punting_player_stats_df)
+        clean_return_player_stats_df = cleaning_scrapped_player_stats_data.cleaning_return_player_stats(return_player_stats_df, teams)
 
         insert.insert_return_stats_to_mysql(clean_return_player_stats_df)
         insert.insert_kick_punt_stats_to_mysql(clean_kicking_punting_player_stats_df)
 
-test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
-grab_offensive_player_data(test_dict)
-
-sys.exit()
+# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
+# grab_special_teams_player_data(test_dict)
+#
+# sys.exit()

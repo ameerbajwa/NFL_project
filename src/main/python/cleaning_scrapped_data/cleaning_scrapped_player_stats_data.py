@@ -16,17 +16,21 @@ def converting_to_float(x):
     else:
         return float(x)
 
-def defining_opposing_team_and_splitting_player_name(list_of_player_stats_df):
+def defining_opposing_team_and_splitting_player_name(list_of_player_stats_df, list_of_teams):
     new_list_of_player_stats_df = []
 
     for df in list_of_player_stats_df:
         df['player_first_name'] = list(map(lambda x: ' '.join(x.split(' ')[:-1]) if len(x.split(' ')) > 1 else x.split(' ')[0], df['Player']))
         df['player_last_name'] = list(map(lambda x: x.split(' ')[-1], df['Player']))
         teams = df['Tm'].unique()
-        df['opposing_team'] = list(map(lambda x: teams[0] if x == teams[1] else teams[1], df['Tm']))
+        if (len(teams) == 1):
+            df['opposing_team'] = list(map(lambda x: list_of_teams[0] if x == list_of_teams[1] else list_of_teams[1], df['Tm']))
+        else:
+            df['opposing_team'] = list(map(lambda x: teams[0] if x == teams[1] else teams[1], df['Tm']))
+
         new_list_of_player_stats_df.append(df)
 
-    return (new_list_of_player_stats_df)
+    return (new_list_of_player_stats_df, teams)
 
 def transforming_date(date_of_game):
     pieces_of_date = date_of_game.replace(',', '').split(' ')
@@ -35,7 +39,6 @@ def transforming_date(date_of_game):
     return (pd.to_datetime(datetime.strptime(date, '%Y-%m-%d')))
 
 def convert_values_to_appropriate_types(list_of_player_stats_df):
-    # IF COLUMN HEADER HAS RATE, DADOT, /, OR % THEN CONVERT TO FLOAT ELSE CONVERT TO INT
     new_list_of_player_stats_df = []
     list_of_columns_set = ['date', 'week', 'home_team_name', 'away_team_name', 'new_date', 'player_first_name', 'player_last_name', 'opposing_team', 'Player', 'Tm']
 
@@ -51,29 +54,6 @@ def convert_values_to_appropriate_types(list_of_player_stats_df):
                     df[col] = list(map(converting_to_float, df[col]))
                 else:
                     df[col] = list(map(converting_to_int, df[col]))
-
-            # for val_index in range(0, len(df[col].values)):
-            #     if (type(df[col].values[val_index]) == str):
-            #         if ('%' in df[col].values[val_index]):
-            #
-            #
-            #             # if ('.' in val):
-            #             #     df[col] = list(map(converting_to_float, df[col]))
-            #             #     break
-            #             # elif ('.' not in val):
-            #             #     df[col] = list(map(converting_to_int, df[col]))
-            #             #     break
-            #
-            #         elif ('.' in df[col].values[val_index]):
-            #             df[col] = list(map(converting_to_float, df[col]))
-            #             break
-            #         elif ('.' not in df[col].values[val_index]):
-            #             if ('.' in df[col].values[val_index+1]):
-            #                 df[col] = list(map(converting_to_float, df[col]))
-            #                 break
-            #             elif ('.' not in df[col].values[val_index+1]):
-            #                 df[col] = list(map(converting_to_int, df[col]))
-            #                 break
 
         new_list_of_player_stats_df.append(df)
 
@@ -103,7 +83,8 @@ def joining_basic_stats_and_adv_stats(basic_player_stats_df, adv_player_stats_df
 def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_stats_df, type_of_offense):
 
     list_of_player_dfs = [basic_off_player_stats_df, adv_off_player_stats_df]
-    new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
+    tms = [1,2]
+    new_list_of_player_dfs, teams = defining_opposing_team_and_splitting_player_name(list_of_player_dfs, tms)
 
     for df in new_list_of_player_dfs:
         df['new_date'] = list(map(transforming_date, df['date']))
@@ -154,10 +135,11 @@ def cleaning_offensive_player_stats(basic_off_player_stats_df, adv_off_player_st
 def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_stats_df):
 
     list_of_player_dfs = [basic_def_player_stats_df, adv_def_player_stats_df]
-    new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
+    tms = [1,2]
+    new_list_of_player_dfs, teams = defining_opposing_team_and_splitting_player_name(list_of_player_dfs, tms)
 
     for df in new_list_of_player_dfs:
-        df['date'] = list(map(transforming_date, df['date']))
+        df['new_date'] = list(map(transforming_date, df['date']))
 
     cleaner_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
     cleaner_basic_def_player_stats_df = cleaner_list_of_player_dfs[0]
@@ -166,7 +148,7 @@ def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_st
     cleaner_basic_def_player_stats_df.sort_values(['Tm', 'Tackles_Comb', 'Player'], ascending=[False, True, False], inplace=True)
     cleaner_adv_def_player_stats_df.sort_values(['Tm', 'Comb', 'Player'], ascending=[False, True, False], inplace=True)
 
-    list_of_new_column_names =['Def Interceptions_Yds', 'Def Interceptions_TD', 'Def Interceptions_Lng', 'Def Interceptions_PD,'
+    list_of_new_column_names =['Def Interceptions_Yds', 'Def Interceptions_TD', 'Def Interceptions_Lng', 'Def Interceptions_PD',
                                'Tackles_Solo', 'Tackles_Ast', 'Tackles_TFL', 'Fumbles_FR', 'Fumbles_Yds', 'Fumbles_TD', 'Fumbles_FF']
 
     new_adv_def_player_stats_df = defining_new_columns(list_of_new_column_names, cleaner_adv_def_player_stats_df)
@@ -175,12 +157,25 @@ def cleaning_defensive_player_stats(basic_def_player_stats_df, adv_def_player_st
 
     return (defensive_player_stats)
 
-def cleaning_special_team_player_stats(player_stats_df):
+def cleaning_kicking_player_stats(player_stats_df):
 
-    player_stats_df['date'] = list(map(transforming_date, player_stats_df['date']))
+    player_stats_df['new_date'] = list(map(transforming_date, player_stats_df['date']))
 
     list_of_player_dfs = [player_stats_df]
-    new_list_of_player_dfs = defining_opposing_team_and_splitting_player_name(list_of_player_dfs)
+    tms = [1,2]
+    new_list_of_player_dfs, teams = defining_opposing_team_and_splitting_player_name(list_of_player_dfs, tms)
+
+    newer_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
+    cleaner_player_df = newer_list_of_player_dfs[0]
+
+    return (cleaner_player_df, teams)
+
+def cleaning_return_player_stats(player_stats_df, teams):
+
+    player_stats_df['new_date'] = list(map(transforming_date, player_stats_df['date']))
+
+    list_of_player_dfs = [player_stats_df]
+    new_list_of_player_dfs, tms = defining_opposing_team_and_splitting_player_name(list_of_player_dfs, teams)
 
     newer_list_of_player_dfs = convert_values_to_appropriate_types(new_list_of_player_dfs)
     cleaner_player_df = newer_list_of_player_dfs[0]
