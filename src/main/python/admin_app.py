@@ -1,6 +1,6 @@
 print ('Welcome to the main scrapping central page!')
 
-from src.main.python.web_scrappers import NFL_url_scrapper, NFL_team_scrapper, NFL_player_scrapper
+from src.main.python.web_scrappers import NFL_url_scrapper, NFL_team_scrapper, NFL_player_scrapper, NFL_play_by_play_scrapper
 import sys
 
 exit_program = False
@@ -52,6 +52,10 @@ while (exit_program == False):
         if (scrapper_type == 'player_stats'):
             week = input('For which week in ' + year + ' season? ')
             NFL_player_scrapper.selecting_player_info(year, week)
+
+        if (scrapper_type == 'play_by_play'):
+            week = input('For which week in ' + year + ' season? ')
+            NFL_play_by_play_scrapper.grabbing_play_by_play_info(year, week)
 
     if (action == 'exit'):
         exit_program = True
