@@ -21,6 +21,7 @@ def play_by_play_table_scrapper(driver, week):
     play_by_play_info_df = pd.DataFrame(columns=column_names)
 
     play_by_play_info = driver.find_elements_by_xpath('//*[@id="pbp"]/tbody//tr')
+    starting_possession = driver.find_element_by_xpath('//*[@id="game_info"]/tbody/tr[1]/td').text
 
     for play in play_by_play_info:
         p = {}
@@ -40,9 +41,7 @@ def play_by_play_table_scrapper(driver, week):
     play_by_play_info_df['home_team_name'] = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[1]/div[1]/strong/a').text
     play_by_play_info_df['away_team_name'] = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[2]/div[1]/strong/a').text
 
-    starting_possession = driver.find_element_by_xpath('//*[@id="game_info"]/tbody/tr[1]/td').text
-
-    return play_by_play_info_df, starting_possession
+    return play_by_play_info_df
 
 def grabbing_play_by_play_info(year, week):
     with open('dictionaries_of_nfl_urls/list_of_game_summaries_from_week_' + str(week) + '_season_' + str(year), 'rb') as handle:
