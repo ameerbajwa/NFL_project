@@ -55,7 +55,7 @@ while (exit_program == False):
 
         if (scrapper_type == 'play_by_play'):
             week = input('For which week in ' + year + ' season? ')
-            NFL_play_by_play_scrapper.grabbing_play_by_play_info(year, week)
+            NFL_play_by_play_scrapper.selecting_play_by_play_info(year, week)
 
     if (action == 'exit'):
         exit_program = True
