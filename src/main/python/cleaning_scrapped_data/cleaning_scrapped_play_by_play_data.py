@@ -28,21 +28,49 @@ def determining_quarterback(play_details):
 
     if ('pass' in words or 'sacked' in words):
         return (words[0] + ' ' + words[1])
+    else:
+        return ''
+
+def determining_type_of_pass(play_details):
+    words = play_details.split(' ')
+
+    if ('pass' in words):
+        if ('complete' in words or 'incomplete' in words):
+            return (words[4] + ' ' + words[5])
+        else:
+            return ''
+    else:
+        return ''
+
+def determining_type_of_run(play_details):
+    words = play_details.split(' ')
+
+    if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words):
+        return ''
+    else:
+        if ('up' in words):
+            return (words[2] + ' ' + words[3] + ' ' + words[4])
+        else:
+            return (words[2] + ' ' + words[3])
 
 def determining_rusher(play_details):
     words = play_details.split(' ')
 
-    if ('pass' in words or 'sacked' in words):
-        pass
-    elif ('punted' in words or 'kicks' in words):
-        pass
+    if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words):
+        return ''
     else:
         return (words[0] + ' ' + words[1])
 
 def cleaning_play_by_play_info(play_by_play_df):
 
+    # type of play, type of pass, type of rush, result of play, type of penalty, penalty on, penalty accepted, penalty yards, yards gained, yards kicked, yards punted
+    # qb, rb, receiver, tackler, defender, kicker, punter, returner, intercepted by, fumble recovery by, forced fumble by
+
     play_by_play_df['new_date'] = list(map(transforming_date, play_by_play_df['date']))
     play_by_play_df['type_of_play'] = list(map(determining_type_of_play, play_by_play_df['Detail']))
+    play_by_play_df['type_of_pass'] = list(map(determining_type_of_pass, play_by_play_df['Detail']))
+    play_by_play_df['type_of_rush'] = list(map(determining_type_of_run, play_by_play_df['Detail']))
+
 
     play_by_play_df['quarterback'] = list(map(determining_quarterback, play_by_play_df['Detail']))
     play_by_play_df['rusher'] = list(map(determining_rusher, play_by_play_df['Detail']))

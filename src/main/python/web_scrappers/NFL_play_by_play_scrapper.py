@@ -50,6 +50,7 @@ def play_by_play_table_scrapper(driver, week):
     print (column_names)
 
     play_by_play_info_df = pd.DataFrame(columns=column_names)
+    play_by_play_info_df['possession'] = ''
 
     play_by_play_info = driver.find_elements_by_xpath('//*[@id="pbp"]/tbody//tr')
 
@@ -71,7 +72,7 @@ def play_by_play_table_scrapper(driver, week):
                     possession = home_team_name
             p['possession'] = possession
 
-            play_by_play_info_df.append(p, ignore_index=True)
+            play_by_play_info_df = play_by_play_info_df.append(p, ignore_index=True)
         else:
             pass
 
@@ -94,9 +95,8 @@ def grabbing_play_by_play_info(dict_of_game_summaries):
         time.sleep(1)
 
         play_by_play_info_df = play_by_play_table_scrapper(driver, week)
-        print (play_by_play_info_df)
 
-        # clean_play_by_play_info_df = cleaning_scrapped_play_by_play_data.cleaning_play_by_play_info(play_by_play_info_df)
+        clean_play_by_play_info_df = cleaning_scrapped_play_by_play_data.cleaning_play_by_play_info(play_by_play_info_df)
 
 test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080min.htm']}
 grabbing_play_by_play_info(test_dict)
