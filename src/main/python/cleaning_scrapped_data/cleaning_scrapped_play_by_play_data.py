@@ -20,16 +20,12 @@ def determining_type_of_play(play_details):
             return ('extra point play')
         elif ('off' in words):
             return ('kickoff play')
+    elif ('field' in words and 'goal' in words):
+        return ('field goal play')
+    elif ('Timeout' in words):
+        return 'NA'
     else:
         return ('rush play')
-
-def determining_quarterback(play_details):
-    words = play_details.split(' ')
-
-    if ('pass' in words or 'sacked' in words):
-        return (words[0] + ' ' + words[1])
-    else:
-        return 'NA'
 
 def determining_type_of_pass(play_details):
     words = play_details.split(' ')
@@ -45,7 +41,7 @@ def determining_type_of_pass(play_details):
 def determining_type_of_run(play_details):
     words = play_details.split(' ')
 
-    if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words):
+    if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words or 'field' in words or 'Timeout' in words):
         return 'NA'
     else:
         if ('up' in words):
@@ -63,6 +59,32 @@ def determining_result_of_play(play_details):
     elif ('touchdown' in words):
         return (words[-1])
 
+
+def determining_yards_kicked(play_details):
+    words = play_details.split(' ')
+
+    if ('kicks' in words and 'off' in words):
+        return (words[4])
+    elif ('field' in words and 'goal' in words):
+        return (words[2])
+    else:
+        return 'NA'
+
+def determining_yards_punted(play_details):
+    words = play_details.split(' ')
+
+    if ('punts' in words):
+        return (words[3])
+    else:
+        return 'NA'
+
+def determining_quarterback(play_details):
+    words = play_details.split(' ')
+
+    if ('pass' in words or 'sacked' in words):
+        return (words[0] + ' ' + words[1])
+    else:
+        return 'NA'
 
 def determining_rusher(play_details):
     words = play_details.split(' ')
@@ -99,6 +121,9 @@ def cleaning_play_by_play_info(play_by_play_df):
     play_by_play_df['type_of_rush'] = list(map(determining_type_of_run, play_by_play_df['Detail']))
     play_by_play_df['result_of_play'] = list(map(determining_result_of_play, play_by_play_df['Detail']))
 
+
+    play_by_play_df['yards_kicked'] = list(map(determining_yards_kicked, play_by_play_df['Detail']))
+    play_by_play_df['yards_punted'] = list(map(determining_yards_punted, play_by_play_df['Detail']))
 
     play_by_play_df['quarterback'] = list(map(determining_quarterback, play_by_play_df['Detail']))
     play_by_play_df['rusher'] = list(map(determining_rusher, play_by_play_df['Detail']))
