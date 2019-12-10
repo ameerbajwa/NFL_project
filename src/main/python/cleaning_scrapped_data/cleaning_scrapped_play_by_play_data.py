@@ -59,6 +59,46 @@ def determining_result_of_play(play_details):
     elif ('touchdown' in words):
         return (words[-1])
 
+def determining_type_of_penalty(play_details):
+    words = play_details.split(' ')
+
+    if ('Penalty' in words):
+        if ('False' in words and 'Start' in words):
+            return ' '.join(play_details.split(':')[1].split(',')[0].split(' ')[1:])
+        else:
+            return ' '.join(play_details.split('.')[1].split(':')[1].split(',')[0].split(' ')[1:])
+    else:
+        return 'NA'
+
+def determining_penalty_on_whom(play_details):
+    words = play_details.split(' ')
+
+    if ('Penalty' in words):
+        if ('False' in words and 'Start' in words):
+            return ' '.join(play_details.split(':')[0].split(' ')[2:])
+        else:
+            return ' '.join(play_details.spilt('.')[1].split(':')[0].split(' ')[3:])
+    else:
+        return 'NA'
+
+def determining_penalty_accepted(play_details):
+    words = play_details.split(' ')
+
+    if ('Penalty' in words):
+        if ('(Declined)' in words):
+            return 'Declined'
+        else:
+            return 'Accepted'
+    else:
+        return 'NA'
+
+def determining_penalty_yards(play_details):
+    words = play_details.split(' ')
+
+    if ('Penalty' in words):
+        return (play_details.split(',')[1].split(' ')[1])
+    else:
+        return 'NA'
 
 def determining_yards_kicked(play_details):
     words = play_details.split(' ')
@@ -110,6 +150,20 @@ def determining_receiver(play_details):
     else:
         return 'NA'
 
+def determining_kicker(play_details):
+    words = play_details.split(' ')
+
+    if ('kicks' in words or ('field' in words and 'goal' in words)):
+        return (words[0] + ' ' + words[1])
+    else:
+        return 'NA'
+
+def determining_punter(play_details):
+    words = play_details.split(' ')
+
+    if ('punts' in words):
+        return (words[0] + ' ' + words[1])
+
 def cleaning_play_by_play_info(play_by_play_df):
 
     # type of play, type of pass, type of rush, result of play, type of penalty, penalty on, penalty accepted, penalty yards, yards gained, yards kicked, yards punted
@@ -121,6 +175,11 @@ def cleaning_play_by_play_info(play_by_play_df):
     play_by_play_df['type_of_rush'] = list(map(determining_type_of_run, play_by_play_df['Detail']))
     play_by_play_df['result_of_play'] = list(map(determining_result_of_play, play_by_play_df['Detail']))
 
+    play_by_play_df['type_of_penalty'] = list(map(determining_type_of_penalty, play_by_play_df['Detail']))
+    play_by_play_df['penalty_on'] = list(map(determining_penalty_on_whom, play_by_play_df['Detail']))
+    play_by_play_df['penalty_accepted'] = list(map(determining_penalty_accepted, play_by_play_df['Detail']))
+    play_by_play_df['penalty_yards'] = list(map(determining_penalty_yards, play_by_play_df['Detail']))
+
 
     play_by_play_df['yards_kicked'] = list(map(determining_yards_kicked, play_by_play_df['Detail']))
     play_by_play_df['yards_punted'] = list(map(determining_yards_punted, play_by_play_df['Detail']))
@@ -129,5 +188,11 @@ def cleaning_play_by_play_info(play_by_play_df):
     play_by_play_df['rusher'] = list(map(determining_rusher, play_by_play_df['Detail']))
     play_by_play_df['receiver'] = list(map(determining_receiver, play_by_play_df['Detail']))
 
+    play_by_play_df['kicker'] = list(map(determining_kicker), play_by_play_df['Detail'])
+    play_by_play_df['punter'] = list(map(determining_punter, play_by_play_df['Detail']))
+
 
     return play_by_play_df
+
+penalty_words = determining_type_of_penalty()
+print (penalty_words)
