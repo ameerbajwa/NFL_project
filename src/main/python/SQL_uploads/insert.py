@@ -59,6 +59,7 @@ def insert_roster_info_to_mysql(team_roster_info):
                           )
 
     connection_to_database.commit()
+    connection_to_database.close()
     print(team_roster_info.loc[0, 'Team'] + ' roster insertion to mysql table complete!')
 
 def insert_overall_team_info_to_mysql(overall_team_info):
@@ -90,6 +91,7 @@ def insert_overall_team_info_to_mysql(overall_team_info):
                       )
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (team_name + ' overall team info insertion to mysql table complete!')
 
 def insert_team_off_stats_to_mysql(team_off_stats_df):
@@ -188,6 +190,7 @@ def insert_team_off_stats_to_mysql(team_off_stats_df):
         ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (team_off_stats_df.index[0] + ' offensive team stats insertion to mysql table complete!')
 
 def insert_team_def_stats_to_mysql(team_def_stats_df):
@@ -286,6 +289,7 @@ def insert_team_def_stats_to_mysql(team_def_stats_df):
         ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (team_def_stats_df.index[0] + ' defensive team stats insertion to mysql table complete!')
 
 def insert_game_summary_data_to_mysql(game_summary_df):
@@ -343,6 +347,7 @@ def insert_game_summary_data_to_mysql(game_summary_df):
                        ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (game_id + ' summary stats insertion to mysql table complete!')
 
 def insert_game_drive_summary_data_to_mysql(game_drive_summary_df):
@@ -386,6 +391,7 @@ def insert_game_drive_summary_data_to_mysql(game_drive_summary_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (game_drive_summary_df.loc[0, 'home_team_name'] + ' vs ' + game_drive_summary_df.loc[0, 'away_team_name'] + ' drive summary stats insertion to mysql table complete!')
 
 def insert_passing_stats_to_mysql(passing_stats_df):
@@ -481,6 +487,7 @@ def insert_passing_stats_to_mysql(passing_stats_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (passing_stats_df.loc[0, 'home_team_name'] + ' vs ' + passing_stats_df.loc[0, 'away_team_name'] + ' game\'s passing stats insertion to mysql table complete!')
 
 def insert_rushing_stats_to_mysql(rushing_stats_df):
@@ -543,6 +550,7 @@ def insert_rushing_stats_to_mysql(rushing_stats_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (rushing_stats_df.loc[0, 'home_team_name'] + ' vs ' + rushing_stats_df.loc[0, 'away_team_name'] + ' game\'s rushing stats insertion to mysql table complete!')
 
 def insert_receiving_stats_to_mysql(receiving_stats_df):
@@ -612,6 +620,7 @@ def insert_receiving_stats_to_mysql(receiving_stats_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (receiving_stats_df.loc[0, 'home_team_name'] + ' vs ' + receiving_stats_df.loc[0, 'away_team_name'] + ' game\'s receiving stats insertion to mysql table complete!')
 
 def insert_defensive_stats_to_mysql(defensive_stats_df):
@@ -712,6 +721,7 @@ def insert_defensive_stats_to_mysql(defensive_stats_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (defensive_stats_df.loc[0, 'home_team_name'] + ' vs ' + defensive_stats_df.loc[0, 'away_team_name'] + ' game\'s defensive stats insertion to mysql table complete!')
 
 def insert_return_stats_to_mysql(return_stats_df):
@@ -768,6 +778,7 @@ def insert_return_stats_to_mysql(return_stats_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (return_stats_df.loc[0, 'home_team_name'] + ' vs ' + return_stats_df.loc[0, 'away_team_name'] + ' game\'s return stats insertion to mysql table complete!')
 
 
@@ -821,5 +832,6 @@ def insert_kick_punt_stats_to_mysql(kick_punt_stats_df):
             ))
 
     connection_to_database.commit()
+    connection_to_database.close()
     print (kick_punt_stats_df.loc[0, 'home_team_name'] + ' vs ' + kick_punt_stats_df.loc[0, 'away_team_name'] + ' game\'s kicking and punting stats insertion to mysql table complete!')
 

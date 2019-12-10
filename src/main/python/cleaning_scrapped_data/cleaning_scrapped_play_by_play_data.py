@@ -29,7 +29,7 @@ def determining_quarterback(play_details):
     if ('pass' in words or 'sacked' in words):
         return (words[0] + ' ' + words[1])
     else:
-        return ''
+        return 'NA'
 
 def determining_type_of_pass(play_details):
     words = play_details.split(' ')
@@ -38,15 +38,15 @@ def determining_type_of_pass(play_details):
         if ('complete' in words or 'incomplete' in words):
             return (words[4] + ' ' + words[5])
         else:
-            return ''
+            return 'NA'
     else:
-        return ''
+        return 'NA'
 
 def determining_type_of_run(play_details):
     words = play_details.split(' ')
 
     if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words):
-        return ''
+        return 'NA'
     else:
         if ('up' in words):
             return (words[2] + ' ' + words[3] + ' ' + words[4])
@@ -68,7 +68,7 @@ def determining_rusher(play_details):
     words = play_details.split(' ')
 
     if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words):
-        return ''
+        return 'NA'
     else:
         return (words[0] + ' ' + words[1])
 
@@ -82,11 +82,11 @@ def determining_receiver(play_details):
             elif ('complete' in words):
                 return (words[7] + ' ' + words[8])
             else:
-                return ''
+                return 'NA'
         else:
-            return ''
+            return 'NA'
     else:
-        return ''
+        return 'NA'
 
 def cleaning_play_by_play_info(play_by_play_df):
 
