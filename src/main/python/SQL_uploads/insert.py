@@ -880,12 +880,15 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "    fumble_recovery_by," \
                            "    forced_fumble_by," \
                            "    fumble_yards," \
+                           "    lateral_to," \
+                           "    lateral_yards" \
                            "    home_team_score," \
                            "    away_team_score" \
                            ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s);"
 
         with connection_to_database.cursor as cursor:
             cursor.execute(insert_SQL_query, (
@@ -926,6 +929,8 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                 play_by_play_df.loc[i, 'fumble_recovered_by'],
                 play_by_play_df.loc[i, 'fumble_forced_by'],
                 play_by_play_df.loc[i, 'fumble_yards'],
+                play_by_play_df.loc[i, 'lateral_to'],
+                play_by_play_df.loc[i, 'lateral_yards'],
                 play_by_play_df.loc[i, 'home_team_score'],
                 play_by_play_df.loc[i, 'away_team_score']
             ))

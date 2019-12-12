@@ -2,52 +2,57 @@ from time import strptime
 from datetime import datetime
 import pandas as pd
 
+
 def transforming_date(date_of_game):
     pieces_of_date = date_of_game.replace(',', '').split(' ')
     month = strptime(pieces_of_date[1], '%b').tm_mon
     date = str(pieces_of_date[3]) + '-' + str(month) + '-' + str(pieces_of_date[2])
-    return (pd.to_datetime(datetime.strptime(date, '%Y-%m-%d')))
+    return pd.to_datetime(datetime.strptime(date, '%Y-%m-%d'))
+
 
 def determining_type_of_play(play_details):
     words = play_details.split(' ')
 
-    if ('pass' in words or 'sacked' in words):
-        return ('pass play')
-    elif ('punted' in words):
-        return ('punt play')
-    elif ('kicked' in words):
-        if ('point' in words):
-            return ('extra point play')
-        elif ('off' in words):
-            return ('kickoff play')
-    elif ('field' in words and 'goal' in words):
-        return ('field goal play')
-    elif ('Timeout' in words):
+    if 'pass' in words or 'sacked' in words:
+        return 'pass play'
+    elif 'punted' in words:
+        return 'punt play'
+    elif 'kicked' in words:
+        if 'point' in words:
+            return 'extra point play'
+        elif 'off' in words:
+            return 'kickoff play'
+    elif 'field' in words and 'goal' in words:
+        return 'field goal play'
+    elif 'Timeout' in words:
         return 'NA'
     else:
-        return ('rush play')
+        return 'rush play'
+
 
 def determining_type_of_pass(play_details):
     words = play_details.split(' ')
 
-    if ('pass' in words):
-        if ('complete' in words or 'incomplete' in words):
-            return (words[4] + ' ' + words[5])
+    if 'pass' in words:
+        if 'complete' in words or 'incomplete' in words:
+            return words[4] + ' ' + words[5]
         else:
             return 'NA'
     else:
         return 'NA'
 
+
 def determining_type_of_run(play_details):
     words = play_details.split(' ')
 
-    if ('pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words or 'field' in words or 'Timeout' in words):
+    if 'pass' in words or 'sacked' in words or 'punted' in words or 'kicks' in words or 'Penalty' in words or 'field' in words or 'Timeout' in words:
         return 'NA'
     else:
-        if ('up' in words):
-            return (words[2] + ' ' + words[3] + ' ' + words[4])
+        if 'up' in words:
+            return words[2] + ' ' + words[3] + ' ' + words[4]
         else:
-            return (words[2] + ' ' + words[3])
+            return words[2] + ' ' + words[3]
+
 
 def determining_result_of_play(play_details):
     words = play_details.split(' ')
@@ -58,6 +63,7 @@ def determining_result_of_play(play_details):
         return (words[2])
     elif ('touchdown' in words):
         return (words[-1])
+
 
 def determining_type_of_penalty(play_details):
     words = play_details.split(' ')
@@ -70,6 +76,7 @@ def determining_type_of_penalty(play_details):
     else:
         return 'NA'
 
+
 def determining_penalty_on_whom(play_details):
     words = play_details.split(' ')
 
@@ -80,6 +87,7 @@ def determining_penalty_on_whom(play_details):
             return ' '.join(play_details.spilt('.')[1].split(':')[0].split(' ')[3:])
     else:
         return 'NA'
+
 
 def determining_penalty_accepted(play_details):
     words = play_details.split(' ')
@@ -92,6 +100,7 @@ def determining_penalty_accepted(play_details):
     else:
         return 'NA'
 
+
 def determining_penalty_yards(play_details):
     words = play_details.split(' ')
 
@@ -99,6 +108,7 @@ def determining_penalty_yards(play_details):
         return (play_details.split(',')[1].split(' ')[1])
     else:
         return 'NA'
+
 
 def determining_yards_gained(play_details):
     words = play_details.split(' ')
@@ -113,6 +123,7 @@ def determining_yards_gained(play_details):
     else:
         return 'NA'
 
+
 def determining_yards_kicked(play_details):
     words = play_details.split(' ')
 
@@ -123,6 +134,7 @@ def determining_yards_kicked(play_details):
     else:
         return 'NA'
 
+
 def determining_yards_punted(play_details):
     words = play_details.split(' ')
 
@@ -130,6 +142,7 @@ def determining_yards_punted(play_details):
         return (words[3])
     else:
         return 'NA'
+
 
 def determining_yards_returned(play_details):
     words = play_details.split(' ')
@@ -142,6 +155,7 @@ def determining_yards_returned(play_details):
     else:
         return 'NA'
 
+
 def determining_quarterback(play_details):
     words = play_details.split(' ')
 
@@ -150,6 +164,7 @@ def determining_quarterback(play_details):
     else:
         return 'NA'
 
+
 def determining_rusher(play_details):
     words = play_details.split(' ')
 
@@ -157,6 +172,7 @@ def determining_rusher(play_details):
         return 'NA'
     else:
         return (words[0] + ' ' + words[1])
+
 
 def determining_receiver(play_details):
     words = play_details.split(' ')
@@ -174,16 +190,19 @@ def determining_receiver(play_details):
     else:
         return 'NA'
 
+
 def determining_tackler(play_details):
     words = play_details.split(' ')
 
     if ('(tackle' in words):
         if ('and' in words):
-            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2] + ' and ' + words[words.index('by') + 4] + ' ' + words[words.index('by') + 5][:-1])
+            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2] + ' and ' + words[
+                words.index('by') + 4] + ' ' + words[words.index('by') + 5][:-1])
         else:
             return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2][:-1])
     else:
         'NA'
+
 
 def determining_defender(play_details):
     words = play_details.split(' ')
@@ -193,6 +212,7 @@ def determining_defender(play_details):
     else:
         return 'NA'
 
+
 def determining_intercepted_by(play_details):
     words = play_details.split(' ')
 
@@ -200,6 +220,7 @@ def determining_intercepted_by(play_details):
         return (words[words.index('intercepted') + 2] + ' ' + words[words.index('intercepted') + 3])
     else:
         return 'NA'
+
 
 def determining_yards_gained_from_interception(play_details):
     words = play_details.split(' ')
@@ -212,6 +233,7 @@ def determining_yards_gained_from_interception(play_details):
     else:
         return 'NA'
 
+
 def determining_who_fumbled(play_details):
     words = play_details.split(' ')
 
@@ -221,6 +243,7 @@ def determining_who_fumbled(play_details):
     else:
         return 'NA'
 
+
 def determining_fumble_forced_by(play_details):
     words = play_details.split(' ')
 
@@ -228,6 +251,7 @@ def determining_fumble_forced_by(play_details):
         return (words[words.index('(forced') + 2] + ' ' + words[words.index('(forced') + 3][:-2])
     else:
         return 'NA'
+
 
 def determining_fumble_recovered_by(play_details):
     words = play_details.split(' ')
@@ -237,8 +261,10 @@ def determining_fumble_recovered_by(play_details):
     else:
         return 'NA'
 
+
 def determining_fumble_yards_gained(play_details):
     words = play_details.split(' ')
+
 
 def determining_kicker(play_details):
     words = play_details.split(' ')
@@ -248,25 +274,43 @@ def determining_kicker(play_details):
     else:
         return 'NA'
 
+
 def determining_punter(play_details):
     words = play_details.split(' ')
 
     if ('punts' in words):
         return (words[0] + ' ' + words[1])
 
+
 def determining_returner(play_details):
     words = play_details.split(' ')
 
-    if ('punts' in words or ('kicks' in words and 'off' in words)):
-        if ('returned' in words or ('fair' in words and 'catch' in words)):
-            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2])
+    if 'punts' in words or ('kicks' in words and 'off' in words):
+        if 'returned' in words or ('fair' in words and 'catch' in words):
+            return words[words.index('by') + 1] + ' ' + words[words.index('by') + 2]
         else:
             return 'NA'
     else:
         return 'NA'
 
-def cleaning_play_by_play_info(play_by_play_df):
 
+def determining_lateral_to_whom(play_details):
+    words = play_details.split(' ')
+
+    if 'lateral' in words:
+        return words[words.index('lateral') + 2] + ' ' + words[words.index('lateral') + 3]
+    else:
+        return 'NA'
+
+
+def determining_lateral_yards(play_details):
+    words = play_details.split(' ')
+
+    if 'lateral' in words:
+        return int(words[words.index('lateral') + 5])
+
+
+def cleaning_play_by_play_info(play_by_play_df):
     # type of play, type of pass, type of rush, result of play, type of penalty, penalty on, penalty accepted, penalty yards, yards gained, yards kicked, yards punted, yards_returned
     # qb, rb, receiver, tackler, defender, kicker, punter, returner, intercepted by, fumble recovery by, forced fumble by
 
@@ -292,11 +336,14 @@ def cleaning_play_by_play_info(play_by_play_df):
     play_by_play_df['tackler'] = list(map(determining_tackler, play_by_play_df['Detail']))
     play_by_play_df['defender'] = list(map(determining_defender, play_by_play_df['Detail']))
     play_by_play_df['intercepted_by'] = list(map(determining_intercepted_by, play_by_play_df['Detail']))
-    play_by_play_df['interception_yards'] = list(map(determining_yards_gained_from_interception, play_by_play_df['Detail']))
+    play_by_play_df['interception_yards'] = list(
+        map(determining_yards_gained_from_interception, play_by_play_df['Detail']))
     play_by_play_df['fumbled_by'] = list(map(determining_who_fumbled, play_by_play_df['Detail']))
     play_by_play_df['fumble_forced_by'] = list(map(determining_fumble_forced_by, play_by_play_df['Detail']))
     play_by_play_df['fumble_recovered_by'] = list(map(determining_fumble_recovered_by, play_by_play_df['Detail']))
     play_by_play_df['fumble_yards'] = list(map(determining_fumble_yards_gained, play_by_play_df['Detail']))
+    play_by_play_df['lateral_to'] = list(map(determining_lateral_to_whom, play_by_play_df['Detail']))
+    play_by_play_df['lateral_yards'] = list(map(determining_lateral_yards, play_by_play_df['Detail']))
 
     play_by_play_df['kicker'] = list(map(determining_kicker), play_by_play_df['Detail'])
     play_by_play_df['punter'] = list(map(determining_punter, play_by_play_df['Detail']))
@@ -304,5 +351,6 @@ def cleaning_play_by_play_info(play_by_play_df):
 
     return play_by_play_df
 
+
 penalty_words = determining_type_of_penalty()
-print (penalty_words)
+print(penalty_words)

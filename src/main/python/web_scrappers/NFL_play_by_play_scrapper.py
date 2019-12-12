@@ -10,14 +10,16 @@ import os
 import pickle
 import sys
 
+
 def selecting_play_by_play_info(year, week):
-    with open('dictionaries_of_nfl_urls/list_of_game_summaries_from_week_' + str(week) + '_season_' + str(year), 'rb') as handle:
+    with open('dictionaries_of_nfl_urls/list_of_game_summaries_from_week_' + str(week) + '_season_' + str(year),
+              'rb') as handle:
         dict_of_game_summaries = pickle.load(handle)
 
     grabbing_play_by_play_info(dict_of_game_summaries)
 
-def determining_team_with_starting_possession(driver):
 
+def determining_team_with_starting_possession(driver):
     home_team_full_name = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[1]/div[1]/strong/a').text
     away_team_full_name = driver.find_element_by_xpath('//*[@id="content"]/div[2]/div[2]/div[1]/strong/a').text
 
@@ -37,17 +39,22 @@ def determining_team_with_starting_possession(driver):
 
     return possession, home_team_name, away_team_name
 
-def play_by_play_table_scrapper(driver, week):
 
+def play_by_play_table_scrapper(driver, week):
     possession, home_team_name, away_team_name = determining_team_with_starting_possession(driver)
 
     raw_column_names = driver.find_elements_by_xpath('//*[@id="pbp"]/thead/tr//th')
     column_names = []
 
     for col in raw_column_names[:8]:
-        column_names.append(col.text)
+        if (col == away_team_name):
+            column_names.append('away_team_score')
+        elif (col == home_team_name):
+            column_names.append('home_team_score')
+        else:
+            column_names.append(col.text)
 
-    print (column_names)
+    print(column_names)
 
     play_by_play_info_df = pd.DataFrame(columns=column_names)
     play_by_play_info_df['possession'] = ''
@@ -61,7 +68,7 @@ def play_by_play_table_scrapper(driver, week):
             counter = 1
             for val in play.find_elements_by_xpath('td')[:7]:
                 if (val.text == ''):
-                    p[column_names[counter]] = 0
+                    p[column_names[counter]] = '0'
                 else:
                     p[column_names[counter]] = val.text
                 counter += 1
@@ -83,6 +90,7 @@ def play_by_play_table_scrapper(driver, week):
 
     return play_by_play_info_df
 
+
 def grabbing_play_by_play_info(dict_of_game_summaries):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
@@ -98,7 +106,10 @@ def grabbing_play_by_play_info(dict_of_game_summaries):
 
         clean_play_by_play_info_df = cleaning_scrapped_play_by_play_data.cleaning_play_by_play_info(play_by_play_info_df)
 
-test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080min.htm']}
+        insert.insert_play_by_play_stats_to_mysql(clean_play_by_play_info_df)
+
+
+test_dict = {'year': 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080min.htm']}
 grabbing_play_by_play_info(test_dict)
 
 sys.exit()
