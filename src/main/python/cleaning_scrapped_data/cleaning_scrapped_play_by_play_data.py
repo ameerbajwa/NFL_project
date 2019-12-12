@@ -179,9 +179,9 @@ def determining_tackler(play_details):
 
     if ('(tackle' in words):
         if ('and' in words):
-            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2] + ' and ' + words[words.index('by') + 4] + ' ' + words[words.index('by') + 5])
+            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2] + ' and ' + words[words.index('by') + 4] + ' ' + words[words.index('by') + 5][:-1])
         else:
-            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2])
+            return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2][:-1])
     else:
         'NA'
 
@@ -189,7 +189,7 @@ def determining_defender(play_details):
     words = play_details.split(' ')
 
     if ('(defended' in words):
-        return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2])
+        return (words[words.index('by') + 1] + ' ' + words[words.index('by') + 2][:-1])
     else:
         return 'NA'
 
@@ -200,6 +200,45 @@ def determining_intercepted_by(play_details):
         return (words[words.index('intercepted') + 2] + ' ' + words[words.index('intercepted') + 3])
     else:
         return 'NA'
+
+def determining_yards_gained_from_interception(play_details):
+    words = play_details.split(' ')
+
+    if ('intercepted' in words):
+        if ('no' in words and 'gain' in words):
+            return '0'
+        else:
+            return (words[words.index('returned') + 2])
+    else:
+        return 'NA'
+
+def determining_who_fumbled(play_details):
+    words = play_details.split(' ')
+
+    if ('fumbles' in words):
+        words_on_fumble = play_details.split('.')[1].split(' ')
+        return (words_on_fumble[1] + ' ' + words_on_fumble[2])
+    else:
+        return 'NA'
+
+def determining_fumble_forced_by(play_details):
+    words = play_details.split(' ')
+
+    if ('fumbles' in words):
+        return (words[words.index('(forced') + 2] + ' ' + words[words.index('(forced') + 3][:-2])
+    else:
+        return 'NA'
+
+def determining_fumble_recovered_by(play_details):
+    words = play_details.split(' ')
+
+    if ('fumbles' in words):
+        return (words[words.index('recovered') + 2] + ' ' + words[words.index('recovered') + 3][:-2])
+    else:
+        return 'NA'
+
+def determining_fumble_yards_gained(play_details):
+    words = play_details.split(' ')
 
 def determining_kicker(play_details):
     words = play_details.split(' ')
@@ -253,6 +292,11 @@ def cleaning_play_by_play_info(play_by_play_df):
     play_by_play_df['tackler'] = list(map(determining_tackler, play_by_play_df['Detail']))
     play_by_play_df['defender'] = list(map(determining_defender, play_by_play_df['Detail']))
     play_by_play_df['intercepted_by'] = list(map(determining_intercepted_by, play_by_play_df['Detail']))
+    play_by_play_df['interception_yards'] = list(map(determining_yards_gained_from_interception, play_by_play_df['Detail']))
+    play_by_play_df['fumbled_by'] = list(map(determining_who_fumbled, play_by_play_df['Detail']))
+    play_by_play_df['fumble_forced_by'] = list(map(determining_fumble_forced_by, play_by_play_df['Detail']))
+    play_by_play_df['fumble_recovered_by'] = list(map(determining_fumble_recovered_by, play_by_play_df['Detail']))
+    play_by_play_df['fumble_yards'] = list(map(determining_fumble_yards_gained, play_by_play_df['Detail']))
 
     play_by_play_df['kicker'] = list(map(determining_kicker), play_by_play_df['Detail'])
     play_by_play_df['punter'] = list(map(determining_punter, play_by_play_df['Detail']))
