@@ -866,6 +866,8 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "    quarterback," \
                            "    rusher," \
                            "    receiver," \
+                           "    sacker," \
+                           "    sack_yards," \
                            "    tackler," \
                            "    defender," \
                            "    kicker," \
@@ -875,10 +877,12 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "    returner," \
                            "    yards_returned," \
                            "    intercepted_by," \
+                           "    interception_location" \
                            "    interception_yards," \
                            "    fumbled_by," \
                            "    fumble_recovery_by," \
                            "    forced_fumble_by," \
+                           "    fumble_recovery_location," \
                            "    fumble_yards," \
                            "    lateral_to," \
                            "    lateral_yards" \
@@ -888,7 +892,7 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-                           "          %s);"
+                           "          %s, %s, %s, %s, %s);"
 
         with connection_to_database.cursor as cursor:
             cursor.execute(insert_SQL_query, (
@@ -915,6 +919,8 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                 play_by_play_df.loc[i, 'quarterback'],
                 play_by_play_df.loc[i, 'rusher'],
                 play_by_play_df.loc[i, 'receiver'],
+                play_by_play_df.loc[i, 'sacker'],
+                play_by_play_df.loc[i, 'sack_yards'],
                 play_by_play_df.loc[i, 'tackler'],
                 play_by_play_df.loc[i, 'defender'],
                 play_by_play_df.loc[i, 'kicker'],
@@ -924,10 +930,12 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                 play_by_play_df.loc[i, 'returner'],
                 play_by_play_df.loc[i, 'yards_returned'],
                 play_by_play_df.loc[i, 'intercepted_by'],
+                play_by_play_df.loc[i, 'interception_location'],
                 play_by_play_df.loc[i, 'interception_yards'],
                 play_by_play_df.loc[i, 'fumbled_by'],
                 play_by_play_df.loc[i, 'fumble_recovered_by'],
                 play_by_play_df.loc[i, 'fumble_forced_by'],
+                play_by_play_df.loc[i, 'fumble_recovery_location'],
                 play_by_play_df.loc[i, 'fumble_yards'],
                 play_by_play_df.loc[i, 'lateral_to'],
                 play_by_play_df.loc[i, 'lateral_yards'],
