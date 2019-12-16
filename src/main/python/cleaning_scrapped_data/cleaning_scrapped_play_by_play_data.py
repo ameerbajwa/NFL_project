@@ -79,22 +79,31 @@ def determining_type_of_penalty(play_details):
     words = play_details.split(' ')
 
     if ('Penalty' in words):
-        if ('False' in words and 'Start' in words):
-            return ' '.join(play_details.split(':')[1].split(',')[0].split(' ')[1:])
-        else:
-            return ' '.join(play_details.split('.')[1].split(':')[1].split(',')[0].split(' ')[1:])
+        if (len('Penalty' in words) == 1):
+            if ('False' in words and 'Start' in words):
+                return ' '.join(play_details.split(':')[1].split(',')[0].split(' ')[1:])
+            else:
+                return ' '.join(play_details.split('.')[1].split(':')[1].split(',')[0].split(' ')[1:])
+        elif (len('Penalty' in words) > 1):
+            return ' '.join(play_details.split('.')[1].split(':')[1].split(',')[0].split(' ')[1:]) + ' and ' + ' '.join(play_details.split('.')[2].split(':')[1].split(',')[0].split(' ')[1:])
     else:
         return 'NA'
+
+# NEED TO DETERMINE TYPE OF PENALTY WHEN PENALTY IS DECLINED
 
 
 def determining_penalty_on_whom(play_details):
     words = play_details.split(' ')
 
     if ('Penalty' in words):
-        if ('False' in words and 'Start' in words):
-            return ' '.join(play_details.split(':')[0].split(' ')[2:])
-        else:
-            return ' '.join(play_details.spilt('.')[1].split(':')[0].split(' ')[3:])
+        if (len('Penalty' in words) == 1):
+            if ('False' in words and 'Start' in words):
+                return ' '.join(play_details.split(':')[0].split(' ')[2:])
+            else:
+                return ' '.join(play_details.spilt('.')[1].split(':')[0].split(' ')[2:])
+        elif (len('Penalty' in words) > 1):
+            return ' '.join(play_details.spilt('.')[1].split(':')[0].split(' ')[2:]) + ' and ' + ' '.join(play_details.spilt('.')[2].split(':')[0].split(' ')[2:])
+
     else:
         return 'NA'
 
@@ -113,9 +122,19 @@ def determining_penalty_accepted(play_details):
 
 def determining_penalty_yards(play_details):
     words = play_details.split(' ')
+    period_counter = len(play_details.split('.'))
 
     if ('Penalty' in words):
-        return (play_details.split(',')[1].split(' ')[1])
+        if ('(Declined)' in words):
+            return 'NA'
+        else:
+            if (len('Penalty' in words) == 1):
+                if (period_counter == 2):
+                    return (play_details.split('.')[1].split(',')[1].split(' ')[1])
+                elif (period_counter == 3):
+                    return (play_details.split('.')[2].split(',')[1].spilt(' ')[1])
+            elif (len('Penalty' in words) > 1):
+                return str(int(play_details.split('.')[-2].split(',')[1].split(' ')[1]) + int(play_details.split('.')[-1].split(',')[1].split(' ')[1]))
     else:
         return 'NA'
 
