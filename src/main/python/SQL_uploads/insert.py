@@ -849,7 +849,8 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "    week," \
                            "    date," \
                            "    quarter," \
-                           "    time," \
+                           "    time_minutes," \
+                           "    time_seconds," \
                            "    down," \
                            "    yards_to_go," \
                            "    location_on_field," \
@@ -892,7 +893,7 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-                           "          %s, %s, %s, %s, %s);"
+                           "          %s, %s, %s, %s, %s, %s);"
 
         with connection_to_database.cursor as cursor:
             cursor.execute(insert_SQL_query, (
@@ -900,11 +901,12 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                 play_by_play_df.loc[i, 'home_team_full_name'],
                 play_by_play_df.loc[i, 'away_team_full_name'],
                 play_by_play_df.loc[i, 'week'],
-                play_by_play_df.loc[i, 'new_date'],
-                play_by_play_df.loc[i, 'Quarter'],
-                play_by_play_df.loc[i, 'Time'],
-                play_by_play_df.loc[i, 'Down'],
-                play_by_play_df.loc[i, 'ToGo'],
+                str(play_by_play_df.loc[i, 'new_date']),
+                str(play_by_play_df.loc[i, 'Quarter']),
+                str(play_by_play_df.loc[i, 'Time_minutes']),
+                str(play_by_play_df.loc[i, 'Time_seconds']),
+                str(play_by_play_df.loc[i, 'Down']),
+                str(play_by_play_df.loc[i, 'ToGo']),
                 play_by_play_df.loc[i, 'Location'],
                 play_by_play_df.loc[i, 'possession'],
                 play_by_play_df.loc[i, 'type_of_play'],
@@ -914,33 +916,33 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                 play_by_play_df.loc[i, 'type_of_penalty'],
                 play_by_play_df.loc[i, 'penalty_on'],
                 play_by_play_df.loc[i, 'penalty_accepted'],
-                play_by_play_df.loc[i, 'penalty_yards'],
-                play_by_play_df.loc[i, 'yards_gained'],
+                str(play_by_play_df.loc[i, 'penalty_yards']),
+                str(play_by_play_df.loc[i, 'yards_gained']),
                 play_by_play_df.loc[i, 'quarterback'],
                 play_by_play_df.loc[i, 'rusher'],
                 play_by_play_df.loc[i, 'receiver'],
                 play_by_play_df.loc[i, 'sacker'],
-                play_by_play_df.loc[i, 'sack_yards'],
+                str(play_by_play_df.loc[i, 'sack_yards']),
                 play_by_play_df.loc[i, 'tackler'],
                 play_by_play_df.loc[i, 'defender'],
                 play_by_play_df.loc[i, 'kicker'],
-                play_by_play_df.loc[i, 'yards_kicked'],
+                str(play_by_play_df.loc[i, 'yards_kicked']),
                 play_by_play_df.loc[i, 'punter'],
-                play_by_play_df.loc[i, 'yards_punted'],
+                str(play_by_play_df.loc[i, 'yards_punted']),
                 play_by_play_df.loc[i, 'returner'],
-                play_by_play_df.loc[i, 'yards_returned'],
+                str(play_by_play_df.loc[i, 'yards_returned']),
                 play_by_play_df.loc[i, 'intercepted_by'],
                 play_by_play_df.loc[i, 'interception_location'],
-                play_by_play_df.loc[i, 'interception_yards'],
+                str(play_by_play_df.loc[i, 'interception_yards']),
                 play_by_play_df.loc[i, 'fumbled_by'],
                 play_by_play_df.loc[i, 'fumble_recovered_by'],
                 play_by_play_df.loc[i, 'fumble_forced_by'],
                 play_by_play_df.loc[i, 'fumble_recovery_location'],
-                play_by_play_df.loc[i, 'fumble_yards'],
+                str(play_by_play_df.loc[i, 'fumble_yards']),
                 play_by_play_df.loc[i, 'lateral_to'],
-                play_by_play_df.loc[i, 'lateral_yards'],
-                play_by_play_df.loc[i, 'home_team_score'],
-                play_by_play_df.loc[i, 'away_team_score']
+                str(play_by_play_df.loc[i, 'lateral_yards']),
+                str(play_by_play_df.loc[i, 'home_team_score']),
+                str(play_by_play_df.loc[i, 'away_team_score'])
             ))
 
     connection_to_database.commit()
