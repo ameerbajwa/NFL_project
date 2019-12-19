@@ -7,6 +7,7 @@ import pandas as pd
 import time
 import os
 import pickle
+import sys
 
 def selecting_team_info(type_of_info_from_teams, year):
     with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'rb') as handle:
@@ -69,7 +70,7 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
     for active_team_injury_report_index in range(0,len(list_of_active_teams_injury_reports)):
         driver.get(list_of_active_teams_injury_reports[active_team_injury_report_index]['url'])
         time.sleep(2)
-        injury_report_url = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('a')
+        injury_report_url = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('href')
         driver.get(injury_report_url)
         time.sleep(2)
 
@@ -78,9 +79,9 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
 
         for col_index in range(0,len(raw_column_names)):
             if (col_index == 0):
-                column_names.append(raw_column_names[col_index])
+                column_names.append('Player')
             else:
-                column_names.append('week_' + col_index)
+                column_names.append('game_' + str(col_index))
 
         injury_report_df = pd.DataFrame(columns=column_names)
 
@@ -91,7 +92,10 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
             player['Player'] = injured_player.find_element_by_tag_name('th').text
             injury_timeline = injured_player.find_elements_by_xpath('td')
             for injury_time_index in range(1,len(injury_timeline)+1):
-                player[column_names[injury_time_index]] = injury_timeline[injury_time_index].text
+                if (injury_timeline[injury_time_index-1].text == ''):
+                    player[column_names[injury_time_index]] = 'NA'
+                else:
+                    player[column_names[injury_time_index]] = injury_timeline[injury_time_index - 1].text
 
             injury_report_df = injury_report_df.append(player, ignore_index=True)
 
@@ -217,7 +221,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_team_info(test_dict)
 
-# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-# grabbing_off_and_def_team_info(test_dict)
-#
-# sys.exit()
+test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+grabbing_injury_info(test_dict)
+
+sys.exit()
