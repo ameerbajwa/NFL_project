@@ -28,6 +28,7 @@ while (exit_program == False):
                                             '"injury" for injury data, '
                                             '"team" for overall team statistics and personnel information) ')
             NFL_url_scrapper.grabbing_nfl_team_urls(type_of_info_from_teams, year)
+
         elif (scrapper_type == 'player_stats' or scrapper_type == 'game_summary' or scrapper_type == 'game_drive_summary'):
             week = input("Which week do you want player\'s data to be scrapped from? ")
             NFL_url_scrapper.grabbing_nfl_game_urls(year, week)

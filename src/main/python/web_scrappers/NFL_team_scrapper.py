@@ -69,11 +69,33 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
     for active_team_injury_report_index in range(0,len(list_of_active_teams_injury_reports)):
         driver.get(list_of_active_teams_injury_reports[active_team_injury_report_index]['url'])
         time.sleep(2)
+        injury_report_url = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('a')
+        driver.get(injury_report_url)
+        time.sleep(2)
 
-        list_of_game_dates = driver.find_elements_by_xpath('//*[@id="team_injuries"]/thead/tr//th')
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="team_injuries"]/thead/tr//th')
+        column_names = []
 
-        for game_date in list_of_game_dates[1:]:
-            print (game_date.text)
+        for col_index in range(0,len(raw_column_names)):
+            if (col_index == 0):
+                column_names.append(raw_column_names[col_index])
+            else:
+                column_names.append('week_' + col_index)
+
+        injury_report_df = pd.DataFrame(columns=column_names)
+
+        injury_data = driver.find_elements_by_xpath('//*[@id="team_injuries"]/tbody//tr')
+
+        for injured_player in injury_data:
+            player = {}
+            player['Player'] = injured_player.find_element_by_tag_name('th').text
+            injury_timeline = injured_player.find_elements_by_xpath('td')
+            for injury_time_index in range(1,len(injury_timeline)+1):
+                player[column_names[injury_time_index]] = injury_timeline[injury_time_index].text
+
+            injury_report_df = injury_report_df.append(player, ignore_index=True)
+
+        cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
 
 def grabbing_team_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
