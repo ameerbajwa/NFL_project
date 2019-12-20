@@ -134,6 +134,40 @@ def grabbing_team_info(list_of_active_teams):
         # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
         insert.insert_overall_team_info_to_mysql(team_info_df)
 
+def grabbing_team_schedule(list_of_active_teams):
+    chromedriver = "/Applications/chromedriver"
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
+
+    for active_team_index in range(0, len(list_of_active_teams)):
+        driver.get(list_of_active_teams[active_team_index]['url'])
+        time.sleep(2)
+
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="games"]/thead/tr[2]//th')
+        column_names = []
+
+        for raw_col_index in range(0,len(raw_column_names)):
+            column_names.append(raw_column_names[raw_col_index].text)
+
+        column_names_schedule = column_names[:10]
+        print (column_names_schedule)
+
+        team_schedule_df = pd.DataFrame(columns=column_names_schedule)
+
+        team_schedule_data = driver.find_elements_by_xpath('//*[@id="games"]/tbody//tr')
+
+        for data in team_schedule_data:
+            week = {}
+            datapoints = data.find_elements_by_xpath('td')
+            datapoints = datapoints[:10]
+            for val_index in range(0,len(datapoints)):
+                week[column_names_schedule[val_index]] = datapoints[val_index].text
+
+            team_schedule_df = team_schedule_df.append(week, ignore_index=True)
+
+        print (team_schedule_df)
+        clean_team_schedule_df = cleaning_scrapped_team_data.cleaning_NFL_team_schedule(team_schedule_df)
+
 def grabbing_off_and_def_team_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver

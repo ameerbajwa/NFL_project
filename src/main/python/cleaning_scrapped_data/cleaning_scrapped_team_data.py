@@ -23,6 +23,9 @@ def cleaning_NFL_roster_data(team_roster_df):
 def cleaning_NFL_injury_report(injury_roster_df):
     return injury_roster_df
 
+def cleaning_NFL_team_schedule(team_schedule_df):
+    return team_schedule_df
+
 # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED
 
 # def cleaning_NFL_team_off_stats(team_off_stats_df):
