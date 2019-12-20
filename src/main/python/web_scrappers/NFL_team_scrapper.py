@@ -143,25 +143,27 @@ def grabbing_team_schedule(list_of_active_teams):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
 
-        raw_column_names = driver.find_elements_by_xpath('//*[@id="games"]/thead/tr[2]//th')
+        raw_column_names = driver.find_elements_by_xpath('//*[@id="games"]/thead/tr[2]//th')[:10]
         column_names = []
 
         for raw_col_index in range(0,len(raw_column_names)):
             column_names.append(raw_column_names[raw_col_index].text)
 
-        column_names_schedule = column_names[:10]
-        print (column_names_schedule)
+        column_names[3] = 'Time'
+        column_names[4] = 'Boxscore'
+        column_names[5] = 'Won/Loss'
+        column_names[8] = 'Home/Away'
 
-        team_schedule_df = pd.DataFrame(columns=column_names_schedule)
+        team_schedule_df = pd.DataFrame(columns=column_names)
 
         team_schedule_data = driver.find_elements_by_xpath('//*[@id="games"]/tbody//tr')
 
         for data in team_schedule_data:
             week = {}
-            datapoints = data.find_elements_by_xpath('td')
-            datapoints = datapoints[:10]
+            week[column_names[0]] = data.find_element_by_xpath('th').text
+            datapoints = data.find_elements_by_xpath('td')[:9]
             for val_index in range(0,len(datapoints)):
-                week[column_names_schedule[val_index]] = datapoints[val_index].text
+                week[column_names[val_index+1]] = datapoints[val_index].text
 
             team_schedule_df = team_schedule_df.append(week, ignore_index=True)
 
@@ -256,6 +258,6 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # grabbing_team_info(test_dict)
 
 test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-grabbing_injury_info(test_dict)
+grabbing_team_schedule(test_dict)
 
 sys.exit()
