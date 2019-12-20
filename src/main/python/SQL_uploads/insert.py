@@ -62,6 +62,9 @@ def insert_roster_info_to_mysql(team_roster_info):
     connection_to_database.close()
     print(team_roster_info.loc[0, 'Team'] + ' roster insertion to mysql table complete!')
 
+def insert_team_schedule_data(team_schedule_info):
+    return team_schedule_info
+
 def insert_overall_team_info_to_mysql(overall_team_info):
     team_name = overall_team_info.loc['Arizona Caridinals', 'team']
     connection_to_database = connect_to_mysql_system()

@@ -9,6 +9,7 @@ import os
 import pickle
 import sys
 
+
 def selecting_team_info(type_of_info_from_teams, year):
     with open('dictionaries_of_nfl_urls/list_of_active_teams_' + type_of_info_from_teams + '_data_for_season_' + year, 'rb') as handle:
         list_of_active_teams = pickle.load(handle)
@@ -21,6 +22,7 @@ def selecting_team_info(type_of_info_from_teams, year):
         grabbing_team_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'off_def_team'):
         grabbing_off_and_def_team_info(list_of_active_teams)
+
 
 def grabbing_roster_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
@@ -62,6 +64,7 @@ def grabbing_roster_info(list_of_active_teams):
         cleaned_team_roster_df = cleaning_scrapped_team_data.cleaning_NFL_roster_data(team_roster_df)
         insert.insert_roster_info_to_mysql(cleaned_team_roster_df)
 
+
 def grabbing_injury_info(list_of_active_teams_injury_reports):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
@@ -101,6 +104,7 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
 
         cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
 
+
 def grabbing_team_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
@@ -134,6 +138,7 @@ def grabbing_team_info(list_of_active_teams):
         # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
         insert.insert_overall_team_info_to_mysql(team_info_df)
 
+
 def grabbing_team_schedule(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
@@ -149,7 +154,7 @@ def grabbing_team_schedule(list_of_active_teams):
         for raw_col_index in range(0,len(raw_column_names)):
             column_names.append(raw_column_names[raw_col_index].text)
 
-        column_names[3] = 'Time'
+        column_names[3] = 'Time_Game_Starts'
         column_names[4] = 'Boxscore'
         column_names[5] = 'Won/Loss'
         column_names[8] = 'Home/Away'
@@ -169,6 +174,8 @@ def grabbing_team_schedule(list_of_active_teams):
 
         print (team_schedule_df)
         clean_team_schedule_df = cleaning_scrapped_team_data.cleaning_NFL_team_schedule(team_schedule_df)
+        insert.insert_team_schedule_data(clean_team_schedule_df)
+
 
 def grabbing_off_and_def_team_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
@@ -249,6 +256,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
         # NO CLEANING OF THE NFL TEAM OFFENSIVE AND DEFENSIVE DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
         insert.insert_team_off_stats_to_mysql(team_off_stats_df)
         insert.insert_team_def_stats_to_mysql(team_def_stats_df)
+
 
 # TEST
 # test_dict = [{'team_name': 'Arizona Cardinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019_roster.htm'}]

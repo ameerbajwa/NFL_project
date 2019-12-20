@@ -6,6 +6,7 @@ def converting_to_int(x):
     else:
         return int(x)
 
+
 def cleaning_NFL_roster_data(team_roster_df):
 
     list_of_columns_to_convert_to_int = ['No.', 'Age', 'G', 'GS', 'Wt', 'Yrs']
@@ -20,10 +21,21 @@ def cleaning_NFL_roster_data(team_roster_df):
     print ('Cleaned team roster pandas dataframe!')
     return (cleaned_team_roster_df)
 
+
 def cleaning_NFL_injury_report(injury_roster_df):
     return injury_roster_df
 
+
 def cleaning_NFL_team_schedule(team_schedule_df):
+    team_schedule_df.drop('Boxscore', axis=1, inplace=True)
+    team_schedule_df['month_of_game'] = list(map(lambda x: x.split(' ')[0], team_schedule_df['Date']))
+    team_schedule_df['day_of_game'] = list(map(lambda x: int(x.split(' ')[1]), team_schedule_df['Date']))
+    team_schedule_df['hour_of_game'] = list(map(lambda x: int(x.split(' ')[0].split(':')[0]), team_schedule_df['Time']))
+    team_schedule_df['minute_of_game'] = list(map(lambda x: int(x.split(' ')[0].split(':')[1]), team_schedule_df['Time']))
+    team_schedule_df['Won/Loss'] = list(map(lambda x: 'NA' if x == '' else x, team_schedule_df['Won/Loss']))
+    team_schedule_df['OT'] = list(map(lambda x: 'NA' if x == '' else x, team_schedule_df['OT']))
+    team_schedule_df['Home/Away'] = list(map(lambda x: 'Away' if x == '@' else 'Home', team_schedule_df['Home/Away']))
+
     return team_schedule_df
 
 # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED
