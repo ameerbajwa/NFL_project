@@ -16,7 +16,6 @@ def connect_to_mysql_system():
     return (connection_to_database)
 
 def insert_roster_info_to_mysql(team_roster_info):
-
     connection_to_database = connect_to_mysql_system()
 
     for i in range(0, len(team_roster_info)):
@@ -63,7 +62,43 @@ def insert_roster_info_to_mysql(team_roster_info):
     print(team_roster_info.loc[0, 'Team'] + ' roster insertion to mysql table complete!')
 
 def insert_team_schedule_data(team_schedule_info):
-    return team_schedule_info
+    connection_to_database = connect_to_mysql_system()
+
+    for i in range(0, len(team_schedule_info)):
+        insert_SQL_query = "INSERT INTO `NFL_team_schedule_info_2019_2020_season`" \
+                           "(" \
+                           "    team_game_id," \
+                           "    week," \
+                           "    day," \
+                           "    month_of_game," \
+                           "    day_of_game," \
+                           "    hour_of_game," \
+                           "    minute_of_game," \
+                           "    won_loss," \
+                           "    overtime," \
+                           "    home_away," \
+                           "    opposing_team" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                team_schedule_info.loc[i, 'Team'],
+                team_schedule_info.loc[i, 'Week'],
+                team_schedule_info.loc[i, 'Day'],
+                team_schedule_info.loc[i, 'month_of_game'],
+                team_schedule_info.loc[i, 'day_of_game'],
+                team_schedule_info.loc[i, 'hour_of_game'],
+                team_schedule_info.loc[i, 'minute_of_game'],
+                team_schedule_info.loc[i, 'Won/Loss'],
+                team_schedule_info.loc[i, 'OT'],
+                team_schedule_info.loc[i, 'Home/Away'],
+                team_schedule_info.loc[i, 'Opp']
+            ))
+
+    connection_to_database.commit()
+    connection_to_database.close()
+    print (team_schedule_info.loc[0, 'Team'].split(':')[0] + ' schedule insertion to mysql table complete!')
 
 def insert_overall_team_info_to_mysql(overall_team_info):
     team_name = overall_team_info.loc['Arizona Caridinals', 'team']
