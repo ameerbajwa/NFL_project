@@ -170,7 +170,7 @@ def grabbing_team_schedule(list_of_active_teams):
             datapoints = data.find_elements_by_xpath('td')[:9]
             for val_index in range(0,len(datapoints)):
                 week[column_names[val_index+1]] = datapoints[val_index].text
-            week['Team'] = ('_'.join(driver.find_elements_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text.split(' '))) + ':week_' + week[column_names[0]]
+            week['Team'] = ('_'.join(driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text.split(' '))) + ':week_' + week[column_names[0]]
 
             team_schedule_df = team_schedule_df.append(week, ignore_index=True)
 
@@ -268,6 +268,6 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # grabbing_team_info(test_dict)
 
 test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-grabbing_injury_info(test_dict)
+grabbing_team_schedule(test_dict)
 
 sys.exit()

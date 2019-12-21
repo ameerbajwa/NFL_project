@@ -8,11 +8,11 @@ def connect_to_mysql_system():
 
     connection_to_database = pymysql.connect(
                                 user='root',
-                                password='%s',
+                                password='Tennis07',
                                 host='127.0.0.1',
                                 port=3306,
                                 database='NFL_database'
-                             ) % (connection_to_local_mysql_data_management_system.columns[1])
+                             ) # % (connection_to_local_mysql_data_management_system.columns[1])
     return (connection_to_database)
 
 def insert_roster_info_to_mysql(team_roster_info):
