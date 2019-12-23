@@ -8,11 +8,11 @@ def connect_to_mysql_system():
 
     connection_to_database = pymysql.connect(
                                 user='root',
-                                password='Tennis07',
+                                password='%s',
                                 host='127.0.0.1',
                                 port=3306,
                                 database='NFL_database'
-                             ) # % (connection_to_local_mysql_data_management_system.columns[1])
+                             ) % (connection_to_local_mysql_data_management_system.columns[1])
     return (connection_to_database)
 
 def insert_roster_info_to_mysql(team_roster_info):
@@ -70,6 +70,7 @@ def insert_team_schedule_data(team_schedule_info):
                            "    team_game_id," \
                            "    week," \
                            "    day," \
+                           "    date," \
                            "    month_of_game," \
                            "    day_of_game," \
                            "    hour_of_game," \
@@ -79,17 +80,18 @@ def insert_team_schedule_data(team_schedule_info):
                            "    home_away," \
                            "    opposing_team" \
                            ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
-                           "          %s);"
+                           "          %s, %s);"
 
         with connection_to_database.cursor() as cursor:
             cursor.execute(insert_SQL_query, (
                 team_schedule_info.loc[i, 'Team'],
                 team_schedule_info.loc[i, 'Week'],
                 team_schedule_info.loc[i, 'Day'],
+                str(team_schedule_info.loc[i, 'date']),
                 team_schedule_info.loc[i, 'month_of_game'],
-                team_schedule_info.loc[i, 'day_of_game'],
-                team_schedule_info.loc[i, 'hour_of_game'],
-                team_schedule_info.loc[i, 'minute_of_game'],
+                str(team_schedule_info.loc[i, 'day_of_game']),
+                str(team_schedule_info.loc[i, 'hour_of_game']),
+                str(team_schedule_info.loc[i, 'minute_of_game']),
                 team_schedule_info.loc[i, 'Won/Loss'],
                 team_schedule_info.loc[i, 'OT'],
                 team_schedule_info.loc[i, 'Home/Away'],

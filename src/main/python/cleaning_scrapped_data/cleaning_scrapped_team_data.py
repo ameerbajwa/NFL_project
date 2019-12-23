@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import strptime
 
 def converting_to_int(x):
     if (x == '' or x == 'Rook'):
@@ -28,6 +29,8 @@ def cleaning_NFL_injury_report(injury_roster_df):
 
 def cleaning_NFL_team_schedule(team_schedule_df):
     team_schedule_df.drop('Boxscore', axis=1, inplace=True)
+    team_schedule_df['new_date'] = list(map(lambda x : strptime(x.split(' ')[0],'%b').tm_mon + '/' + x.split(' ')[1] + '/2019', team_schedule_df['Date']))
+    team_schedule_df['date'] = list(map(lambda x: datetime.strptime(x, '%m/%d/%y'), team_schedule_df['new_date']))
     team_schedule_df['month_of_game'] = list(map(lambda x: x.split(' ')[0] if x != '' else 'NA', team_schedule_df['Date']))
     team_schedule_df['day_of_game'] = list(map(lambda x: int(x.split(' ')[1]) if x != '' else 0, team_schedule_df['Date']))
     team_schedule_df['hour_of_game'] = list(map(lambda x: int(x.split(' ')[0].split(':')[0]) if x != '' else 0, team_schedule_df['Time_Game_Starts']))
