@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import strptime
 
 def converting_to_int(x):
@@ -8,7 +8,10 @@ def converting_to_int(x):
         return int(x)
 
 
+dates = []
+
 def creating_new_date(date):
+    print (dates)
     if (date != ''):
         month_number = str(strptime(date.split(' ')[0][:3], '%b').tm_mon)
         day_number = str(date.split(' ')[1])
@@ -19,9 +22,12 @@ def creating_new_date(date):
         if (len(day_number) == 1):
             day_number = '0' + day_number
 
+        dates.append(month_number + '/' + day_number + '/2019')
         return (month_number + '/' + day_number + '/2019')
     else:
-        return 'NA'
+        raw_bye_date = datetime.strptime(dates[-1], '%m/%d/%Y')
+        bye_date = raw_bye_date + timedelta(days=7)
+        return (bye_date.strftime('%m/%d/%Y'))
 
 
 def cleaning_NFL_roster_data(team_roster_df):
@@ -44,9 +50,10 @@ def cleaning_NFL_injury_report(injury_roster_df):
 
 
 def cleaning_NFL_team_schedule(team_schedule_df):
+    dates = []
     team_schedule_df.drop('Boxscore', axis=1, inplace=True)
     team_schedule_df['new_date'] = list(map(creating_new_date, team_schedule_df['Date']))
-    team_schedule_df['date'] = list(map(lambda x: datetime.strptime(x, '%m/%d/%Y') if x != 'NA' else None, team_schedule_df['new_date']))
+    team_schedule_df['date'] = list(map(lambda x: datetime.strptime(x, '%m/%d/%Y'), team_schedule_df['new_date']))
     team_schedule_df['month_of_game'] = list(map(lambda x: x.split(' ')[0] if x != '' else 'NA', team_schedule_df['Date']))
     team_schedule_df['day_of_game'] = list(map(lambda x: int(x.split(' ')[1]) if x != '' else 0, team_schedule_df['Date']))
     team_schedule_df['hour_of_game'] = list(map(lambda x: int(x.split(' ')[0].split(':')[0]) if x != '' else 0, team_schedule_df['Time_Game_Starts']))
