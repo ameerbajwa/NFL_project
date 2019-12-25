@@ -11,7 +11,6 @@ def converting_to_int(x):
 dates = []
 
 def creating_new_date(date):
-    print (dates)
     if (date != ''):
         month_number = str(strptime(date.split(' ')[0][:3], '%b').tm_mon)
         day_number = str(date.split(' ')[1])
@@ -50,7 +49,6 @@ def cleaning_NFL_injury_report(injury_roster_df):
 
 
 def cleaning_NFL_team_schedule(team_schedule_df):
-    dates = []
     team_schedule_df.drop('Boxscore', axis=1, inplace=True)
     team_schedule_df['new_date'] = list(map(creating_new_date, team_schedule_df['Date']))
     team_schedule_df['date'] = list(map(lambda x: datetime.strptime(x, '%m/%d/%Y'), team_schedule_df['new_date']))
@@ -62,6 +60,7 @@ def cleaning_NFL_team_schedule(team_schedule_df):
     team_schedule_df['OT'] = list(map(lambda x: 'NA' if x == '' else x, team_schedule_df['OT']))
     team_schedule_df['Home/Away'] = list(map(lambda x: 'Away' if x == '@' else 'Home', team_schedule_df['Home/Away']))
 
+    dates = []
     return team_schedule_df
 
 # NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED

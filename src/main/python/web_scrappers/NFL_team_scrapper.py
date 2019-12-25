@@ -20,6 +20,8 @@ def selecting_team_info(type_of_info_from_teams, year):
         grabbing_injury_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'team'):
         grabbing_team_info(list_of_active_teams)
+    elif (type_of_info_from_teams == 'schedule'):
+        grabbing_team_schedule_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'off_def_team'):
         grabbing_off_and_def_team_info(list_of_active_teams)
 
@@ -102,7 +104,8 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
 
             injury_report_df = injury_report_df.append(player, ignore_index=True)
 
-        cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
+        print (injury_report_df)
+        # cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
 
 
 def grabbing_team_info(list_of_active_teams):
@@ -139,7 +142,7 @@ def grabbing_team_info(list_of_active_teams):
         insert.insert_overall_team_info_to_mysql(team_info_df)
 
 
-def grabbing_team_schedule(list_of_active_teams):
+def grabbing_team_schedule_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
@@ -267,7 +270,11 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_team_info(test_dict)
 
+# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+# grabbing_team_schedule_info(test_dict)
+#
+
 test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-grabbing_team_schedule(test_dict)
+grabbing_injury_info(test_dict)
 
 sys.exit()

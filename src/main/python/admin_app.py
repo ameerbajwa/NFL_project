@@ -47,6 +47,7 @@ while (exit_program == False):
                                             '("roster" for roster data, '
                                             '"injury" for injury data, '
                                             '"team" for overall team statistics and personnel information, '
+                                            '"schedule" for team schedule information, '
                                             'or "off_def_team" for offensive and defensive team statistics over the course of the season) ')
             NFL_team_scrapper.selecting_team_info(type_of_info_from_teams, year)
 
