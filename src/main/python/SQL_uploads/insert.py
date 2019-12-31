@@ -61,6 +61,98 @@ def insert_roster_info_to_mysql(team_roster_info):
     connection_to_database.close()
     print(team_roster_info.loc[0, 'Team'] + ' roster insertion to mysql table complete!')
 
+
+def insert_injury_report_info_to_mysql(injury_report_info):
+    connection_to_database = connect_to_mysql_system()
+
+    for i in range(0, len(injury_report_info)):
+        random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        insert_SQL_query = "INSERT INTO `NFL_injury_info_2019_2020_season`" \
+                           "(" \
+                           "    random_id," \
+                           "    player," \
+                           "    team," \
+                           "    injury_status_game_1," \
+                           "    body_part_injured_game_1," \
+                           "    injury_status_game_2," \
+                           "    body_part_injured_game_2," \
+                           "    injury_status_game_3," \
+                           "    body_part_injured_game_3," \
+                           "    injury_status_game_4," \
+                           "    body_part_injured_game_4," \
+                           "    injury_status_game_5," \
+                           "    body_part_injured_game_5," \
+                           "    injury_status_game_6," \
+                           "    body_part_injured_game_6," \
+                           "    injury_status_game_7," \
+                           "    body_part_injured_game_7," \
+                           "    injury_status_game_8," \
+                           "    body_part_injured_game_8," \
+                           "    injury_status_game_9," \
+                           "    body_part_injured_game_9," \
+                           "    injury_status_game_10," \
+                           "    body_part_injured_game_10," \
+                           "    injury_status_game_11," \
+                           "    body_part_injured_game_11," \
+                           "    injury_status_game_12," \
+                           "    body_part_injured_game_12," \
+                           "    injury_status_game_13," \
+                           "    body_part_injured_game_13," \
+                           "    injury_status_game_14," \
+                           "    body_part_injured_game_14," \
+                           "    injury_status_game_15," \
+                           "    body_part_injured_game_15," \
+                           "    injury_status_game_16," \
+                           "    body_part_injured_game_16" \
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
+                           "          %s, %s, %s, %s, %s);"
+
+        with connection_to_database.cursor() as cursor:
+            cursor.execute(insert_SQL_query, (
+                random_id,
+                injury_report_info.loc[i, 'Player'],
+                injury_report_info.loc[i, 'Team'],
+                injury_report_info.loc[i, 'game_1'],
+                injury_report_info.loc[i, 'body_part_1'],
+                injury_report_info.loc[i, 'game_2'],
+                injury_report_info.loc[i, 'body_part_2'],
+                injury_report_info.loc[i, 'game_3'],
+                injury_report_info.loc[i, 'body_part_3'],
+                injury_report_info.loc[i, 'game_4'],
+                injury_report_info.loc[i, 'body_part_4'],
+                injury_report_info.loc[i, 'game_5'],
+                injury_report_info.loc[i, 'body_part_5'],
+                injury_report_info.loc[i, 'game_6'],
+                injury_report_info.loc[i, 'body_part_6'],
+                injury_report_info.loc[i, 'game_7'],
+                injury_report_info.loc[i, 'body_part_7'],
+                injury_report_info.loc[i, 'game_8'],
+                injury_report_info.loc[i, 'body_part_8'],
+                injury_report_info.loc[i, 'game_9'],
+                injury_report_info.loc[i, 'body_part_9'],
+                injury_report_info.loc[i, 'game_10'],
+                injury_report_info.loc[i, 'body_part_10'],
+                injury_report_info.loc[i, 'game_11'],
+                injury_report_info.loc[i, 'body_part_11'],
+                injury_report_info.loc[i, 'game_12'],
+                injury_report_info.loc[i, 'body_part_12'],
+                injury_report_info.loc[i, 'game_13'],
+                injury_report_info.loc[i, 'body_part_13'],
+                injury_report_info.loc[i, 'game_14'],
+                injury_report_info.loc[i, 'body_part_14'],
+                injury_report_info.loc[i, 'game_15'],
+                injury_report_info.loc[i, 'body_part_15'],
+                injury_report_info.loc[i, 'game_16'],
+                injury_report_info.loc[i, 'body_part_16']
+            ))
+
+    connection_to_database.commit()
+    connection_to_database.close()
+    print (injury_report_info.loc[0, 'Team'] + ' injury report insertion to mysql table complete!')
+
+
 def insert_team_schedule_data(team_schedule_info):
     connection_to_database = connect_to_mysql_system()
 

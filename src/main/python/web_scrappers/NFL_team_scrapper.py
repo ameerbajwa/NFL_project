@@ -85,8 +85,10 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
         for col_index in range(0,len(raw_column_names)):
             if (col_index == 0):
                 column_names.append('Player')
+                column_names.append('Team')
             else:
-                column_names.append('game_' + str(col_index))
+                column_names.append('game_'+str(col_index)) # (raw_column_names[col_index].text).replace('\nvs. ', '/')
+                column_names.append('body_part_'+str(col_index))
 
         injury_report_df = pd.DataFrame(columns=column_names)
 
@@ -95,18 +97,23 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
         for injured_player in injury_data:
             player = {}
             player['Player'] = injured_player.find_element_by_tag_name('th').text
+            player['Team'] = driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text
             injury_timeline = injured_player.find_elements_by_xpath('td')
-            for injury_time_index in range(1,len(injury_timeline)+1):
+            for injury_time_index in range(2, len(injury_timeline)+2, 2):
                 if (injury_timeline[injury_time_index-1].text == ''):
                     player[column_names[injury_time_index]] = 'NA'
                 else:
-                    player[column_names[injury_time_index]] = injury_timeline[injury_time_index - 1].text
+                    player[column_names[injury_time_index]] = injury_timeline[injury_time_index - 2].text
+                    if (injury_timeline[injury_time_index - 2].get_attribute('data-tip') == ''):
+                        player[column_names[injury_time_index+1]] = 'NA'
+                    else:
+                        player[column_names[injury_time_index+1]] = injury_timeline[injury_time_index - 2].get_attribute('data-tip')
 
             injury_report_df = injury_report_df.append(player, ignore_index=True)
 
         print (injury_report_df)
-        # cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
-
+        cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
+        # insert.insert_injury_report_info_to_mysql(injury_report_df)
 
 def grabbing_team_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"
