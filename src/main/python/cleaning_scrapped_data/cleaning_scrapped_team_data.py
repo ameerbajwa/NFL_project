@@ -33,7 +33,7 @@ def creating_new_date(date):
 
 def cleaning_body_part_info(body_part_info):
     print (body_part_info)
-    if (body_part_info == 'NA' or body_part_info == float('NaN')):
+    if (body_part_info == 'NA'): # or body_part_info == float('NaN')
         return 'NA'
     else:
         if (body_part_info.split(':')[-1] == ''):
