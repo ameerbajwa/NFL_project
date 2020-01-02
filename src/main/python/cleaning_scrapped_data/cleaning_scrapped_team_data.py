@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from time import strptime
 
+
 def converting_to_int(x):
     if (x == '' or x == 'Rook'):
         return 0
@@ -9,6 +10,7 @@ def converting_to_int(x):
 
 
 dates = []
+
 
 def creating_new_date(date):
     if (date != ''):
@@ -29,6 +31,17 @@ def creating_new_date(date):
         return (bye_date.strftime('%m/%d/%Y'))
 
 
+def cleaning_body_part_info(body_part_info):
+    print (body_part_info)
+    if (body_part_info == 'NA' or body_part_info == float('NaN')):
+        return 'NA'
+    else:
+        if (body_part_info.split(':')[-1] == ''):
+            return 'NA'
+        else:
+            return body_part_info.split(':')[-1][1:]
+
+
 def cleaning_NFL_roster_data(team_roster_df):
 
     list_of_columns_to_convert_to_int = ['No.', 'Age', 'G', 'GS', 'Wt', 'Yrs']
@@ -41,10 +54,14 @@ def cleaning_NFL_roster_data(team_roster_df):
 
     cleaned_team_roster_df = team_roster_df
     print ('Cleaned team roster pandas dataframe!')
-    return (cleaned_team_roster_df)
+    return cleaned_team_roster_df
 
 
 def cleaning_NFL_injury_report(injury_roster_df):
+
+    for i in range(1,int((len(injury_roster_df)-2)/2)):
+        injury_roster_df['body_part_'+str(i)] = list(map(cleaning_body_part_info, injury_roster_df['body_part_'+str(i)]))
+
     return injury_roster_df
 
 
