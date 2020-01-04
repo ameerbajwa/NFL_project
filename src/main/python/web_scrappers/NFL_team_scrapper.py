@@ -36,6 +36,7 @@ def grabbing_roster_info(list_of_active_teams):
         time.sleep(2)
 
         raw_roster_column_names = driver.find_elements_by_xpath('//*[@id="games_played_team"]/thead/tr//th')
+        print (raw_roster_column_names)
         roster_column_names = []
 
         for raw_roster_col_index in range(0,len(raw_roster_column_names)):
@@ -45,6 +46,7 @@ def grabbing_roster_info(list_of_active_teams):
         team_roster_df = pd.DataFrame(columns=roster_column_names)
 
         raw_roster_info = driver.find_elements_by_xpath('//*[@id="games_played_team"]/tbody//tr')
+        print (raw_roster_info)
 
         for row in raw_roster_info:
             player_roster_info = {}
@@ -90,37 +92,37 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
                 column_names.append('game_'+str(col_index)) # (raw_column_names[col_index].text).replace('\nvs. ', '/')
                 column_names.append('body_part_'+str(col_index))
 
-        print (len(column_names))
-        print (column_names)
         injury_report_df = pd.DataFrame(columns=column_names)
 
         injury_data = driver.find_elements_by_xpath('//*[@id="team_injuries"]/tbody//tr')
 
-        col_name_counter = 2
+        column_names = column_names[2:]
         for injured_player in injury_data:
             player = {}
+            col_name_counter = 0
             player['Player'] = injured_player.find_element_by_tag_name('th').text
             player['Team'] = driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text
             injury_timeline = injured_player.find_elements_by_xpath('td')
-            for injury_time_index in range(1, len(injury_timeline)+1):
-                if (injury_timeline[injury_time_index-1].text == ''):
+            for injury_time_index in range(0, len(injury_timeline)):
+                if (injury_timeline[injury_time_index].text == '' or injury_timeline[injury_time_index].text == None):
+                    player[column_names[col_name_counter]] = 'NA'
+                    col_name_counter += 1
                     player[column_names[col_name_counter]] = 'NA'
                     col_name_counter += 1
                 else:
-                    player[column_names[col_name_counter]] = injury_timeline[injury_time_index - 1].text
+                    player[column_names[col_name_counter]] = injury_timeline[injury_time_index].text
                     col_name_counter += 1
-                    if (injury_timeline[injury_time_index - 1].get_attribute('data-tip') == float('nan') or injury_timeline[injury_time_index - 1].get_attribute('data-tip') == None):
+                    if (injury_timeline[injury_time_index].get_attribute('data-tip') == float('nan') or injury_timeline[injury_time_index].get_attribute('data-tip') == None):
                         player[column_names[col_name_counter]] = 'NA'
                     else:
-                        player[column_names[col_name_counter]] = injury_timeline[injury_time_index - 1].get_attribute('data-tip')
+                        player[column_names[col_name_counter]] = injury_timeline[injury_time_index].get_attribute('data-tip')
                     col_name_counter += 1
 
             injury_report_df = injury_report_df.append(player, ignore_index=True)
 
-        print (injury_report_df)
-        # cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
-        # print ('Cleaned injury report dataframe')
-        # print (cleaned_injury_report_df)
+        cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
+        print ('Cleaned injury report dataframe')
+        print (cleaned_injury_report_df)
         # insert.insert_injury_report_info_to_mysql(injury_report_df)
 
 def grabbing_team_info(list_of_active_teams):
