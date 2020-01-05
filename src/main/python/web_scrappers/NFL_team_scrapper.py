@@ -98,25 +98,28 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
 
         column_names = column_names[2:]
         for injured_player in injury_data:
-            player = {}
-            col_name_counter = 0
-            player['Player'] = injured_player.find_element_by_tag_name('th').text
-            player['Team'] = driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text
-            injury_timeline = injured_player.find_elements_by_xpath('td')
-            for injury_time_index in range(0, len(injury_timeline)):
-                if (injury_timeline[injury_time_index].text == '' or injury_timeline[injury_time_index].text == None):
-                    player[column_names[col_name_counter]] = 'NA'
-                    col_name_counter += 1
-                    player[column_names[col_name_counter]] = 'NA'
-                    col_name_counter += 1
-                else:
-                    player[column_names[col_name_counter]] = injury_timeline[injury_time_index].text
-                    col_name_counter += 1
-                    if (injury_timeline[injury_time_index].get_attribute('data-tip') == float('nan') or injury_timeline[injury_time_index].get_attribute('data-tip') == None):
+            if (len(injured_player.find_elements_by_tag_name('th')) > 1):
+                continue
+            else:
+                player = {}
+                col_name_counter = 0
+                player['Player'] = injured_player.find_element_by_tag_name('th').text
+                player['Team'] = driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text
+                injury_timeline = injured_player.find_elements_by_xpath('td')
+                for injury_time_index in range(0, len(injury_timeline)):
+                    if (injury_timeline[injury_time_index].text == '' or injury_timeline[injury_time_index].text == None):
                         player[column_names[col_name_counter]] = 'NA'
+                        col_name_counter += 1
+                        player[column_names[col_name_counter]] = 'NA'
+                        col_name_counter += 1
                     else:
-                        player[column_names[col_name_counter]] = injury_timeline[injury_time_index].get_attribute('data-tip')
-                    col_name_counter += 1
+                        player[column_names[col_name_counter]] = injury_timeline[injury_time_index].text
+                        col_name_counter += 1
+                        if (injury_timeline[injury_time_index].get_attribute('data-tip') == float('nan') or injury_timeline[injury_time_index].get_attribute('data-tip') == None):
+                            player[column_names[col_name_counter]] = 'NA'
+                        else:
+                            player[column_names[col_name_counter]] = injury_timeline[injury_time_index].get_attribute('data-tip')
+                        col_name_counter += 1
 
             injury_report_df = injury_report_df.append(player, ignore_index=True)
 
