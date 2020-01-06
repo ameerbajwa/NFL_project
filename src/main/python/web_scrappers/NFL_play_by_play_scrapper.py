@@ -113,7 +113,3 @@ test_dict = {'year': 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www
 grabbing_play_by_play_info(test_dict)
 
 sys.exit()
-
-# test = 'Matt Ryan pass incomplete short left intended for Austin Hooper. Penalty on Kris Boyd: Defensive Pass Interference, 9 yards (no play)'
-#
-# print (' '.join(test.split('Penalty')[1].split(':')[0].split(' ')[2:]))

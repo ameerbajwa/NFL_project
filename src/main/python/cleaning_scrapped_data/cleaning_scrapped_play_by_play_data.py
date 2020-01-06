@@ -148,7 +148,10 @@ def determining_yards_gained(play_details):
         elif ('incomplete' in words):
             return 0
         else:
-            return int(words[words.index('for') + 1])
+            try:
+                return int(words[words.index('for') + 1])
+            except ValueError:
+                return 0
     else:
         return 0
 
@@ -168,7 +171,10 @@ def determining_yards_punted(play_details):
     words = play_details.split(' ')
 
     if ('punts' in words):
-        return int(words[3])
+        if 'blocked' in words:
+            return 0
+        else:
+            return int(words[3])
     else:
         return 0
 
@@ -231,7 +237,10 @@ def determining_sack_yards_lost(play_details):
     words = play_details.split(' ')
 
     if ('sacked' in words):
-        return int(words[words.index('sacked') + 5])
+        try:
+            return int(words[words.index('sacked') + 5])
+        except ValueError:
+            return 0
     else:
         return 0
 
@@ -283,7 +292,10 @@ def determining_yards_gained_from_interception(play_details):
         if ('no' in words and 'gain' in words):
             return 0
         else:
-            return int(words[words.index('returned') + 2])
+            try:
+                return int(words[words.index('returned') + 2])
+            except ValueError:
+                return 0
     else:
         return 0
 
@@ -327,7 +339,10 @@ def determining_fumble_yards_gained(play_details):
 
     if ('fumbles' in words):
         if ('returned' in words):
-            return int(words[words.index('returned') + 2])
+            try:
+                return int(words[words.index('returned') + 2])
+            except ValueError:
+                return 0
         else:
             return 0
     else:
@@ -377,7 +392,10 @@ def determining_lateral_yards(play_details):
     words = play_details.split(' ')
 
     if 'lateral' in words:
-        return int(words[words.index('lateral') + 5])
+        try:
+            return int(words[words.index('lateral') + 5])
+        except ValueError:
+            return 0
 
 
 def cleaning_play_by_play_info(play_by_play_df):
@@ -419,12 +437,12 @@ def cleaning_play_by_play_info(play_by_play_df):
     play_by_play_df['lateral_to'] = list(map(determining_lateral_to_whom, play_by_play_df['Detail']))
     play_by_play_df['lateral_yards'] = list(map(determining_lateral_yards, play_by_play_df['Detail']))
 
-    play_by_play_df['kicker'] = list(map(determining_kicker), play_by_play_df['Detail'])
+    play_by_play_df['kicker'] = list(map(determining_kicker, play_by_play_df['Detail']))
     play_by_play_df['punter'] = list(map(determining_punter, play_by_play_df['Detail']))
     play_by_play_df['returner'] = list(map(determining_returner, play_by_play_df['Detail']))
 
-    play_by_play_df['Time_minutes'] = list(map(lambda x: int(x.split(':')[0]), play_by_play_df['Time']))
-    play_by_play_df['Time_seconds'] = list(map(lambda x: int(x.split(':')[1]), play_by_play_df['Time']))
+    play_by_play_df['Time_minutes'] = list(map(lambda x: int(x.split(':')[0]) if x != '0' else 0, play_by_play_df['Time']))
+    play_by_play_df['Time_seconds'] = list(map(lambda x: int(x.split(':')[1]) if x != '0' else 0, play_by_play_df['Time']))
 
     return play_by_play_df
 
