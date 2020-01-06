@@ -293,7 +293,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 # grabbing_team_schedule_info(test_dict)
 #
 
-test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
-grabbing_injury_info(test_dict)
-
-sys.exit()
+# test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
+# grabbing_injury_info(test_dict)
+#
+# sys.exit()
