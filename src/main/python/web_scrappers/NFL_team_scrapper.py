@@ -125,8 +125,7 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
 
         cleaned_injury_report_df = cleaning_scrapped_team_data.cleaning_NFL_injury_report(injury_report_df)
         print ('Cleaned injury report dataframe')
-        print (cleaned_injury_report_df)
-        # insert.insert_injury_report_info_to_mysql(injury_report_df)
+        insert.insert_injury_report_info_to_mysql(cleaned_injury_report_df)
 
 def grabbing_team_info(list_of_active_teams):
     chromedriver = "/Applications/chromedriver"

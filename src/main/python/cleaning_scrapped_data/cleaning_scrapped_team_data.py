@@ -32,7 +32,6 @@ def creating_new_date(date):
 
 
 def cleaning_body_part_info(body_part_info):
-    print (body_part_info)
     if (body_part_info == 'NA' or body_part_info == float('nan')):
         return 'NA'
     else:
@@ -58,8 +57,7 @@ def cleaning_NFL_roster_data(team_roster_df):
 
 
 def cleaning_NFL_injury_report(injury_roster_df):
-
-    for i in range(1,int((len(injury_roster_df)-2)/2)+1):
+    for i in range(1,int((len(injury_roster_df.columns)-2)/2)+1):
         injury_roster_df['body_part_'+str(i)] = list(map(cleaning_body_part_info, injury_roster_df['body_part_'+str(i)]))
 
     return injury_roster_df
