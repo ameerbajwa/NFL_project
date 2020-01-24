@@ -22,7 +22,8 @@ def insert_roster_info_to_mysql(team_roster_info):
         insert_SQL_query = "INSERT INTO `NFL_roster_info_2019_2020_season` " \
                            "(" \
                            "    player_number," \
-                           "    player_name," \
+                           "    player_first_name," \
+                           "    player_last_name," \
                            "    team," \
                            "    age," \
                            "    position," \
@@ -35,13 +36,14 @@ def insert_roster_info_to_mysql(team_roster_info):
                            "    years," \
                            "    drafted," \
                            "    salary" \
-                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
 
         with connection_to_database.cursor() as cursor:
             cursor.execute(insert_SQL_query,
                             (
                                str(team_roster_info.loc[i, 'No.']),
-                               team_roster_info.loc[i, 'Player '],
+                               team_roster_info.loc[i, 'Player_first_name'],
+                               team_roster_info.loc[i, 'Player_last_name'],
                                team_roster_info.loc[i, 'Team'],
                                str(team_roster_info.loc[i, 'Age']),
                                team_roster_info.loc[i, 'Pos'],

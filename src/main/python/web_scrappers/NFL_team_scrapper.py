@@ -15,7 +15,7 @@ def selecting_team_info(type_of_info_from_teams, year):
         list_of_active_teams = pickle.load(handle)
 
     if (type_of_info_from_teams == 'roster'):
-        grabbing_team_info(list_of_active_teams)
+        grabbing_roster_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'injury'):
         grabbing_injury_info(list_of_active_teams)
     elif (type_of_info_from_teams == 'team'):
@@ -36,7 +36,6 @@ def grabbing_roster_info(list_of_active_teams):
         time.sleep(2)
 
         raw_roster_column_names = driver.find_elements_by_xpath('//*[@id="games_played_team"]/thead/tr//th')
-        print (raw_roster_column_names)
         roster_column_names = []
 
         for raw_roster_col_index in range(0,len(raw_roster_column_names)):
@@ -46,7 +45,6 @@ def grabbing_roster_info(list_of_active_teams):
         team_roster_df = pd.DataFrame(columns=roster_column_names)
 
         raw_roster_info = driver.find_elements_by_xpath('//*[@id="games_played_team"]/tbody//tr')
-        print (raw_roster_info)
 
         for row in raw_roster_info:
             player_roster_info = {}

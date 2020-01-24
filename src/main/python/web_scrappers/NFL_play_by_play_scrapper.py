@@ -109,7 +109,7 @@ def grabbing_play_by_play_info(dict_of_game_summaries):
         insert.insert_play_by_play_stats_to_mysql(clean_play_by_play_info_df)
 
 
-test_dict = {'year': 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080min.htm']}
-grabbing_play_by_play_info(test_dict)
-
-sys.exit()
+# test_dict = {'year': 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080min.htm']}
+# grabbing_play_by_play_info(test_dict)
+#
+# sys.exit()
