@@ -47,8 +47,8 @@ def cleaning_NFL_roster_data(team_roster_df):
     for col in list_of_columns_to_convert_to_int:
         team_roster_df[col] = list(map(converting_to_int, team_roster_df[col]))
 
-    team_roster_df['Player_first_name'] = list(map(lambda x: x.split(' ')[0], team_roster_df['Player ']))
-    team_roster_df['Player_last_name'] = list(map(lambda x: x.split(' ')[-1], team_roster_df['Player ']))
+    team_roster_df['Player_first_name'] = list(map(lambda x: x.split(' ')[0], team_roster_df['Player']))
+    team_roster_df['Player_last_name'] = list(map(lambda x: x.split(' ')[-1], team_roster_df['Player']))
     team_roster_df['BirthDate'] = list(map(lambda x: datetime.strptime(x, '%m/%d/%Y'), team_roster_df['BirthDate']))
     team_roster_df['Ht'] = list(map(lambda x: int(x.split('-')[0])*12 + int(x.split('-')[1]), team_roster_df['Ht']))
     team_roster_df['Salary'] = list(map(lambda x: 0 if (x == '') else int(x.split('$')[1].replace(',', '')), team_roster_df['Salary']))

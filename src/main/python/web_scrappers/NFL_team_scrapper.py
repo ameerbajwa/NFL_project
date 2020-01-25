@@ -39,7 +39,7 @@ def grabbing_roster_info(list_of_active_teams):
         roster_column_names = []
 
         for raw_roster_col_index in range(0,len(raw_roster_column_names)):
-            roster_column_names.append(raw_roster_column_names[raw_roster_col_index].text)
+            roster_column_names.append(raw_roster_column_names[raw_roster_col_index].text.replace(' ', ''))
         roster_column_names.insert(2, 'Team')
 
         team_roster_df = pd.DataFrame(columns=roster_column_names)
