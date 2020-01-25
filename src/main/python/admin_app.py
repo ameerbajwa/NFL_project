@@ -8,9 +8,9 @@ exit_program = False
 while (exit_program == False):
 
     action = input('Action? \n'
-                   '("define_urls" to create scrapper for grabbing necessary urls,'
-                   '"create_insert_scrapper" to create scrapper for inserting data,'
-                   '"create_update_scrapper" to create scrapper to update data,'
+                   '("define_urls" to create scrapper for grabbing necessary urls, '
+                   '"create_insert_scrapper" to create scrapper for inserting data, '
+                   '"create_update_scrapper" to create scrapper to update data, '
                    '"exit" to exit program) \n')
 
     if (action == 'define_urls'):

@@ -54,7 +54,7 @@ def insert_roster_info_to_mysql(team_roster_info):
                                team_roster_info.loc[i, 'College/Univ'],
                                str(team_roster_info.loc[i, 'BirthDate']),
                                str(team_roster_info.loc[i, 'Yrs']),
-                               team_roster_info.loc[i, 'Drafted (tm/rnd/yr)'],
+                               team_roster_info.loc[i, 'Drafted(tm/rnd/yr)'],
                                str(team_roster_info.loc[i, 'Salary'])
                             )
                           )
