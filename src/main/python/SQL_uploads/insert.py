@@ -34,9 +34,13 @@ def insert_roster_info_to_mysql(team_roster_info):
                            "    college," \
                            "    birth_date," \
                            "    years," \
-                           "    drafted," \
+                           "    drafted_by," \
+                           "    draft_round," \
+                           "    draft_pick," \
+                           "    draft_year," \
                            "    salary" \
-                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                           ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, " \
+                           "          %s, %s, %s, %s, %s, %s, %s, %s);"
 
         with connection_to_database.cursor() as cursor:
             cursor.execute(insert_SQL_query,
@@ -54,7 +58,10 @@ def insert_roster_info_to_mysql(team_roster_info):
                                team_roster_info.loc[i, 'College/Univ'],
                                str(team_roster_info.loc[i, 'BirthDate']),
                                str(team_roster_info.loc[i, 'Yrs']),
-                               team_roster_info.loc[i, 'Drafted(tm/rnd/yr)'],
+                               team_roster_info.loc[i, 'Drafted_by'],
+                               str(team_roster_info.loc[i, 'Draft_round']),
+                               str(team_roster_info.loc[i, 'Draft_pick']),
+                               str(team_roster_info.loc[i, 'Draft_year']),
                                str(team_roster_info.loc[i, 'Salary'])
                             )
                           )

@@ -27,11 +27,11 @@ def selecting_team_info(type_of_info_from_teams, year):
 
 
 def grabbing_roster_info(list_of_active_teams):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
-    for active_team_index in range(0, len(list_of_active_teams)):
+    for active_team_index in range(17, len(list_of_active_teams)):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
 
@@ -67,7 +67,7 @@ def grabbing_roster_info(list_of_active_teams):
 
 
 def grabbing_injury_info(list_of_active_teams_injury_reports):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -125,7 +125,7 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
         insert.insert_injury_report_info_to_mysql(cleaned_injury_report_df)
 
 def grabbing_team_info(list_of_active_teams):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -159,7 +159,7 @@ def grabbing_team_info(list_of_active_teams):
 
 
 def grabbing_team_schedule_info(list_of_active_teams):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -199,7 +199,7 @@ def grabbing_team_schedule_info(list_of_active_teams):
 
 
 def grabbing_off_and_def_team_info(list_of_active_teams):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
