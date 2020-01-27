@@ -14,7 +14,6 @@ dates = []
 
 def creating_new_date(date):
     if (date != ''):
-        # print (date)
         month_number = str(strptime(date.split(' ')[0][:3], '%b').tm_mon)
         day_number = str(date.split(' ')[1])
 

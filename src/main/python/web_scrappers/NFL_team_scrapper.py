@@ -74,9 +74,6 @@ def grabbing_injury_info(list_of_active_teams_injury_reports):
     for active_team_injury_report_index in range(0,len(list_of_active_teams_injury_reports)):
         driver.get(list_of_active_teams_injury_reports[active_team_injury_report_index]['url'])
         time.sleep(2)
-        injury_report_url = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('href')
-        driver.get(injury_report_url)
-        time.sleep(2)
 
         raw_column_names = driver.find_elements_by_xpath('//*[@id="team_injuries"]/thead/tr//th')
         column_names = []
@@ -189,10 +186,6 @@ def grabbing_team_schedule_info(list_of_active_teams):
             week[column_names[0]] = data.find_element_by_xpath('th').text
 
             for val_index in range(0,len(datapoints)):
-                # print (datapoints[val_index].text)
-                # if val_index == 1 and datapoints[val_index].text == 'Playoffs':
-                #     continue
-                # else:
                 week[column_names[val_index+1]] = datapoints[val_index].text
                 week['Team'] = ('_'.join(driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text.split(' '))) + ':week_' + week[column_names[0]]
 
@@ -201,7 +194,6 @@ def grabbing_team_schedule_info(list_of_active_teams):
             else:
                 team_schedule_df = team_schedule_df.append(week, ignore_index=True)
 
-        # print(team_schedule_df)
         clean_team_schedule_df = cleaning_scrapped_team_data.cleaning_NFL_team_schedule(team_schedule_df)
         insert.insert_team_schedule_data(clean_team_schedule_df)
 
