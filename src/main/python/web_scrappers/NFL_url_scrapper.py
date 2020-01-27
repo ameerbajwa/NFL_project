@@ -6,7 +6,7 @@ import os
 import pickle
 
 def grabbing_nfl_team_urls(type_of_info_from_teams, year):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -40,13 +40,11 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
             driver.get(active_team)
             time.sleep(2)
 
-            if (type_of_info_from_teams == 'roster'):
-                list_of_active_teams[team_counter]['url'] = driver.find_element_by_xpath(
-                    '//*[@id="inner_nav"]/ul/li[5]/a').get_attribute('href')
-            elif (type_of_info_from_teams == 'injury'):
-                list_of_active_teams[team_counter]['url'] = driver.find_element_by_xpath(
-                    '//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('href')
-            elif (type_of_info_from_teams == 'team'):
+            if type_of_info_from_teams == 'roster':
+                list_of_active_teams[team_counter]['url'] = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[5]/a').get_attribute('href')
+            elif type_of_info_from_teams == 'injury':
+                list_of_active_teams[team_counter]['url'] = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('href')
+            elif type_of_info_from_teams == 'team' or type_of_info_from_teams == 'schedule':
                 list_of_active_teams[team_counter]['url'] = active_team
 
             i += 1
@@ -64,7 +62,7 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
         pickle.dump(list_of_active_teams, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def grabbing_nfl_game_urls(year, week):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 

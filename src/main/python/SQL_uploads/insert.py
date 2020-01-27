@@ -183,8 +183,6 @@ def insert_team_schedule_data(team_schedule_info):
                            ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s);"
 
-        print (str(team_schedule_info.loc[i, 'date']))
-
         with connection_to_database.cursor() as cursor:
             cursor.execute(insert_SQL_query, (
                 team_schedule_info.loc[i, 'Team'],

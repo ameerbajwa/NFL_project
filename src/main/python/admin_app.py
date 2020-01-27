@@ -25,6 +25,7 @@ while (exit_program == False):
         if (scrapper_type == 'team'):
             type_of_info_from_teams = input('What type of team data do you want to be scrapped? \n'
                                             '("roster" for roster data, '
+                                            '"schedule" for schedule data, '
                                             '"injury" for injury data, '
                                             '"team" for overall team statistics and personnel information) \n')
             NFL_url_scrapper.grabbing_nfl_team_urls(type_of_info_from_teams, year)

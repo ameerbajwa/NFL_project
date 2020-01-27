@@ -184,16 +184,24 @@ def grabbing_team_schedule_info(list_of_active_teams):
         team_schedule_data = driver.find_elements_by_xpath('//*[@id="games"]/tbody//tr')
 
         for data in team_schedule_data:
+            datapoints = data.find_elements_by_xpath('td')[:9]
             week = {}
             week[column_names[0]] = data.find_element_by_xpath('th').text
-            datapoints = data.find_elements_by_xpath('td')[:9]
+
             for val_index in range(0,len(datapoints)):
+                # print (datapoints[val_index].text)
+                # if val_index == 1 and datapoints[val_index].text == 'Playoffs':
+                #     continue
+                # else:
                 week[column_names[val_index+1]] = datapoints[val_index].text
-            week['Team'] = ('_'.join(driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text.split(' '))) + ':week_' + week[column_names[0]]
+                week['Team'] = ('_'.join(driver.find_element_by_xpath('//*[@id="meta"]/div[2]/h1/span[2]').text.split(' '))) + ':week_' + week[column_names[0]]
 
-            team_schedule_df = team_schedule_df.append(week, ignore_index=True)
+            if datapoints[1].text == 'Playoffs':
+                continue
+            else:
+                team_schedule_df = team_schedule_df.append(week, ignore_index=True)
 
-        print (team_schedule_df)
+        # print(team_schedule_df)
         clean_team_schedule_df = cleaning_scrapped_team_data.cleaning_NFL_team_schedule(team_schedule_df)
         insert.insert_team_schedule_data(clean_team_schedule_df)
 
@@ -207,7 +215,7 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
 
-        raw_column_headers_part_1 = driver.find_elements_by_xpath(('//*[@id="team_stats"]/thead/tr[1]//th'))
+        raw_column_headers_part_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/thead/tr[1]//th')
         raw_column_names_part_1 = driver.find_elements_by_xpath('//*[@id="team_stats"]/thead/tr[2]//th')
         raw_column_names_part_2 = driver.find_elements_by_xpath('//*[@id="team_conversions"]/thead/tr[2]//th')
         team_stats_column_names = []
@@ -288,7 +296,6 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_team_schedule_info(test_dict)
-#
 
 # test_dict = [{'team_name' : 'Arizona Caridinals', 'url': 'https://www.pro-football-reference.com/teams/crd/2019.htm'}]
 # grabbing_injury_info(test_dict)
