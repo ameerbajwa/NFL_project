@@ -204,7 +204,8 @@ def insert_team_schedule_data(team_schedule_info):
     print (team_schedule_info.loc[0, 'Team'].split(':')[0] + ' schedule insertion to mysql table complete!')
 
 def insert_overall_team_info_to_mysql(overall_team_info):
-    team_name = overall_team_info.loc['Arizona Caridinals', 'team']
+    team_name = overall_team_info.index[0]
+    print(team_name)
     connection_to_database = connect_to_mysql_system()
 
     insert_SQL_query = "INSERT INTO `NFL_team_info_2019_2020_season`" \

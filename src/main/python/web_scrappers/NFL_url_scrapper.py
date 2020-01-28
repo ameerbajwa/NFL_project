@@ -21,6 +21,7 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
     while i < len(list_of_teams):
         try:
             active_team = list_of_teams[i].find_element_by_tag_name('a').get_attribute('href')
+            print(list_of_teams[i].find_element_by_tag_name('a').text)
 
             list_of_active_teams.append(
                 {
