@@ -45,7 +45,8 @@ def grabbing_nfl_team_urls(type_of_info_from_teams, year):
                 list_of_active_teams[team_counter]['url'] = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[5]/a').get_attribute('href')
             elif type_of_info_from_teams == 'injury':
                 list_of_active_teams[team_counter]['url'] = driver.find_element_by_xpath('//*[@id="inner_nav"]/ul/li[8]/a').get_attribute('href')
-            elif type_of_info_from_teams == 'team' or type_of_info_from_teams == 'schedule':
+            elif type_of_info_from_teams == 'team' or type_of_info_from_teams == 'schedule' or type_of_info_from_teams == 'off_def_team':
+                print(team.find_element_by_xpath('td[2]/a').text)
                 list_of_active_teams[team_counter]['url'] = active_team
 
             i += 1

@@ -31,7 +31,7 @@ def grabbing_roster_info(list_of_active_teams):
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
-    for active_team_index in range(17, len(list_of_active_teams)):
+    for active_team_index in range(0, len(list_of_active_teams)):
         driver.get(list_of_active_teams[active_team_index]['url'])
         time.sleep(2)
 
@@ -274,9 +274,11 @@ def grabbing_off_and_def_team_info(list_of_active_teams):
 
         team_def_stats_df = pd.DataFrame(data=team_def_stats_dict, index=[list_of_active_teams[active_team_index]['team_name']])
 
-        # NO CLEANING OF THE NFL TEAM OFFENSIVE AND DEFENSIVE DATA NEEDED, SO CAN GO STRAIGHT TO INSERTING DATAFRAME TO MYSQL
-        insert.insert_team_off_stats_to_mysql(team_off_stats_df)
-        insert.insert_team_def_stats_to_mysql(team_def_stats_df)
+        clean_team_off_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_off_stats(team_off_stats_df)
+        clean_team_def_stats_df = cleaning_scrapped_team_data.cleaning_NFL_team_def_stats(team_def_stats_df)
+
+        insert.insert_team_off_stats_to_mysql(clean_team_off_stats_df)
+        insert.insert_team_def_stats_to_mysql(clean_team_def_stats_df)
 
 
 # TEST

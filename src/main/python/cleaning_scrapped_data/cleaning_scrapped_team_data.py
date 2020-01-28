@@ -85,10 +85,18 @@ def cleaning_NFL_team_schedule(team_schedule_df):
     dates = []
     return team_schedule_df
 
-# NO CLEANING OF THE NFL OVERALL TEAM DATA NEEDED
+def cleaning_NFL_team_off_stats(team_off_stats_df):
 
-# def cleaning_NFL_team_off_stats(team_off_stats_df):
-#     return team_off_stats_df
-#
-# def cleaning_NFL_team_def_stats(team_def_stats_df):
-#     return team_def_stats_df
+    team_off_stats_df['3D%'] = list(map(lambda x: x.replace('%', '') if '%' in x else x, team_off_stats_df['3D%']))
+    team_off_stats_df['4D%'] = list(map(lambda x: x.replace('%', '') if '%' in x else x, team_off_stats_df['4D%']))
+    team_off_stats_df['RZPct'] = list(map(lambda x: x.replace('%', '') if '%' in x else x, team_off_stats_df['RZPct']))
+
+    return team_off_stats_df
+
+def cleaning_NFL_team_def_stats(team_def_stats_df):
+
+    team_def_stats_df['3D%'] = list(map(lambda x: x.replace('%', '') if '%' in x else x, team_def_stats_df['3D%']))
+    team_def_stats_df['4D%'] = list(map(lambda x: x.replace('%', '') if '%' in x else x, team_def_stats_df['4D%']))
+    team_def_stats_df['RZPct'] = list(map(lambda x: x.replace('%', '') if '%' in x else x, team_def_stats_df['RZPct']))
+
+    return team_def_stats_df
