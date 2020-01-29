@@ -68,28 +68,8 @@ def grabbing_nfl_game_urls(year, week):
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
-    driver.get('https://www.pro-football-reference.com/years/')
+    driver.get('https://www.pro-football-reference.com/years/' + year + '/week_' + week + '.htm')
     time.sleep(1)
-
-    list_of_seasons = driver.find_elements_by_xpath('//*[@id="years"]/tbody//tr')
-
-    for season in list_of_seasons:
-        if (str(year) == season.find_element_by_tag_name('a').text):
-            driver.get(season.find_element_by_tag_name('a').get_attribute('href'))
-            time.sleep(1)
-            break
-        else:
-            continue
-
-    list_of_weeks = driver.find_elements_by_xpath('//*[@id="div_week_games"]/div//div')
-
-    for week_of_season in list_of_weeks:
-        if (week == week_of_season.find_element_by_tag_name('a').text.split(' ')[1]):
-            driver.get(week_of_season.find_element_by_tag_name('a').get_attribute('href'))
-            time.sleep(1)
-            break
-        else:
-            continue
 
     dict_of_game_summary_urls = {
         'year': year,
@@ -99,7 +79,13 @@ def grabbing_nfl_game_urls(year, week):
     list_of_game_summaries = driver.find_elements_by_xpath('//*[@id="content"]/div[5]//div')
 
     for game_summary in list_of_game_summaries:
-        dict_of_game_summary_urls['list_of_game_summary_urls'].append(game_summary.find_element_by_xpath('//*[@id="content"]/div[5]/div[1]/table[1]/tbody/tr[2]/td[3]/a').get_attribute('href'))
+        for link in game_summary.find_elements_by_tag_name('a'):
+            if link.text == 'Final':
+                print(link.get_attribute('href'))
+                dict_of_game_summary_urls['list_of_game_summary_urls'].append(link.get_attribute('href'))
+                break
+            else:
+                continue
 
     with open('dictionaries_of_nfl_urls/list_of_game_summaries_from_week_' + str(week) + '_season_' + str(year), 'wb') as handle:
         pickle.dump(dict_of_game_summary_urls, handle, protocol=pickle.HIGHEST_PROTOCOL)

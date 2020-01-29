@@ -18,7 +18,7 @@ def selecting_game_info(year, week):
     grab_game_drive_summary_data(dict_of_game_summaries)
 
 def grab_game_summary_data(dict_of_game_summaries):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -55,7 +55,7 @@ def grab_game_summary_data(dict_of_game_summaries):
         insert.insert_game_summary_data_to_mysql(clean_game_summary_df)
 
 def grab_game_drive_summary_data(dict_of_game_summaries):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
