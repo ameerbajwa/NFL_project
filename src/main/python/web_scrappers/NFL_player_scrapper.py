@@ -97,8 +97,9 @@ def table_scrapper(id_of_table, driver, week):
 
     return (player_stats_df)
 
+
 def grab_offensive_player_data(dict_of_game_summaries):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -121,8 +122,9 @@ def grab_offensive_player_data(dict_of_game_summaries):
         insert.insert_rushing_stats_to_mysql(clean_rushing_stats_df)
         insert.insert_receiving_stats_to_mysql(clean_receiving_stats_df)
 
+
 def grab_defensive_player_data(dict_of_game_summaries):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -139,8 +141,9 @@ def grab_defensive_player_data(dict_of_game_summaries):
 
         insert.insert_defensive_stats_to_mysql(clean_defensive_stats_df)
 
+
 def grab_special_teams_player_data(dict_of_game_summaries):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -158,8 +161,3 @@ def grab_special_teams_player_data(dict_of_game_summaries):
 
         insert.insert_return_stats_to_mysql(clean_return_player_stats_df)
         insert.insert_kick_punt_stats_to_mysql(clean_kicking_punting_player_stats_df)
-
-# test_dict = {'year' : 2019, 'week': 1, 'list_of_game_summary_urls': ['https://www.pro-football-reference.com/boxscores/201909080tam.htm']}
-# grab_special_teams_player_data(test_dict)
-#
-# sys.exit()

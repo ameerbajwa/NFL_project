@@ -92,7 +92,7 @@ def play_by_play_table_scrapper(driver, week):
 
 
 def grabbing_play_by_play_info(dict_of_game_summaries):
-    chromedriver = "/Applications/chromedriver"
+    chromedriver = "/usr/local/bin/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
