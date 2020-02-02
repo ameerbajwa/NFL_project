@@ -129,10 +129,13 @@ def determining_penalty_yards(play_details):
             return 0
         else:
             if (words.count('Penalty') == 1):
-                if (period_counter == 2):
-                    return int(play_details.split('Penalty')[1].split(',')[1].split(' ')[1])
-                elif (period_counter == 3):
-                    return int(play_details.split('Penalty')[2].split(',')[1].spilt(' ')[1])
+                return int(play_details.split('Penalty')[1].split(',')[1].split(' ')[1])
+                # if period_counter == 0:
+                #     return int(play_details[play_details.index('yards')-1])
+                # if (period_counter == 2):
+                #     return int(play_details.split('Penalty')[1].split(',')[1].split(' ')[1])
+                # elif (period_counter == 3):
+                #     return int(play_details.split('Penalty')[1].split(',')[1].spilt(' ')[1])
             elif (words.count('Penalty') > 1):
                 return int(play_details.split('Penalty')[-2].split(',')[1].split(' ')[1]) + int(play_details.split('Penalty')[-1].split(',')[1].split(' ')[1])
     else:

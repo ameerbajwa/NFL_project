@@ -103,9 +103,7 @@ def grabbing_play_by_play_info(dict_of_game_summaries):
         time.sleep(1)
 
         play_by_play_info_df = play_by_play_table_scrapper(driver, week)
-
         clean_play_by_play_info_df = cleaning_scrapped_play_by_play_data.cleaning_play_by_play_info(play_by_play_info_df)
-
         insert.insert_play_by_play_stats_to_mysql(clean_play_by_play_info_df)
 
 
