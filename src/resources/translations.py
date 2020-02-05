@@ -10,7 +10,7 @@ NFL_team_names_and_abbr = {
     'Dallas Cowboys': 'DAL',
     'Denver Broncos': 'DEN',
     'Detroit Lions': 'DET',
-    'Green Bay Packers': 'GB',
+    'Green Bay Packers': 'GNB',
     'Houston Texans': 'HOU',
     'Indianapolis Colts': 'IND',
     'Jacksonville Jaguars': 'JAX',

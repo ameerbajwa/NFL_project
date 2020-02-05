@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from src.main.python.SQL_uploads import insert
 from src.main.python.cleaning_scrapped_data import cleaning_scrapped_play_by_play_data
+from src.resources import translations
 
 import pandas as pd
 import time
@@ -37,19 +38,19 @@ def determining_team_with_starting_possession(driver):
         else:
             possession = home_team_name
 
-    return possession, home_team_name, away_team_name
+    return possession, home_team_name, away_team_name, home_team_full_name, away_team_full_name
 
 
 def play_by_play_table_scrapper(driver, week):
-    possession, home_team_name, away_team_name = determining_team_with_starting_possession(driver)
+    possession, home_team_name, away_team_name, home_team_full_name, away_team_full_name = determining_team_with_starting_possession(driver)
 
     raw_column_names = driver.find_elements_by_xpath('//*[@id="pbp"]/thead/tr//th')
     column_names = []
 
     for col in raw_column_names[:8]:
-        if (col.text == away_team_name):
+        if (col.text == translations.NFL_team_names_and_abbr[away_team_full_name]):
             column_names.append('away_team_score')
-        elif (col.text == home_team_name):
+        elif (col.text == translations.NFL_team_names_and_abbr[home_team_full_name]):
             column_names.append('home_team_score')
         else:
             column_names.append(col.text)
@@ -101,7 +102,6 @@ def grabbing_play_by_play_info(dict_of_game_summaries):
         time.sleep(1)
 
         play_by_play_info_df = play_by_play_table_scrapper(driver, week)
-        print(play_by_play_info_df)
         clean_play_by_play_info_df = cleaning_scrapped_play_by_play_data.cleaning_play_by_play_info(play_by_play_info_df)
         insert.insert_play_by_play_stats_to_mysql(clean_play_by_play_info_df)
 

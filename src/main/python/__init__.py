@@ -1,2 +1,3 @@
 from .SQL_uploads import insert
-from .web_scrappers import NFL_url_scrapper, NFL_team_scrapper, NFL_player_scrapper
+from .web_scrappers import NFL_url_scrapper, NFL_team_scrapper, NFL_player_scrapper, NFL_game_scrapper, NFL_play_by_play_scrapper
+from .cleaning_scrapped_data import cleaning_scrapped_team_data, cleaning_scrapped_player_stats_data, cleaning_scrapped_game_stats_data, cleaning_scrapped_play_by_play_data
