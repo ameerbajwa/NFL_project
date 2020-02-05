@@ -981,6 +981,10 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
     connection_to_database = connect_to_mysql_system()
 
     for i in range(0, len(play_by_play_df)):
+        # print(str(play_by_play_df.loc[i, 'Quarter']))
+        # print(str(play_by_play_df.loc[i, 'Time_minutes']))
+        # print(str(play_by_play_df.loc[i, 'Time_seconds']))
+
         random_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
 
         insert_SQL_query = "INSERT INTO `play_by_play_info_2019_2020_season`" \
@@ -1037,7 +1041,7 @@ def insert_play_by_play_stats_to_mysql(play_by_play_df):
                            "          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s," \
                            "          %s, %s, %s, %s, %s, %s);"
 
-        with connection_to_database.cursor as cursor:
+        with connection_to_database.cursor() as cursor:
             cursor.execute(insert_SQL_query, (
                 random_id,
                 play_by_play_df.loc[i, 'home_team_full_name'],

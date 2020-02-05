@@ -47,14 +47,12 @@ def play_by_play_table_scrapper(driver, week):
     column_names = []
 
     for col in raw_column_names[:8]:
-        if (col == away_team_name):
+        if (col.text == away_team_name):
             column_names.append('away_team_score')
-        elif (col == home_team_name):
+        elif (col.text == home_team_name):
             column_names.append('home_team_score')
         else:
             column_names.append(col.text)
-
-    print(column_names)
 
     play_by_play_info_df = pd.DataFrame(columns=column_names)
     play_by_play_info_df['possession'] = ''
@@ -103,6 +101,7 @@ def grabbing_play_by_play_info(dict_of_game_summaries):
         time.sleep(1)
 
         play_by_play_info_df = play_by_play_table_scrapper(driver, week)
+        print(play_by_play_info_df)
         clean_play_by_play_info_df = cleaning_scrapped_play_by_play_data.cleaning_play_by_play_info(play_by_play_info_df)
         insert.insert_play_by_play_stats_to_mysql(clean_play_by_play_info_df)
 
